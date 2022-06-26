@@ -22,7 +22,7 @@
   <Target Name="ILRepack" AfterTargets="Build">
     <ItemGroup>
       <InputAssemblies Include="BlueprintCore.dll" />
-      <InputAssemblies Include="TabletopTweaks-Core.dll" />
+    
       <InputAssemblies Include="PathOfWarForWotR.dll" />
       <OutputAssembly Include="PathOfWarForWotR.dll" />
     </ItemGroup>
@@ -31,6 +31,12 @@
 
     <ILRepack OutputType="Dll" MainAssembly="PathOfWarForWotR.dll" OutputAssembly="@(OutputAssembly)" InputAssemblies="@(InputAssemblies)" WorkingDirectory="$(OutputPath)" />
   </Target>
+  <ItemGroup>
+    <None Remove="Config\Blueprints.json" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Config\Blueprints.json" />
+  </ItemGroup>
 
 
   <ItemGroup>
