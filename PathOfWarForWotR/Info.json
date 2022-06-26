@@ -1,0 +1,10 @@
+﻿{
+  "Id": "PathOfWarForWotR",
+  "DisplayName": "Path Of War For WotR",
+  "Author": "Pheonix99",
+  "Version": "0.0.1",
+  "ManagerVersion": "0.21.3",
+  "Requirements": [],
+  "AssemblyName": "PathOfWarForWotR.dll",
+  "EntryMethod": "PathOfWarForWotR.Main.Load"
+}
