@@ -4,7 +4,8 @@
   "Author": "username",
   "Version": "1.0.0",
   "ManagerVersion": "0.21.3",
-  "Requirements": [],
   "AssemblyName": "PathOfWarForWotR.dll",
-  "EntryMethod": "PathOfWarForWotR.Main.Load"
+  "EntryMethod": "PathOfWarForWotR.Main.Load",
+  "Requirements": [ "TabletopTweaks-Core" ],
+  "LoadAfter": [ "TabletopTweaks-Core" ]
 }
