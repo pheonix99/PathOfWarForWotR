@@ -21,7 +21,21 @@ namespace PathOfWarForWotR.ModLogic
         public override void LoadAllSettings()
         {
             LoadBlueprints("PathOfWarForWotR.Config", this);
+            LoadLocalization("PathOfWarForWotR.Localization");
 
         }
+
+        public override void AfterBlueprintCachePatches()
+        {
+            base.AfterBlueprintCachePatches();
+            if (Debug)
+            {
+                Blueprints.RemoveUnused();
+                SaveSettings(BlueprintsFile, Blueprints);
+                ModLocalizationPack.RemoveUnused();
+                SaveLocalization(ModLocalizationPack);
+            }
+        }
+       
     }
 }
