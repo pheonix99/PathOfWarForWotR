@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using TabletopTweaks.Core.UMMTools;
 using UnityModManagerNet;
 
-namespace PathOfWarForWotR
+namespace TheInfiniteCrusade
 {
     internal static class UMMSettingsUI
     {

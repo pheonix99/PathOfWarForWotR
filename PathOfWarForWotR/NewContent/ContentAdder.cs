@@ -1,13 +1,14 @@
 ﻿using HarmonyLib;
 using Kingmaker.Blueprints.JsonSystem;
-using PathOfWarForWotR.NewContent.MartialSystem;
+using TheInfiniteCrusade.NewContent.MartialSystem;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TheInfiniteCrusade.Utilities;
 
-namespace PathOfWarForWotR.NewContent
+namespace TheInfiniteCrusade.NewContent
 {
     class ContentAdder
     {
@@ -19,13 +20,29 @@ namespace PathOfWarForWotR.NewContent
             [HarmonyPriority(Priority.First)]
             static void Postfix()
             {
-                SystemLists.BuildMasterSpellLists();
+                ConstructionAssets.LoadGUIDS();
+                SystemLists.BuildSystemSpellLists();
+                SystemLists.BuildSystemSpellTables();
 
 
 
                 Disciplines.BrokenBlade.BuildBrokenBlade();
 
                 MartialArchetypes.Myrmidon.BuildMyrmidon();
+                //MartialArchetypes.PrimalDisciple.Make();
+            }
+        }
+
+        [HarmonyPatch(typeof(BlueprintsCache), "Init")]
+        static class BlueprintsCache_Init_Patch2
+        {
+            static bool Initialized;
+
+            [HarmonyPriority(Priority.Last)]
+            static void Postfix()
+            {
+
+                ProcessProgressionDefinition.FinalRun();
             }
         }
     }

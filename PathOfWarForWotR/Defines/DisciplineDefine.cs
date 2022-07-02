@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 using TabletopTweaks.Core.Utilities;
 using UnityEngine;
 
-namespace PathOfWarForWotR.Defines
+namespace TheInfiniteCrusade.Defines
 {
     public class DisciplineDefine
     {

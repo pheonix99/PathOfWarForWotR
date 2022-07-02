@@ -2,15 +2,17 @@
 using UnityModManagerNet;
 using UnityEngine.UI;
 using HarmonyLib;
-using PathOfWarForWotR.ModLogic;
+using TheInfiniteCrusade.ModLogic;
 using TabletopTweaks.Core.Utilities;
+using System;
+using Kingmaker.Blueprints.JsonSystem;
 
-namespace PathOfWarForWotR
+namespace TheInfiniteCrusade
 {
     static class Main
     {
         public static bool Enabled;
-        public static PoWModContext Context;
+        public static TICModContext Context;
         static bool Load(UnityModManager.ModEntry modEntry)
         {
             var harmony = new Harmony(modEntry.Info.Id);
@@ -21,10 +23,25 @@ namespace PathOfWarForWotR
             PostPatchInitializer.Initialize(Context);
             return true;
         }
-
+        public static void Safely(Action act)
+        {
+            try
+            {
+                act();
+            }
+            catch (Exception ex)
+            {
+                Context.Logger.LogError(ex, "trying to safely invoke action");
+            }
+        }
         static void OnSaveGUI(UnityModManager.ModEntry modEntry)
         {
             Context.SaveAllSettings();
+        }
+
+        public static void LogPatch(IScriptableObjectWithAssetId obj)
+        {
+            Context.Logger.LogPatch(obj);
         }
     }
 }

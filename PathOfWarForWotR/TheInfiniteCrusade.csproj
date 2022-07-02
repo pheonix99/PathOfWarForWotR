@@ -9,13 +9,13 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\PathOfWarForWotR</OutputPath>
+    <OutputPath>bin\Debug\TheInfiniteCrusade</OutputPath>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\PathOfWarForWotR</OutputPath>
+    <OutputPath>bin\Debug\TheInfiniteCrusade</OutputPath>
   </PropertyGroup>
 
   <!-- DLL Merging -->
@@ -23,13 +23,13 @@
     <ItemGroup>
       <InputAssemblies Include="BlueprintCore.dll" />
     
-      <InputAssemblies Include="PathOfWarForWotR.dll" />
-      <OutputAssembly Include="PathOfWarForWotR.dll" />
+      <InputAssemblies Include="TheInfiniteCrusade.dll" />
+      <OutputAssembly Include="TheInfiniteCrusade.dll" />
     </ItemGroup>
 
     <Message Text="Merging: @(InputAssemblies) into @(OutputAssembly)" Importance="High" />
 
-    <ILRepack OutputType="Dll" MainAssembly="PathOfWarForWotR.dll" OutputAssembly="@(OutputAssembly)" InputAssemblies="@(InputAssemblies)" WorkingDirectory="$(OutputPath)" />
+    <ILRepack OutputType="Dll" MainAssembly="TheInfiniteCrusade.dll" OutputAssembly="@(OutputAssembly)" InputAssemblies="@(InputAssemblies)" WorkingDirectory="$(OutputPath)" />
   </Target>
   <ItemGroup>
     <None Remove="Config\Blueprints.json" />
@@ -186,11 +186,12 @@
 
   <Target Name="Deploy" AfterTargets="Build">
     <ItemGroup>
-      <Assembly Include="$(OutputPath)\PathOfWarForWotR.dll" />
+      <Assembly Include="$(OutputPath)\TheInfiniteCrusade.dll" />
       <ModConfig Include="$(OutputPath)\Info.json" />
-    </ItemGroup>
+      <Localization Include="$(OutputPath)\Localization\LocalizationPack.json"></Localization>   </ItemGroup>
 
     <Copy SourceFiles="@(Assembly)" DestinationFolder="$(WrathPath)\Mods\$(MSBuildProjectName)" />
     <Copy SourceFiles="@(ModConfig)" DestinationFolder="$(WrathPath)\Mods\$(MSBuildProjectName)" />
+    <Copy SourceFiles="@(Localization)" DestinationFolder="$(WrathPath)\Mods\$(MSBuildProjectName)\Localization" />
   </Target>
 </Project>

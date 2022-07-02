@@ -6,11 +6,11 @@ using System.Threading.Tasks;
 using TabletopTweaks.Core.ModLogic;
 using UnityModManagerNet;
 
-namespace PathOfWarForWotR.ModLogic
+namespace TheInfiniteCrusade.ModLogic
 {
-    class PoWModContext : ModContextBase
+    class TICModContext : ModContextBase
     {
-        public PoWModContext(UnityModManager.ModEntry modEntry) : base(modEntry)
+        public TICModContext(UnityModManager.ModEntry modEntry) : base(modEntry)
         {
 #if DEBUG
             Debug = true;
@@ -20,8 +20,8 @@ namespace PathOfWarForWotR.ModLogic
 
         public override void LoadAllSettings()
         {
-            LoadBlueprints("PathOfWarForWotR.Config", this);
-            LoadLocalization("PathOfWarForWotR.Localization");
+            LoadBlueprints("TheInfiniteCrusade.Config", this);
+            LoadLocalization("TheInfiniteCrusade.Localization");
 
         }
 

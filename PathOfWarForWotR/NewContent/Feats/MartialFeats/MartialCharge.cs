@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace TheInfiniteCrusade.NewContent.MartialArchetypes
+namespace TheInfiniteCrusade.NewContent.Feats.MartialFeats
 {
-    class KnightDisciple
+    class MartialCharge
     {
     }
 }

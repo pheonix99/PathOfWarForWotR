@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PathOfWarForWotR.NewContent.Feats
+namespace TheInfiniteCrusade.NewContent.Disciplines
 {
-    class ExtraReadiedManeuver
+    class ScarletThrone
     {
     }
 }

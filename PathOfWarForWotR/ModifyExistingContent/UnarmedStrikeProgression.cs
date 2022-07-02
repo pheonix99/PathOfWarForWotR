@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PathOfWarForWotR.NewContent.Feats
+namespace TheInfiniteCrusade.ModifyExistingContent
 {
-    class ExtraGrantedManeuver
+    class UnarmedStrikeProgression
     {
     }
 }

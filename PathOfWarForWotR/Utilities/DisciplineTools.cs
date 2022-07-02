@@ -4,8 +4,8 @@ using Kingmaker.Blueprints.Classes.Spells;
 using Kingmaker.Blueprints.Items.Weapons;
 using Kingmaker.EntitySystem.Stats;
 using Kingmaker.Enums;
-using PathOfWarForWotR.Defines;
-using PathOfWarForWotR.NewComponents.MartialAbilityInformation;
+using TheInfiniteCrusade.Defines;
+using TheInfiniteCrusade.NewComponents.MartialAbilityInformation;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,7 +14,7 @@ using System.Threading.Tasks;
 using TabletopTweaks.Core.Utilities;
 using UnityEngine;
 
-namespace PathOfWarForWotR.Utilities
+namespace TheInfiniteCrusade.Utilities
 {
     public static class DisciplineTools
     {
@@ -39,5 +39,35 @@ namespace PathOfWarForWotR.Utilities
 
         }
 
+        internal static List<DisciplineDefine> GetAllDisciplinesForProgressionDefinition(InitiatorProgressionDefine define)
+        {
+            List<DisciplineDefine> disciplineDefines = new();
+            foreach(string s in define.FixedUnlocks)
+            {
+                if (Disciplines.TryGetValue(s, out var disc))
+                {
+                    if (!disciplineDefines.Contains(disc))
+                        disciplineDefines.Add(disc);
+                }
+            }
+            foreach(string s in define.SelectionUnlocks)
+            {
+                if (Disciplines.TryGetValue(s, out var disc))
+                {
+                    if (!disciplineDefines.Contains(disc))
+                        disciplineDefines.Add(disc);
+                }
+            }
+            foreach(string s in define.ProgressionSpecificSubstitutions)
+            {
+                if (Disciplines.TryGetValue(s, out var disc))
+                {
+                    if (!disciplineDefines.Contains(disc))
+                        disciplineDefines.Add(disc);
+                }
+            }    
+
+            return disciplineDefines;
+        }
     }
 }

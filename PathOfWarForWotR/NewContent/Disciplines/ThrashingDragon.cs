@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PathOfWarForWotR.NewContent.Classes
+namespace TheInfiniteCrusade.NewContent.Disciplines
 {
-    class Mystic
+    class ThrashingDragon
     {
     }
 }

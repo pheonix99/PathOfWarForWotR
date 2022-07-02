@@ -15,7 +15,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PathOfWarForWotR.NewComponents.ActionTriggers
+namespace TheInfiniteCrusade.NewComponents.ActionTriggers
 {
     [AllowMultipleComponents]
     [AllowedOn(typeof(BlueprintUnitFact), false)]

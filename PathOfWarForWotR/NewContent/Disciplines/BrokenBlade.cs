@@ -1,5 +1,5 @@
 ﻿using Kingmaker.Blueprints.Classes;
-using PathOfWarForWotR.Utilities;
+using TheInfiniteCrusade.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using TabletopTweaks.Core.Utilities;
 
-namespace PathOfWarForWotR.NewContent.Disciplines
+namespace TheInfiniteCrusade.NewContent.Disciplines
 {
     public static class BrokenBlade
     {

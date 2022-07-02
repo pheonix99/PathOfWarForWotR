@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace TheInfiniteCrusade.NewContent.MartialArchetypes
+namespace TheInfiniteCrusade.NewContent.MartialClasses.Archetypes
 {
-    class KnightDisciple
+    class Stalker_Vigilante
     {
     }
 }
