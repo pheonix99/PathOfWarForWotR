@@ -24,12 +24,17 @@ namespace TheInfiniteCrusade.NewContent
                 SystemLists.BuildSystemSpellLists();
                 SystemLists.BuildSystemSpellTables();
 
-
+                CommonBuffs.Build();
 
                 Disciplines.BrokenBlade.BuildBrokenBlade();
-
+                Disciplines.ElementalFlux.BuildElementalFlux();
+                Disciplines.GoldenLion.BuildGoldenLion();
+                Disciplines.PrimalFury.BuildPrimalFury();
+                Disciplines.ScarletThrone.BuildScarletThrone();
+                Disciplines.IronTortoise.Build();
+                Disciplines.SilverCrane.Build();
                 MartialArchetypes.Myrmidon.BuildMyrmidon();
-                //MartialArchetypes.PrimalDisciple.Make();
+                MartialArchetypes.PrimalDisciple.Make();
             }
         }
 

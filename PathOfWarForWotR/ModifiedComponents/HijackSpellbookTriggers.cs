@@ -12,7 +12,7 @@ namespace TheInfiniteCrusade.ModifiedComponents
 {
     class HijackSpellbookTriggers
     {
-        /*
+        
         //Rest - hack to trigger refresh and reshuffle on 
 
         [HarmonyPatch(typeof(Spellbook), nameof(Spellbook.Rest))]
@@ -40,6 +40,6 @@ namespace TheInfiniteCrusade.ModifiedComponents
 
                 return true;
             }
-        }*/
+        }
     }
 }

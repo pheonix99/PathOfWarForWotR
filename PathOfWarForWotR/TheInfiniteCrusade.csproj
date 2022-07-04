@@ -18,6 +18,14 @@
     <OutputPath>bin\Debug\TheInfiniteCrusade</OutputPath>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="AssemblyPublicizer" Version="1.0.1">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="ILRepack.MSBuild.Task" Version="2.0.13" />
+    <PackageReference Include="WW-Blueprint-Core" Version="2.0.4" />
+  </ItemGroup>
   <!-- DLL Merging -->
   <Target Name="ILRepack" AfterTargets="Build">
     <ItemGroup>
@@ -31,6 +39,20 @@
 
     <ILRepack OutputType="Dll" MainAssembly="TheInfiniteCrusade.dll" OutputAssembly="@(OutputAssembly)" InputAssemblies="@(InputAssemblies)" WorkingDirectory="$(OutputPath)" />
   </Target>
+
+
+  <!-- Publicize Target -->
+  <Target Name="Publicize" AfterTargets="Clean">
+    <ItemGroup>
+
+      <Assemblies Include="$(WrathPath)\Wrath_Data\Managed\Assembly-CSharp.dll" />
+      <PublicAssembly Include="$(SolutionDir)\lib\Assembly-CSharp_public.dll" />
+      <RenamedAssembly Include="$(SolutionDir)\lib\Assembly-CSharp.dll" />
+    </ItemGroup>
+    <PublicizeTask InputAssemblies="@(Assemblies)" OutputDir="$(SolutionDir)lib/" />
+    <Move SourceFiles="@(PublicAssembly)" DestinationFiles="@(RenamedAssembly)" />
+  </Target>
+  
   <ItemGroup>
     <None Remove="Config\Blueprints.json" />
     <None Remove="Localization\LocalizationPack.json" />
@@ -43,14 +65,6 @@
   </ItemGroup>
 
 
-  <ItemGroup>
-    <PackageReference Include="AssemblyPublicizer" Version="1.0.1">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-    </PackageReference>
-    <PackageReference Include="ILRepack.MSBuild.Task" Version="2.0.13" />
-    <PackageReference Include="WW-Blueprint-Core" Version="2.0.4" />
-  </ItemGroup>
 
   <ItemGroup>
     <Reference Include="0Harmony">
@@ -104,6 +118,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Update="Assets\Fly.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="Info.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
@@ -171,27 +188,23 @@
       <EmbedInteropTypes>false</EmbedInteropTypes>
     </Reference>
   </ItemGroup>
-  
-  <!-- Publicize Target -->
-  <Target Name="Publicize" AfterTargets="Clean">
-    <ItemGroup>
-    
-      <Assemblies Include="$(WrathPath)\Wrath_Data\Managed\Assembly-CSharp.dll" />
-      <PublicAssembly Include="$(SolutionDir)\lib\Assembly-CSharp_public.dll" />
-      <RenamedAssembly Include="$(SolutionDir)\lib\Assembly-CSharp.dll" />
-    </ItemGroup>
-    <PublicizeTask InputAssemblies="@(Assemblies)" OutputDir="$(SolutionDir)lib/" />
-    <Move SourceFiles="@(PublicAssembly)" DestinationFiles="@(RenamedAssembly)" />
-  </Target>
+
+  <ItemGroup>
+    <Folder Include="Assets\" />
+  </ItemGroup>
+
 
   <Target Name="Deploy" AfterTargets="Build">
     <ItemGroup>
       <Assembly Include="$(OutputPath)\TheInfiniteCrusade.dll" />
       <ModConfig Include="$(OutputPath)\Info.json" />
-      <Localization Include="$(OutputPath)\Localization\LocalizationPack.json"></Localization>   </ItemGroup>
-
+      <Localization Include="$(OutputPath)\Localization\LocalizationPack.json"></Localization>
+      <Assets Include="$(OutputPath)\Assets\Fly.png" />
+    </ItemGroup>
+    
     <Copy SourceFiles="@(Assembly)" DestinationFolder="$(WrathPath)\Mods\$(MSBuildProjectName)" />
     <Copy SourceFiles="@(ModConfig)" DestinationFolder="$(WrathPath)\Mods\$(MSBuildProjectName)" />
+    <Copy SourceFiles="@(Assets)" DestinationFolder="$(WrathPath)\Mods\$(MSBuildProjectName)\Assets" />
     <Copy SourceFiles="@(Localization)" DestinationFolder="$(WrathPath)\Mods\$(MSBuildProjectName)\Localization" />
   </Target>
 </Project>

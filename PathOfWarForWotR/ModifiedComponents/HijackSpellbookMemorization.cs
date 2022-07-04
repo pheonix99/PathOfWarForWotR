@@ -11,7 +11,7 @@ using TheInfiniteCrusade.NewComponents.UnitParts;
 
 namespace TheInfiniteCrusade.ModifiedComponents
 {
-    /*
+    
     class HijackSpellbookMemorization
     {
         [HarmonyPatch(typeof(Spellbook), nameof(Spellbook.GetMemorizedSpellSlots), new Type[] { typeof(int) })]
@@ -95,5 +95,5 @@ namespace TheInfiniteCrusade.ModifiedComponents
             }
 
         }
-    }*/
+    }
 }

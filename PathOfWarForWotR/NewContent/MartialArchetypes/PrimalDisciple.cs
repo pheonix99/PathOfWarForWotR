@@ -25,7 +25,7 @@ namespace TheInfiniteCrusade.NewContent.MartialArchetypes
                 x.AddFeatures(BlueprintTool.Get<BlueprintFeature>("CombatReflexes"));
 
             });
-
+            Main.LogPatch(ancestral);
 
             BlueprintCharacterClass barbarian = BlueprintTool.Get<BlueprintCharacterClass>("f7d7eb166b3dd594fb330d085df41853");
 
@@ -48,15 +48,18 @@ namespace TheInfiniteCrusade.NewContent.MartialArchetypes
             var primalDefine = new InitiatorProgressionDefine(Main.Context, "PrimalDisciple", "Primal Disciple", false, NewComponents.ManeuverBookSystem.ManeuverBookComponent.ManeuverBookType.Level6Archetype);
             primalDefine.LoadDefaultArchetypeProgression();
             primalDefine.FixedUnlocks = new string[] { "GoldenLion", "PiercingThunder", "PrimalFury", "ThrashingDragon" };
-            primalDefine.ClassesForClassTemplate = new List<BlueprintCharacterClassReference>() { barbarian.ToReference<BlueprintCharacterClassReference>() };
-            primalDefine.ArchetypesForArchetypeTemplate = new() { primal.ToReference<BlueprintArchetypeReference>() };
+            primalDefine.ClassesForClassTemplate.Add(barbarian.ToReference<BlueprintCharacterClassReference>());
+            primalDefine.ArchetypesForArchetypeTemplate.Add(primal.ToReference<BlueprintArchetypeReference>());
             primalDefine.DefaultInitiatingStat = Kingmaker.EntitySystem.Stats.StatType.Wisdom;
             primalDefine.FullRoundRestoreName = "Invoke Ancestral Strength";
             primalDefine.FullRoundRestoreDesc = "In order for the primal disciple to recover maneuvers, she must draw on the strength of her ancestors as a full-round action. When she does so, she recovers a number of expended maneuvers equal to her primal disciple initiation modifier (minimum 2), regains one round of rage, and if she is fatigued as a result of her rage class feature, she can make a Fortitude save (DC 10 + the number of rounds the fatigue would last) to not become fatigued.";
             primalDefine.StandardActionRestoreName = "Focus Inward";
             primalDefine.StandardActionRestoreDesc = "A primal disciple may focus inward and recover a single maneuver as a standard action.";
 
+            
             var primalProg = ProcessProgressionDefinition.BuildInitiatorProgress(primalDefine);
+         
+            
 
             primal.AddToAddFeatures(1, primalProg.ToReference<BlueprintFeatureBaseReference>());
 

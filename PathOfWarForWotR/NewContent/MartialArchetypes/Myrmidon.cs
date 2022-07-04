@@ -175,7 +175,7 @@ namespace TheInfiniteCrusade.NewContent.MartialArchetypes
 
             });
             Main.LogPatch(WarriorsDetermination3);
-            InitiatorProgressionDefine myrmidonDefine = new InitiatorProgressionDefine(Main.Context, "Myrmidon", maneuverBookType: NewComponents.ManeuverBookSystem.ManeuverBookComponent.ManeuverBookType.Level6Archetype);
+           
            
 
 
@@ -184,6 +184,7 @@ namespace TheInfiniteCrusade.NewContent.MartialArchetypes
             var myrm = Helpers.CreateBlueprint<BlueprintArchetype>(Main.Context, "MyrmidonArchetype", x =>
             {
                 x.SetName(Main.Context, "Myrmidon");
+                x.LocalizedDescriptionShort = LocalizationTool.CreateString("Myrmidon.Short", "");
                 x.SetDescription(Main.Context, "Some fighters attend grand colleges of war where they learn to master more esoteric martial forms, and some learn the techniques of many different schools of combat and forge their own path. Others are trained in small regiments to fight as a single cohesive, adaptable unit where all members are capable of playing the other’s parts. These fighters are known as myrmidons, the pinnacle of the fighter’s tradition of adaptability, ingenuity, and enduring strength.");
                 x.AddSkillPoints = 1;
                 x.m_ParentClass = fighter;
@@ -204,7 +205,7 @@ namespace TheInfiniteCrusade.NewContent.MartialArchetypes
                 x.AddToAddFeatures(10, WarriorsDetermination2.ToReference<BlueprintFeatureBaseReference>());
                 x.AddToAddFeatures(14, WarriorsDetermination3.ToReference<BlueprintFeatureBaseReference>());
             });
-
+            InitiatorProgressionDefine myrmidonDefine = new InitiatorProgressionDefine(Main.Context, "Myrmidon", maneuverBookType: NewComponents.ManeuverBookSystem.ManeuverBookComponent.ManeuverBookType.Level6Archetype);
             myrmidonDefine.ClassesForClassTemplate.Add(fighter.ToReference<BlueprintCharacterClassReference>());
             myrmidonDefine.ArchetypesForArchetypeTemplate.Add(myrm.ToReference<BlueprintArchetypeReference>());
             myrmidonDefine.DefaultInitiatingStat = Kingmaker.EntitySystem.Stats.StatType.Wisdom;

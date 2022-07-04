@@ -1,6 +1,8 @@
 ﻿using Kingmaker.Blueprints;
 using Kingmaker.Blueprints.Classes;
 using Kingmaker.Blueprints.Classes.Spells;
+using Kingmaker.PubSubSystem;
+using Kingmaker.RuleSystem.Rules;
 using Kingmaker.UnitLogic;
 using Kingmaker.Utility;
 using System;
@@ -10,12 +12,13 @@ using System.Text;
 using System.Threading.Tasks;
 using TheInfiniteCrusade.Extensions;
 using TheInfiniteCrusade.NewComponents.ManeuverBookSystem;
+using TheInfiniteCrusade.NewComponents.ManeuverProperties;
 using TheInfiniteCrusade.NewComponents.MartialAbilityInformation;
 using TheInfiniteCrusade.NewComponents.UnitParts.ManeuverBookSystem;
 
 namespace TheInfiniteCrusade.NewComponents.UnitParts
 {
-    class UnitPartMartialDisciple : OldStyleUnitPart
+    class UnitPartMartialDisciple : OldStyleUnitPart, IInitiatorRulebookHandler<RuleCombatManeuver>, IRulebookHandler<RuleCombatManeuver>, ISubscriber, IInitiatorRulebookSubscriber
     {
 
         #region Handle Maneuver Books
@@ -358,6 +361,28 @@ namespace TheInfiniteCrusade.NewComponents.UnitParts
         internal void ReloadAndRecharge(Spellbook instance)
         {
 
+        }
+
+        public void OnEventAboutToTrigger(RuleCombatManeuver evt)
+        {
+            var ability = evt.Reason?.Ability;
+            if (ability != null)
+            {
+              
+
+                if (ability.Blueprint.GetComponents<TICManeuverCMBBonus>().Any())
+                {
+                    foreach(var bonus in ability.Blueprint.GetComponents<TICManeuverCMBBonus>().Where(x=>x.combatManeuvers.Contains(evt.Type)))
+                    {
+                        evt.AddModifier(bonus.Bonus, bonus.Descriptor);
+                    }
+                }
+            }
+        }
+
+        public void OnEventDidTrigger(RuleCombatManeuver evt)
+        {
+            
         }
     }
 }

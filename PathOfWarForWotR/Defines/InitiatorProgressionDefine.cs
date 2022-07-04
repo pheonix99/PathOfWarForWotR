@@ -20,7 +20,7 @@ namespace TheInfiniteCrusade.Defines
         public readonly bool GrantedType;
         public readonly ManeuverBookComponent.ManeuverBookType maneuverBookType = ManeuverBookComponent.ManeuverBookType.Level9Class;
 
-        public string DisplayName => string.IsNullOrEmpty(_displayName) ? InitiatorSysNameBase : DisplayName;
+        public string DisplayName => string.IsNullOrEmpty(_displayName) ? InitiatorSysNameBase : _displayName;
 
       
 

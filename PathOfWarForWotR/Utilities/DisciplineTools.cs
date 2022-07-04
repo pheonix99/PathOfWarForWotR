@@ -20,7 +20,7 @@ namespace TheInfiniteCrusade.Utilities
     {
         public static Dictionary<string, DisciplineDefine> Disciplines = new();
         public static Dictionary<string, BlueprintGuid> MasterGuids = new();
-     
+        
 
        
 

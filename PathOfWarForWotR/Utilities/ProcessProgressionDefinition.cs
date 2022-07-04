@@ -41,12 +41,14 @@ namespace TheInfiniteCrusade.Utilities
                 return null;
 
             Defines.Add(define);
+          
 
-           
+
             var progression = Helpers.CreateBlueprint<BlueprintProgression>(source, stringProgressionBlueprintSysName, x =>
             {
                 x.SetName(source, define.DisplayName);
                 x.SetDescription(source, "");
+                x.HideInCharacterSheetAndLevelUp = true;
                 x.IsClassFeature = true;
                 if (define.maneuverBookType == ManeuverBookComponent.ManeuverBookType.Level6Archetype)
                 {
@@ -62,7 +64,7 @@ namespace TheInfiniteCrusade.Utilities
                 }
 
             });
-
+           
             var spellbookSysName = define.InitiatorSysNameBase + "ManeuverBook";
 
 
@@ -113,11 +115,12 @@ namespace TheInfiniteCrusade.Utilities
 
             });
             Main.LogPatch(MLProperty);
-
+            //PRIMAL DISCIPLE ASPLODES NORTH OF HERE
             var addSpellbookSysName = define.InitiatorSysNameBase + "AddManeuverBook";
 
             var AddSpellbookFact = Helpers.CreateBlueprint<BlueprintFeature>(source, addSpellbookSysName, x =>
             {
+                x.SetNameDescription(source, $"{define.DisplayName} Maneuvers", "Temp Placeholder");
                 x.AddComponent<AddManeuverBook>(y =>
                 {
                     y.m_CasterLevel = new Kingmaker.UnitLogic.Mechanics.ContextValue { m_CustomProperty = MLProperty.ToReference<BlueprintUnitPropertyReference>(), ValueType = Kingmaker.UnitLogic.Mechanics.ContextValueType.CasterCustomProperty };
@@ -357,6 +360,7 @@ namespace TheInfiniteCrusade.Utilities
                 x.HideInCharacterSheetAndLevelUp = true;
 
             });
+            exchanger.AddFeatures(finalize);
             Main.LogPatch(exchanger);
             return exchanger;
         }
