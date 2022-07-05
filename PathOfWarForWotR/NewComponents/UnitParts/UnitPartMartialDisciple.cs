@@ -1,9 +1,12 @@
 ﻿using Kingmaker.Blueprints;
 using Kingmaker.Blueprints.Classes;
 using Kingmaker.Blueprints.Classes.Spells;
+using Kingmaker.EntitySystem.Entities;
 using Kingmaker.PubSubSystem;
 using Kingmaker.RuleSystem.Rules;
 using Kingmaker.UnitLogic;
+using Kingmaker.UnitLogic.Abilities;
+using Kingmaker.UnitLogic.Abilities.Blueprints;
 using Kingmaker.Utility;
 using System;
 using System.Collections.Generic;
@@ -18,12 +21,12 @@ using TheInfiniteCrusade.NewComponents.UnitParts.ManeuverBookSystem;
 
 namespace TheInfiniteCrusade.NewComponents.UnitParts
 {
-    class UnitPartMartialDisciple : OldStyleUnitPart, IInitiatorRulebookHandler<RuleCombatManeuver>, IRulebookHandler<RuleCombatManeuver>, ISubscriber, IInitiatorRulebookSubscriber
+    class UnitPartMartialDisciple : OldStyleUnitPart, IUnitSubscriber, IUnitCompleteLevelUpHandler, IInitiatorRulebookHandler<RuleCombatManeuver>, IRulebookHandler<RuleCombatManeuver>, ISubscriber, IInitiatorRulebookSubscriber
     {
 
         #region Handle Maneuver Books
 
-        public List<ManeuverBook> ManeuverBooks = new();
+        private List<ManeuverBook> ManeuverBooks = new();
         public class ManeuverBook
         {
 
@@ -38,7 +41,8 @@ namespace TheInfiniteCrusade.NewComponents.UnitParts
 
             public List<ManeuverSlot> ManeuverSlots = new();
 
-            public BlueprintSpellbookReference BlueprintSpellbookReference { get; }
+            private BlueprintSpellbookReference _blueprintSpellbookReference;
+            public BlueprintSpellbookReference BlueprintSpellbookReference { get => _blueprintSpellbookReference; }
             public bool GrantedType => ManeuverBookData.IsGranted;
 
             public BlueprintUnitPropertyReference ManeuverSlotsPropertyReference => ManeuverBookData.m_ManeuverSlotsReference;
@@ -48,27 +52,38 @@ namespace TheInfiniteCrusade.NewComponents.UnitParts
             public ManeuverBook(UnitFact fact, BlueprintSpellbookReference blueprintSpellbookReference)
             {
                 source = fact;
-                BlueprintSpellbookReference = blueprintSpellbookReference;
+                _blueprintSpellbookReference = blueprintSpellbookReference;
                 Main.Context.Logger.Log($"Build Maneuver Book {blueprintSpellbookReference.NameSafe()} on  {fact.Owner.CharacterName}");
 
             }
 
             internal void DemandSlotsUpdate()
             {
+                
                 int correctSlots = ManeuverSlotsPropertyReference.Get().GetInt(source.Owner);
                 if (correctSlots == ManeuverSlots.Count)
                 {
-
+                    Main.Context.Logger.Log($"Slots Update Called On {Spellbook.Blueprint.Name}, slots are correct: {ManeuverSlots.Count}");
                 }
                 else if (correctSlots > ManeuverSlots.Count)
                 {
+                    Main.Context.Logger.Log($"Slots Update Called On {Spellbook.Blueprint.Name}, slots are incorrect: {ManeuverSlots.Count}, should be {correctSlots}");
                     while (correctSlots > ManeuverSlots.Count)
                     {
-                        ManeuverSlots.Add(new ManeuverSlot(ManeuverSlots.Max(x => x.Index) + 1, SlotType.Common));
+                        Main.Context.Logger.Log($"Added Maneuver Slot!");
+                        if (ManeuverSlots.Count == 0)
+                        {
+                            ManeuverSlots.Add(new ManeuverSlot(0, SlotType.Common));
+                        }
+                        else
+                        {
+                            ManeuverSlots.Add(new ManeuverSlot(ManeuverSlots.Max(x => x.Index) + 1, SlotType.Common));
+                        }
                     }
                 }
                 else
                 {
+                    Main.Context.Logger.Log($"Slots Update Called On {Spellbook.Blueprint.Name}, slots are incorrect: {ManeuverSlots.Count}, should be {correctSlots}");
                     while (correctSlots < ManeuverSlots.Count)
                     {
                         ManeuverSlots.RemoveLast();
@@ -76,13 +91,93 @@ namespace TheInfiniteCrusade.NewComponents.UnitParts
                 }
 
             }
+
+            internal bool ManeuverIsReadied(BlueprintAbility blueprint)
+            {
+                return ManeuverSlots.Any(x => x.Readied != null && x.Readied.Equals(blueprint.ToReference<BlueprintAbilityReference>()));
+            }
+
+            internal bool ManueverIsAvailable(BlueprintAbility blueprint)
+            {
+                return ManeuverSlots.Any(x => x.Combat != null && x.Combat.Equals(blueprint.ToReference<BlueprintAbilityReference>()) && x.Available);
+            }
+
+            internal bool ExpendManeuver(BlueprintAbility blueprint)
+            {
+                var slot = ManeuverSlots.FirstOrDefault(x => x.Combat != null && x.Combat.Equals(blueprint.ToReference<BlueprintAbilityReference>()) && x.Available);
+                if (slot != null)
+                {
+                    return slot.Expend();
+                }
+                else
+                    return false;
+
+
+            }
+        }
+
+        private ManeuverBook GetManeuverBook(Spellbook spellbook)
+        {
+            return GetManeuverBook(spellbook.Blueprint.ToReference<BlueprintSpellbookReference>());
+        }
+
+        private ManeuverBook GetManeuverBook(BlueprintSpellbook spellbook)
+        {
+            return GetManeuverBook(spellbook.ToReference<BlueprintSpellbookReference>());
+           
+        }
+
+        private ManeuverBook GetManeuverBook(BlueprintSpellbookReference spellbook)
+        {
+            var find = ManeuverBooks.FirstOrDefault(x => x.BlueprintSpellbookReference.Equals(spellbook));
+            if (find == null)
+            {
+                Main.Context.Logger.Log($"Unable to find maneuver book {spellbook.NameSafe()} on {Owner.CharacterName}, recreating");
+                var comp = spellbook.Get().Components.OfType<ManeuverBookComponent>().FirstOrDefault();
+                RegisterBook(Owner.Progression.Features.GetFact(comp.GrantingFeature), spellbook, comp);
+                find = ManeuverBooks.FirstOrDefault(x => x.BlueprintSpellbookReference.Equals(spellbook));
+            }
+
+            return find;
+
+            
+        }
+
+
+        internal bool ExpendManeuverOnSelection(Spellbook instance, BlueprintAbility blueprint)
+        {
+            var book = GetManeuverBook(instance);
+            if (book == null)
+                return false;
+            else
+            {
+                //TODO INSERT FREEBIE LOGIC
+
+
+                return book.ExpendManeuver(blueprint);
+
+            }
+        }
+
+        internal bool ManeuverReadedAndUsable(Spellbook instance, BlueprintAbility blueprint)
+        {
+            var book = GetManeuverBook(instance);
+            if (book != null)
+            {
+                return book.ManueverIsAvailable(blueprint);
+            }
+            else
+                return false;
         }
 
         internal IEnumerable<SpellSlot> GetCurrentReadiedManeuversSlotDisplay(Spellbook instance, bool displayPrepped, int spellLevel)
         {
-            var book = ManeuverBooks.FirstOrDefault(x => instance.Blueprint.ToReference<BlueprintSpellbookReference>().Equals(x));
+            var book = GetManeuverBook(instance);
             if (book == null)
+            {
+                Main.Context.Logger.Log($"ManeuverBook not found for spellbook {instance.Blueprint.Name} while getting readied list");
                 return new List<SpellSlot>();
+            }
             else
             {
                 List<SpellSlot> spellSlots = new();
@@ -114,17 +209,26 @@ namespace TheInfiniteCrusade.NewComponents.UnitParts
             
         }
 
-        public void RegisterManeuverBook(UnitFact source, BlueprintSpellbookReference blueprintSpellbookReference)
+        internal int GetCastsForManeuverFromBook(Spellbook instance, AbilityData spell)
         {
-            if (!ManeuverBooks.Any(x => x.BlueprintSpellbookReference.Equals(blueprintSpellbookReference)))
+            var book = GetManeuverBook(instance);
+            if (book != null)
             {
-                ManeuverBooks.Add(new ManeuverBook(source, blueprintSpellbookReference));
+                int casts = 0;
+                casts += book.ManeuverSlots.Count(x => x.Combat != null && spell.Blueprint.ToReference<BlueprintAbilityReference>().Equals(x.Combat));
+
+
+                return casts;
             }
+            else
+                return 0;
+
+
         }
 
         public void DemandSlotUpdate(BlueprintSpellbookReference reference)
         {
-            var book = ManeuverBooks.FirstOrDefault(x => x.BlueprintSpellbookReference.Equals(reference));
+            var book = GetManeuverBook(reference);
             if (book != null)
                 book.DemandSlotsUpdate();
 
@@ -383,6 +487,61 @@ namespace TheInfiniteCrusade.NewComponents.UnitParts
         public void OnEventDidTrigger(RuleCombatManeuver evt)
         {
             
+        }
+
+        public void HandleUnitCompleteLevelup(UnitEntityData unit)
+        {
+
+            if (Owner.Unit != unit)
+            {
+
+            }
+            else
+            {
+                Main.Context.Logger.Log($"Starting Post Level Up Martial Recording for {unit.CharacterName}");
+
+                foreach (Spellbook s in unit.Spellbooks.Where(x => x.Blueprint.Components.OfType<ManeuverBookComponent>().Any()))
+                {
+                    
+                    var book = ManeuverBooks.FirstOrDefault(x=>x.Spellbook.Equals(s));
+                    Main.Context.Logger.Log($"Starting Post Level Up Recording for {unit.CharacterName} with Maneuver Book {s.Blueprint.Name}");
+                    DemandSlotUpdate(s.Blueprint.ToReference<BlueprintSpellbookReference>());
+                    Main.Context.Logger.Log($"{GetManeuverBook(s).ManeuverSlots.Count} slots in book");
+                    if (book.ManeuverSlots.Any(x => x.Readied == null))
+                    {
+                        Main.Context.Logger.Log($"{unit.CharacterName} has {book.ManeuverSlots.Count(x => x.Readied == null)} empty slots for book {s.Blueprint.Name}, fixing");
+                        List<AbilityData> available = s.GetAllKnownManeuvers().Where(x => !book.ManeuverIsReadied(x.Blueprint.ToReference<BlueprintAbilityReference>())).ToList();
+                        int empty = 0;
+                        foreach (var slot in book.ManeuverSlots.Where(x => x.Readied == null))//TODO improve for multiclassing
+                        {
+                            empty++;
+                            Main.Context.Logger.Log($"Trying to fix empty slot: {empty}");
+                            if (available.Any())
+                            {
+                                var pick = available.FirstOrDefault();
+                                if (pick != null)
+                                {
+                                    Main.Context.Logger.Log($"Auto-adding {pick} to list");
+                                    slot.SetAsReadied(pick.Blueprint.ToReference<BlueprintAbilityReference>());
+                                    available.Remove(pick);
+                                }
+                            }
+                            else
+                            {
+                                Main.Context.Logger.Log($"No Filler Found");
+                            }
+                        }
+
+
+
+                    }
+                    foreach (var slot in book.ManeuverSlots.Where(x => x.Readied != null && x.Combat == null))
+                    {
+                        slot.SetAsReadied(slot.Readied);
+                    }
+                }
+            }
+
         }
     }
 }

@@ -187,6 +187,11 @@ namespace TheInfiniteCrusade.Utilities
                 
                 
             }
+            for(int i = 0; i<define.ManeuverSlotsAtLevel1; i++)
+            {
+                progression.AddToProgressionLevels(1, featureUp.ToReference<BlueprintFeatureBaseReference>());
+            }
+
             foreach (int i in define.ManeuversLearnedAtLevels)
             {
                 progression.AddToProgressionLevels(i, maneuverPick.ToReference<BlueprintFeatureBaseReference>());
@@ -259,7 +264,7 @@ namespace TheInfiniteCrusade.Utilities
                             }
                         }
                     };
-
+                    
                 });
 
             });
@@ -465,13 +470,14 @@ namespace TheInfiniteCrusade.Utilities
 
         
             var feature = Helpers.CreateDerivedBlueprint<BlueprintFeature>(define.Source, systemName, unlock.masterGuid, new List<SimpleBlueprint>() {define.m_spellbook.Get() }, x => {
-                x.SetNameDescription(define.Source, unlock.DisplayName, $"Gain access to {unlock.DisplayName} as {define.DisplayName} manuevers");
+                x.SetNameDescription(define.Source, unlock.DisplayName, $"Gain access to {unlock.DisplayName} as {define.DisplayName} manuevers\n{unlock.Description}");
                 x.AddComponent<DisciplineUnlockForInitiatorProgression>(x =>
                 {
                     x.m_Progression = define.m_Progression;
                     x.disciplineType = unlock.SysName;
                     
                 });
+                x.m_Icon = unlock.defaultSprite;
                 x.AddComponent<AddClassSkill>(x =>
                 {
 
