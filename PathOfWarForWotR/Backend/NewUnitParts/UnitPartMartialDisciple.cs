@@ -33,6 +33,11 @@ namespace TheInfiniteCrusade.Backend.NewUnitParts
 
         private List<ManeuverBook> ManeuverBooks = new();
 
+        internal void DoRecoverManeuversForBook(Spellbook spellbook, BlueprintAbilityReference blueprintAbilityReference)
+        {
+            GetManeuverBook(spellbook)?.ManeuverSlots.FirstOrDefault(x => x.Combat.Equals(blueprintAbilityReference) && x.State == SlotManeuverState.Exhausted).Recover();
+        }
+
         internal void RechargeBookOnCombatStart(BlueprintSpellbook spellbook)
         {
             var book = GetManeuverBook(spellbook);
@@ -61,6 +66,11 @@ namespace TheInfiniteCrusade.Backend.NewUnitParts
                     slot.Recover();
                 }
             }
+        }
+
+        internal bool CanRecoverManeuverForBook(BlueprintSpellbookReference spellbookReference, BlueprintAbilityReference blueprintAbilityReference)
+        {
+            return GetManeuverBook(spellbookReference)?.ManeuverSlots.Any(x => x.Combat.Equals(blueprintAbilityReference) && x.State == SlotManeuverState.Exhausted) == true;
         }
 
         internal void Rest()

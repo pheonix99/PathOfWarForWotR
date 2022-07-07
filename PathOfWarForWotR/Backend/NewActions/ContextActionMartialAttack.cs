@@ -24,7 +24,7 @@ using TabletopTweaks.Core.Utilities;
 using TheInfiniteCrusade.NewComponents.AbilityRestrictions;
 using TheInfiniteCrusade.NewComponents.ManeuverProperties;
 
-namespace TheInfiniteCrusade.NewComponents.Actions
+namespace TheInfiniteCrusade.Backend.NewActions
 {
     class ContextActionMartialAttack : ContextAction
     {

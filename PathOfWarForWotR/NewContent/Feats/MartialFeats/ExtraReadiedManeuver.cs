@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TabletopTweaks.Core.Utilities;
-using TheInfiniteCrusade.NewComponents.Prerequisites;
+using TheInfiniteCrusade.Backend.NewComponents.Prerequisites;
 using TheInfiniteCrusade.Utilities;
 
 namespace TheInfiniteCrusade.NewContent.Feats.MartialFeats

@@ -9,7 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using TabletopTweaks.Core.Utilities;
 
-namespace TheInfiniteCrusade.NewComponents.AbilitySpecific
+namespace TheInfiniteCrusade.Backend.NewComponents.AbilitySpecific
 {
     class MyrmidonImproviseWeaponComponent : UnitFactComponentDelegate, IInitiatorRulebookHandler<RuleCalculateAttackBonusWithoutTarget>, IRulebookHandler<RuleCalculateAttackBonusWithoutTarget>, ISubscriber, IInitiatorRulebookSubscriber
     {

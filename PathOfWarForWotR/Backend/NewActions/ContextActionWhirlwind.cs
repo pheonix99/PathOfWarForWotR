@@ -11,7 +11,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace TheInfiniteCrusade.NewComponents.Actions
+namespace TheInfiniteCrusade.Backend.NewActions
 {
     class ContextActionWhirlwind : ContextAction
     {

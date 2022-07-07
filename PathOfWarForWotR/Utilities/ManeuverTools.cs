@@ -25,10 +25,10 @@ using System.Threading.Tasks;
 using TabletopTweaks.Core.ModLogic;
 using TabletopTweaks.Core.NewComponents;
 using TabletopTweaks.Core.Utilities;
+using TheInfiniteCrusade.Backend.NewActions;
 using TheInfiniteCrusade.Defines;
 using TheInfiniteCrusade.NewComponents;
 using TheInfiniteCrusade.NewComponents.AbilityRestrictions;
-using TheInfiniteCrusade.NewComponents.Actions;
 using TheInfiniteCrusade.NewComponents.ManeuverProperties;
 using TheInfiniteCrusade.NewComponents.MartialAbilityInformation;
 using UnityEngine;
@@ -236,7 +236,7 @@ namespace TheInfiniteCrusade.Utilities
                 {
                     x.DamageType = damage;
                 }
-                x.contextValue = new ContextValue
+                x.Value = new ContextValue
                 {
                     ValueType = Kingmaker.UnitLogic.Mechanics.ContextValueType.Rank,
                     ValueRank = AbilityRankType.DamageBonus
@@ -286,11 +286,11 @@ namespace TheInfiniteCrusade.Utilities
 
         public static void MakeScalingConfig(this ContextRankConfig config, AbilityRankType type, int baseValue, int levelsToIncrease)
         {
-            config.m_Type = AbilityRankType.DamageBonus;
+            config.m_Type = type;
             config.m_Progression = ContextRankProgression.StartPlusDivStep;
             if (baseValue > 1)
             {
-                config.m_StartLevel = -1 * (baseValue - 1) * levelsToIncrease;
+                config.m_StartLevel = 1 - ((baseValue -1) * levelsToIncrease);
             }
             else
             {
@@ -320,21 +320,21 @@ namespace TheInfiniteCrusade.Utilities
 
         public static BlueprintAbility MakeStanceStub(ModContextBase source, string sysName, string displayName, string description, int level, DisciplineDefine discipline, out BlueprintBuff buff, Sprite icon = null)
         {
-           var localbuff = Helpers.CreateBlueprint<BlueprintBuff>(source, sysName + "Buff", x =>
-              {
-                  x.SetNameDescription(source, displayName, description);
-                  x.AddComponent<ManeuverInformation>(x =>
-                  {
-                      x.ManeuverLevel = level;
-                      x.ManeuverType = ManeuverType.Stance;
-                      x.isPrcAbility = false;
-                      x.DisciplineKeys = new string[] { discipline.SysName };
-                  });
-                  x.m_Icon = icon ?? discipline.defaultSprite;
-                  x.FxOnStart = new();
-                  x.FxOnRemove = new();
+            var localbuff = Helpers.CreateBlueprint<BlueprintBuff>(source, sysName + "Buff", x =>
+               {
+                   x.SetNameDescription(source, displayName, description);
+                   x.AddComponent<ManeuverInformation>(x =>
+                   {
+                       x.ManeuverLevel = level;
+                       x.ManeuverType = ManeuverType.Stance;
+                       x.isPrcAbility = false;
+                       x.DisciplineKeys = new string[] { discipline.SysName };
+                   });
+                   x.m_Icon = icon ?? discipline.defaultSprite;
+                   x.FxOnStart = new();
+                   x.FxOnRemove = new();
 
-              });
+               });
 
             var ability = MakeManeuverStub(source, sysName, displayName, description, ManeuverType.Stance, level, discipline, icon);
             ability.Range = AbilityRange.Personal;
@@ -343,8 +343,10 @@ namespace TheInfiniteCrusade.Utilities
             {
                 x.m_Type = PseudoActivatable.PseudoActivatableType.BuffToggle;
                 x.m_GroupName = "MartialStance";
+                
                 x.m_Buff = localbuff.ToReference<BlueprintBuffReference>();
             });
+            ability.AddComponent<AbilityEffectToggleBuff>(x => { x.m_Buff = localbuff.ToReference<BlueprintBuffReference>(); });
             ability.SetLocalizedDuration(Main.Context, "");
             ability.SetLocalizedSavingThrow(Main.Context, "");
             buff = localbuff;

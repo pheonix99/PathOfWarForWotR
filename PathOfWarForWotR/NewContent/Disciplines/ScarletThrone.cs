@@ -99,7 +99,7 @@ namespace TheInfiniteCrusade.NewContent.Disciplines
                 buff.AddScalingConfig(Kingmaker.Enums.AbilityRankType.DamageDice, 1, 10);
                 buff.AddComponent<ContextAddWeaponDamageDice>(x =>
                 {
-                    x.contextValue = new Kingmaker.UnitLogic.Mechanics.ContextValue
+                    x.Value = new Kingmaker.UnitLogic.Mechanics.ContextValue
                     {
                         ValueType = Kingmaker.UnitLogic.Mechanics.ContextValueType.Rank,
                         ValueRank = AbilityRankType.DamageDice

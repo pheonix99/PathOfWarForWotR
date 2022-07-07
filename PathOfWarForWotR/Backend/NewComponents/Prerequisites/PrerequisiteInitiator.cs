@@ -9,7 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using TheInfiniteCrusade.NewComponents.ManeuverBookSystem;
 
-namespace TheInfiniteCrusade.NewComponents.Prerequisites
+namespace TheInfiniteCrusade.Backend.NewComponents.Prerequisites
 {
     class PrerequisiteInitiator : Prerequisite
     {

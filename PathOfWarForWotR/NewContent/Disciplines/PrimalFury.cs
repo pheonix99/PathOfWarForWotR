@@ -14,11 +14,11 @@ using System.Text;
 using System.Threading.Tasks;
 using TabletopTweaks.Core.Utilities;
 using TheInfiniteCrusade.NewComponents.AbilityRestrictions;
-using TheInfiniteCrusade.NewComponents.Actions;
 using TheInfiniteCrusade.NewComponents.ManeuverProperties;
 using TheInfiniteCrusade.Utilities;
 using UnityEngine;
 using Kingmaker.UnitLogic.Mechanics;
+using TheInfiniteCrusade.Backend.NewActions;
 
 namespace TheInfiniteCrusade.NewContent.Disciplines
 {
@@ -58,6 +58,7 @@ namespace TheInfiniteCrusade.NewContent.Disciplines
                 {
                     x.Stat = Kingmaker.EntitySystem.Stats.StatType.AC;
                     x.Descriptor = Kingmaker.Enums.ModifierDescriptor.UntypedStackable;
+                    x.Value = -2;
                 });
 
                 ManeuverTools.FinishManeuver(stance);

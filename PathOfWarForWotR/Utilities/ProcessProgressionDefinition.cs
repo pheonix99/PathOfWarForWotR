@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using System.Linq;
 using TabletopTweaks.Core.NewComponents.Properties;
 using TabletopTweaks.Core.Utilities;
+using TheInfiniteCrusade.Backend.NewActions;
 using TheInfiniteCrusade.Defines;
 using TheInfiniteCrusade.NewComponents.ManeuverBookSystem;
 using TheInfiniteCrusade.NewComponents.Properties;
@@ -291,7 +292,18 @@ namespace TheInfiniteCrusade.Utilities
                 x.ActionType = Kingmaker.UnitLogic.Commands.Base.UnitCommand.CommandType.Standard;
                 x.Type = AbilityType.Extraordinary;
                 x.Range = AbilityRange.Personal;
-
+                x.AddComponent<RecoverSelectedManeuver>(x =>
+                {
+                    x.spellbookReference = define.m_spellbook;
+                });
+                if (define.CustomStandardActionRestoreSprite != null)
+                {
+                    x.m_Icon = define.CustomStandardActionRestoreSprite;
+                }
+                else
+                {
+                    x.m_Icon = ConstructionAssets.itemBondSprite;
+                }
 
             });
             feature.AddComponent<AddFacts>(x =>

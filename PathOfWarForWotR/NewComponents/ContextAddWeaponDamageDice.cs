@@ -5,6 +5,7 @@ using Kingmaker.PubSubSystem;
 using Kingmaker.RuleSystem;
 using Kingmaker.RuleSystem.Rules;
 using Kingmaker.RuleSystem.Rules.Damage;
+using Kingmaker.UnitLogic;
 using Kingmaker.UnitLogic.Buffs.Blueprints;
 using Kingmaker.UnitLogic.Mechanics;
 using Kingmaker.UnitLogic.Mechanics.Components;
@@ -18,34 +19,42 @@ using TheInfiniteCrusade.NewComponents.UnitParts;
 namespace TheInfiniteCrusade.NewComponents
 {
     [AllowedOn(typeof(BlueprintBuff))]
-    class ContextAddWeaponDamageDice : EntityFactComponentDelegate, IInitiatorRulebookHandler<RuleCalculateWeaponStats>, IRulebookHandler<RuleCalculateWeaponStats>, ISubscriber, IInitiatorRulebookSubscriber
+    class ContextAddWeaponDamageDice : UnitFactComponentDelegate, IInitiatorRulebookHandler<RuleCalculateWeaponStats>, IRulebookHandler<RuleCalculateWeaponStats>, ISubscriber, IInitiatorRulebookSubscriber
     {
         
 
         public void OnEventAboutToTrigger(RuleCalculateWeaponStats evt)
         {
-            int dice = contextValue.Calculate(evt.Reason.Context);
+            int dice = Value.Calculate(base.Fact.MaybeContext);
             if (DealWeaponDamage)
             {
+                
                 if (evt.DamageDescription.Any())
                 {
+                    
                     evt.DamageDescription.Add(new DamageDescription()
                     {
+                        
                         Dice = new DiceFormula(dice, diceType),
                         TypeDescription = evt.DamageDescription[0].TypeDescription,
                         IgnoreImmunities = evt.DamageDescription[0].IgnoreImmunities,
                         IgnoreReduction = evt.DamageDescription[0].IgnoreReduction,
-
+                        SourceFact = base.Fact
+                        
+                        
                     });
+                    
                 }
                 else
                 {
                     evt.DamageDescription.Add(new DamageDescription()
                     {
                         Dice = new DiceFormula(dice, diceType),
-                        TypeDescription = evt.Weapon.Blueprint.DamageType
-
+                        TypeDescription = evt.Weapon.Blueprint.DamageType,
+                        SourceFact = base.Fact
                     });
+
+                    
                 }
 
             }
@@ -76,7 +85,7 @@ namespace TheInfiniteCrusade.NewComponents
             
         }
 
-        public ContextValue contextValue;
+        public ContextValue Value;
         public DiceType diceType = DiceType.D6;
 
         public bool DealWeaponDamage;

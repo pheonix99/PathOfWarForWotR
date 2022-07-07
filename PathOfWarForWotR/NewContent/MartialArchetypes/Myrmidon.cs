@@ -10,13 +10,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TabletopTweaks.Core.Utilities;
-using TheInfiniteCrusade.NewComponents.AbilitySpecific;
 using Kingmaker.UnitLogic.Buffs.Blueprints;
 using Kingmaker.Blueprints.Classes.Spells;
 using TheInfiniteCrusade.NewComponents;
 using Kingmaker.UnitLogic.Abilities.Blueprints;
 using Kingmaker.UnitLogic.Abilities.Components;
 using TheInfiniteCrusade.Defines;
+using TheInfiniteCrusade.Backend.NewComponents.AbilitySpecific;
+using TheInfiniteCrusade.Backend.NewActions;
 
 namespace TheInfiniteCrusade.NewContent.MartialArchetypes
 {
@@ -88,6 +89,7 @@ namespace TheInfiniteCrusade.NewContent.MartialArchetypes
                     x.m_RequiredResource = GritResource.ToReference<BlueprintAbilityResourceReference>();
 
                 });
+                
                 x.ActionType = Kingmaker.UnitLogic.Commands.Base.UnitCommand.CommandType.Swift;
             });
             Main.LogPatch(HeroicRecoveryAbility);
@@ -220,6 +222,13 @@ namespace TheInfiniteCrusade.NewContent.MartialArchetypes
             myrmidonDefine.FullRoundRestoreDesc = "In order for the myrmidon to recover maneuvers, he must take on a defensive form as a full-round action, resetting his rhythm to continue the battle. When he does so, he recovers a number of maneuvers equal to his myrmidon initiation modifier (minimum 2) and until the start of his next turn, attacks made against the myrmidon provoke an attack of opportunity from him. In addition, he gains the benefit of the Combat Reflexes feat, and can use his myrmidon initiation modifier instead of his Dexterity modifier for determining how many additional attacks of opportunity he can make.";
             myrmidonDefine.StandardActionRestoreName = "Recover Myrmidon Maneuver";
             myrmidonDefine.StandardActionRestoreDesc = "The myrmidon may take a moment to focus, recovering a single maneuver as a standard action.";
+
+
+            HeroicRecoveryAbility.AddComponent<RecoverSelectedManeuver>(x =>
+            {
+
+                x.spellbookReference = myrmidonDefine.m_spellbook;
+            });
 
             var prog = ProcessProgressionDefinition.BuildInitiatorProgress(myrmidonDefine);
             myrm.AddToAddFeatures(1, prog.ToReference<BlueprintFeatureBaseReference>());

@@ -1,4 +1,5 @@
 ﻿using BlueprintCore.Utils;
+using Kingmaker.Blueprints.Classes;
 using Kingmaker.Blueprints.Root;
 using System;
 using System.Collections.Generic;
@@ -11,6 +12,7 @@ namespace TheInfiniteCrusade.Utilities
 {
     public static class ConstructionAssets
     {
+        public static Sprite itemBondSprite;
         public static void LoadGUIDS()
         {
             BlueprintTool.AddGuidsByName(("RangerClass", "cda0615668a6df14eb36ba19ee881af6"));
@@ -37,6 +39,7 @@ namespace TheInfiniteCrusade.Utilities
             BlueprintTool.AddGuidsByName(("StaggeredBuff", "df3950af5a783bd4d91ab73eb8fa0fd3"));
             BlueprintTool.AddGuidsByName(("DazedBuff", "9934fedff1b14994ea90205d189c8759"));
             BlueprintTool.AddGuidsByName(("NauseatedBuff", "956331dba5125ef48afe41875a00ca0e"));
+            itemBondSprite = BlueprintTool.Get<BlueprintFeature>("2fb5e65bd57caa943b45ee32d825e9b9").Icon;
 
         }
         public static BlueprintRoot Root()

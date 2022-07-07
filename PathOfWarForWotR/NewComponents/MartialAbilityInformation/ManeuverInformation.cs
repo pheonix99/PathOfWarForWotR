@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TheInfiniteCrusade.Utilities;
 
 namespace TheInfiniteCrusade.NewComponents.MartialAbilityInformation
 {
@@ -22,9 +23,33 @@ namespace TheInfiniteCrusade.NewComponents.MartialAbilityInformation
         /// </summary>
         public string[] DisciplineKeys = new string[0];
         public bool isPrcAbility = false;
-        
 
-        
+        internal string GetManeuverSchoolString()
+        {
+            StringBuilder s = new();
+            if (DisciplineKeys.Length == 0)
+            {
+                return "No Discipline";
+            }
+            else
+            {
+                for(int i = 0;i<DisciplineKeys.Length;i++)
+                {
+                   if (DisciplineTools.Disciplines.TryGetValue(DisciplineKeys[i], out var discipline))
+                    {
+                        s.Append(discipline.DisplayName);
+                        if (i+1 < DisciplineKeys.Length)
+                        {
+                            s.Append(", ");
+                        }
+                    }
+
+                }
+
+                return s.ToString();
+            }
+            
+        }
     }
 
    

@@ -12,7 +12,6 @@ using Kingmaker.UnitLogic.Abilities.Blueprints;
 using TheInfiniteCrusade.NewComponents.Abilities;
 using BlueprintCore.Blueprints.CustomConfigurators.UnitLogic.Abilities;
 using BlueprintCore.Actions.Builder;
-using TheInfiniteCrusade.NewComponents.Actions;
 using TheInfiniteCrusade.NewComponents.ManeuverProperties;
 using BlueprintCore.Actions.Builder.ContextEx;
 using BlueprintCore.Utils.Types;
@@ -23,6 +22,7 @@ using Kingmaker.UnitLogic.Buffs.Blueprints;
 using BlueprintCore.Blueprints.CustomConfigurators.UnitLogic.Buffs;
 using Kingmaker.UnitLogic.Mechanics;
 using Kingmaker.RuleSystem.Rules;
+using TheInfiniteCrusade.Backend.NewActions;
 
 namespace TheInfiniteCrusade.NewContent.Disciplines
 {

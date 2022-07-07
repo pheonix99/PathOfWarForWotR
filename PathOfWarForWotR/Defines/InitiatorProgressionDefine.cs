@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using TabletopTweaks.Core.ModLogic;
 using TheInfiniteCrusade.NewComponents.ManeuverBookSystem;
+using UnityEngine;
 
 namespace TheInfiniteCrusade.Defines
 {
@@ -49,10 +50,11 @@ namespace TheInfiniteCrusade.Defines
         public bool HasFullRoundRestore = true;
         public string FullRoundRestoreName;
         public string FullRoundRestoreDesc;
+        public Sprite CustomFullRoundRestoreSprite;
 
         public string StandardActionRestoreName;
         public string StandardActionRestoreDesc;
-
+        public Sprite CustomStandardActionRestoreSprite;
 
 
 
