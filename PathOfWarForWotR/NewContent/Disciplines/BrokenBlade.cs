@@ -40,7 +40,8 @@ namespace TheInfiniteCrusade.NewContent.Disciplines
             void IronHandStance()
             {
                 var IronHandStance = ManeuverTools.MakeSimpleStatUpStance(Main.Context, "IronHandStance", "Iron Hand Stance", "By keeping his hands stiff and his arms loose and ready, the disciple uses his bare palms as shields to protect himself from the weapons of his foes. While in this stance, the initiator gains a +2 shield bonus to his AC while he has at least one free hand. At the initiator’s 6th initiator level, this bonus increases by +1, again at 12th level, and a final time at 18th level.", 1, brokenBlade, Kingmaker.EntitySystem.Stats.StatType.AC, Kingmaker.Enums.ModifierDescriptor.Shield, 2, 6, out var IHSbuff);
-
+                IronHandStance.SetLocalizedDuration(Main.Context, "");
+                IronHandStance.SetLocalizedSavingThrow(Main.Context, "");
                 ManeuverTools.FinishManeuver(IronHandStance);
             }
 
@@ -48,7 +49,8 @@ namespace TheInfiniteCrusade.NewContent.Disciplines
             void PugilistStance()
             {
                 var PugilistStance = ManeuverTools.MakeSimpleDamageUpStance(Main.Context, "PugilistStance", "Pugilist Stance", "By adopting a powerful kickboxing stance, the initiator positions himself for lightning fast, potent strikes with his hands and feet. While in this stance, unarmed or discipline weapon strikes inflict an additional 1d6 points of damage, increasing to 2d6 at initator level 8 and another die every eight levels", 1, brokenBlade, baseValue: 1, levelsToIncrease: 8, out var IHSbuff);
-
+                PugilistStance.SetLocalizedDuration(Main.Context, "");
+                PugilistStance.SetLocalizedSavingThrow(Main.Context, "");
                 ManeuverTools.FinishManeuver(PugilistStance);
             }
 
@@ -166,7 +168,7 @@ namespace TheInfiniteCrusade.NewContent.Disciplines
 
 
             #endregion
-            #region level 3
+            #region level 2
 
             KnuckleToTheBlade();
             void KnuckleToTheBlade()

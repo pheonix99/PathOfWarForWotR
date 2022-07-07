@@ -35,6 +35,7 @@ namespace TheInfiniteCrusade.NewContent
                 Disciplines.SilverCrane.Build();
                 MartialArchetypes.Myrmidon.BuildMyrmidon();
                 MartialArchetypes.PrimalDisciple.Make();
+                Feats.MartialFeats.ExtraReadiedManeuver.MakeSelector();
             }
         }
 

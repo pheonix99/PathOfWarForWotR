@@ -49,6 +49,10 @@ namespace TheInfiniteCrusade.NewContent.MartialArchetypes
                 {
                     x.Skill = Kingmaker.EntitySystem.Stats.StatType.SkillPersuasion;
                 });
+                x.AddComponent<AddClassSkill>(x =>
+                {
+                    x.Skill = Kingmaker.EntitySystem.Stats.StatType.SkillPerception;
+                });
             });
             Main.LogPatch(SkillFeature);
             var GritFeature = Helpers.CreateBlueprint<BlueprintFeature>(Main.Context, "MyrmidonGritFeature", x =>

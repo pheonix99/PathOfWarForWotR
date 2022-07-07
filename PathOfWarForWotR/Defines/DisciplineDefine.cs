@@ -39,7 +39,7 @@ namespace TheInfiniteCrusade.Defines
             this.weaponCategories = weaponCategories != null ? weaponCategories : new WeaponCategory[0];
             this.alwaysSupernatural = alwaysSupernatural;
             this.descriptor = descriptor;
-            masterGuid = Main.Context.Blueprints.GetDerivedMaster(sysName);
+            masterGuid = Main.Context.Blueprints.GetDerivedMaster(sysName+"MasterGUID");
         }
     }
 }

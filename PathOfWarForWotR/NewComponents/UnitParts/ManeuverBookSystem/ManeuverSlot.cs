@@ -17,11 +17,13 @@ namespace TheInfiniteCrusade.NewComponents.UnitParts.ManeuverBookSystem
         public readonly SlotType SlotType;
 
         public SlotManeuverState State = SlotManeuverState.Readied;
+
         private BlueprintAbilityReference[] _layers = new BlueprintAbilityReference[3];
         public bool IllegallyEmpty => Combat == null || Readied == null;
 
         public bool Available => State == SlotManeuverState.Readied;
         public BlueprintAbilityReference[] Layers => _layers.ToArray();
+
 
         public BlueprintAbilityReference Combat => _layers[0];
         public BlueprintAbilityReference Readied => _layers[1];
@@ -37,6 +39,11 @@ namespace TheInfiniteCrusade.NewComponents.UnitParts.ManeuverBookSystem
         public ManeuverSlot()
         {
 
+        }
+
+        public BlueprintAbilityReference Get(SlotLayer layer)
+        {
+            return _layers[(int)layer];
         }
 
         public ManeuverSlot(SlotRecord slotRecord)
@@ -73,6 +80,11 @@ namespace TheInfiniteCrusade.NewComponents.UnitParts.ManeuverBookSystem
         {
             _layers[2] = blueprintAbilityReference;
 
+        }
+
+        public void ClearCombatHotswap()
+        {
+            _layers[0] = Layers[1];
         }
 
         private BlueprintAbilityReference TryLoad(string guid)

@@ -83,7 +83,7 @@ namespace TheInfiniteCrusade.Serialization
               {
                   if (name != "header")
                       return;
-                  Main.Context.Logger.Log($"Saving Maneuver Books!");
+                  Main.Context.Logger.Log($"Saving Maneuver Books! - from ManeuverBookStorage");
                   Main.Safely(() => {
                       var serializer = new JsonSerializer();
                       serializer.Formatting = Formatting.Indented;
@@ -103,7 +103,7 @@ namespace TheInfiniteCrusade.Serialization
               [HarmonyPatch("LoadGame"), HarmonyPostfix]
               static void LoadGame(SaveInfo saveInfo)
               {
-                  Main.Context.Logger.Log($"Loading DisciplineSaveInfo");
+                  Main.Context.Logger.Log($"Loading DisciplineSaveInfo - from ManeuverBookStorage");
                   using (saveInfo)
                   {
                       using (saveInfo.GetReadScope())
@@ -130,6 +130,7 @@ namespace TheInfiniteCrusade.Serialization
                   }
               }
           }
+
         
     }
 

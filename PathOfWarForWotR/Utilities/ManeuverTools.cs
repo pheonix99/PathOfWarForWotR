@@ -68,7 +68,7 @@ namespace TheInfiniteCrusade.Utilities
                     }
                     if (comp.DisciplineKeys[0] == "ScarletThrone" && !maneuver.Components.OfType<ScarletThroneNoShieldRule>().Any())
                     {
-                        maneuver.AddComponent<IronTortoiseShieldRequiredRestriction>();
+                        maneuver.AddComponent<ScarletThroneNoShieldRule>(x=>x.AllowTwoHanderAtAll = true);
                     }
                 }
                 

@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TheInfiniteCrusade.Backend.NewUnitParts;
 using TheInfiniteCrusade.NewComponents.ManeuverBookSystem;
 using TheInfiniteCrusade.NewComponents.MartialAbilityInformation;
 using TheInfiniteCrusade.NewComponents.UnitParts;

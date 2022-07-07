@@ -42,7 +42,7 @@ namespace TheInfiniteCrusade.NewComponents.AbilitySpecific
 
         public void OnEventDidTrigger(RuleCalculateAttackBonusWithoutTarget evt)
         {
-            throw new NotImplementedException();
+            
         }
     }
 }

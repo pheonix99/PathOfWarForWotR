@@ -82,5 +82,7 @@ namespace TheInfiniteCrusade.NewComponents
         public bool DealWeaponDamage;
         public bool DealVariableTypeDamage;
         public DamageTypeDescription DamageType;
+
+        //TODO ADD CONDITIONS
     }
 }

@@ -12,6 +12,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TabletopTweaks.Core.Utilities;
+using TheInfiniteCrusade.Backend.NewUnitParts;
 using TheInfiniteCrusade.NewComponents.MartialAbilityInformation;
 using TheInfiniteCrusade.NewComponents.UnitParts;
 

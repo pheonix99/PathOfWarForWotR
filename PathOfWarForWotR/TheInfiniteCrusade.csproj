@@ -191,6 +191,7 @@
 
   <ItemGroup>
     <Folder Include="Assets\" />
+    <Folder Include="NewComponents\Controllers\" />
   </ItemGroup>
 
 

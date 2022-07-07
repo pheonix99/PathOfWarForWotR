@@ -7,11 +7,8 @@ using Kingmaker.Blueprints.Classes.Spells;
 using Kingmaker.UnitLogic.Abilities.Blueprints;
 using Kingmaker.UnitLogic.FactLogic;
 using Kingmaker.UnitLogic.Mechanics.Properties;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TabletopTweaks.Core.NewComponents.Properties;
 using TabletopTweaks.Core.Utilities;
 using TheInfiniteCrusade.Defines;
@@ -41,7 +38,7 @@ namespace TheInfiniteCrusade.Utilities
                 return null;
 
             Defines.Add(define);
-          
+
 
 
             var progression = Helpers.CreateBlueprint<BlueprintProgression>(source, stringProgressionBlueprintSysName, x =>
@@ -54,17 +51,17 @@ namespace TheInfiniteCrusade.Utilities
                 {
                     foreach (var v in define.ArchetypesForArchetypeTemplate)
                     {
-                        
-                       x.AddArchetype(v);
+
+                        x.AddArchetype(v);
                     }
                 }
-                foreach(var c in define.ClassesForClassTemplate)
+                foreach (var c in define.ClassesForClassTemplate)
                 {
                     x.AddClass(c);
                 }
 
             });
-           
+
             var spellbookSysName = define.InitiatorSysNameBase + "ManeuverBook";
 
 
@@ -85,7 +82,7 @@ namespace TheInfiniteCrusade.Utilities
                     bookdef.IsGranted = define.GrantedType;
                     bookdef.ClassReference = define.ClassesForClassTemplate.ToArray();
                     bookdef.GrantingProgression = progression.ToReference<BlueprintProgressionReference>();
-                    
+
 
                 });
             });
@@ -125,7 +122,7 @@ namespace TheInfiniteCrusade.Utilities
                 {
                     y.m_CasterLevel = new Kingmaker.UnitLogic.Mechanics.ContextValue { m_CustomProperty = MLProperty.ToReference<BlueprintUnitPropertyReference>(), ValueType = Kingmaker.UnitLogic.Mechanics.ContextValueType.CasterCustomProperty };
                     y.m_Spellbook = spellbook.ToReference<BlueprintSpellbookReference>();
-                    
+
 
                 });
                 x.ReapplyOnLevelUp = true;
@@ -138,25 +135,25 @@ namespace TheInfiniteCrusade.Utilities
 
             var standardRestore = MakeStandardActionRestore(define);
             progression.AddToProgressionLevels(1, standardRestore.ToReference<BlueprintFeatureBaseReference>());
-            if (define.HasFullRoundRestore )
+            if (define.HasFullRoundRestore)
             {
                 var fullRoundRestore = MakeFullRoundRestore(define);
                 progression.AddToProgressionLevels(1, fullRoundRestore.ToReference<BlueprintFeatureBaseReference>());
             }
-           
+
 
             var exchangerBuild = BuildExchanger(define, out var finalPick);
-            for (int i = 0; i < define.ManeuversKnownAtLevel1; i++)
+
+
+            finalPick.AddComponent<ManeuverSelectionFeature>(x =>
             {
-                finalPick.AddComponent<ManeuverSelectionFeature>(x =>
-                {
-                    x.Count = 1;
-                    x.targetSpellbook = spellbook.ToReference<BlueprintSpellbookReference>();
-                    x.stance = false;
-                    x.mode = ManeuverSelectionFeature.Mode.Standard;
-                    x.m_SpellList = BlueprintTools.GetModBlueprintReference<BlueprintSpellListReference>(Main.Context, $"MasterManeuverList");
-                });
-            }
+                x.Count = define.ManeuversKnownAtLevel1;
+                x.targetSpellbook = spellbook.ToReference<BlueprintSpellbookReference>();
+                x.stance = false;
+                x.mode = ManeuverSelectionFeature.Mode.Standard;
+                x.m_SpellList = BlueprintTools.GetModBlueprintReference<BlueprintSpellListReference>(Main.Context, $"MasterManeuverList");
+            });
+
             finalPick.AddComponent<ManeuverSelectionFeature>(x =>
             {
                 x.Count = 1;
@@ -166,17 +163,18 @@ namespace TheInfiniteCrusade.Utilities
                 x.m_SpellList = BlueprintTools.GetModBlueprintReference<BlueprintSpellListReference>(Main.Context, $"MasterStanceList");
             });
 
-            var maneuverPick = BuildMartialLearnManeuver(define, false);
-            var stancePick = BuildMartialLearnManeuver(define, true);
+            var maneuverPick = BuildAdditionalManeuverLearner(define, false);
+            var stancePick = BuildAdditionalManeuverLearner(define, true);
             var featureUp = BuildAdditionalSlotFeatures(define);
             if (!define.ManuallyBuildSelectors)
             {
 
-                var selectorFeature = Helpers.CreateBlueprint<BlueprintFeatureSelection>(define.Source, define.InitiatorSysNameBase + "DisciplineSelector", x => {
+                var selectorFeature = Helpers.CreateBlueprint<BlueprintFeatureSelection>(define.Source, define.InitiatorSysNameBase + "DisciplineSelector", x =>
+                {
                     x.SetName(define.Source, "Pick Disciplines");
                     x.SetDescription(define.Source, "Select Disciplines");
                     x.IsClassFeature = true;
-               
+
                 });
                 for (int i = 0; i < define.SelectionCount; i++)
                 {
@@ -184,10 +182,10 @@ namespace TheInfiniteCrusade.Utilities
                 }
                 define.m_disciplineSelector = selectorFeature.ToReference<BlueprintFeatureSelectionReference>();
 
-                
-                
+
+
             }
-            for(int i = 0; i<define.ManeuverSlotsAtLevel1; i++)
+            for (int i = 0; i < define.ManeuverSlotsAtLevel1; i++)
             {
                 progression.AddToProgressionLevels(1, featureUp.ToReference<BlueprintFeatureBaseReference>());
             }
@@ -224,21 +222,22 @@ namespace TheInfiniteCrusade.Utilities
                 x.SetNameDescription(definition.Source, displayName, discription);
                 x.IsClassFeature = true;
                 x.Ranks = 50;
-                
+
 
             });
             if (definition.ArchetypesForArchetypeTemplate.Any())
             {
-                foreach(var a in definition.ArchetypesForArchetypeTemplate)
+                foreach (var a in definition.ArchetypesForArchetypeTemplate)
                 {
                     feature.AddComponent<PrerequisiteArchetypeLevel>(x =>
                     {
                         x.m_Archetype = a;
                         x.m_CharacterClass = a.Get().m_ParentClass.ToReference<BlueprintCharacterClassReference>();
                         x.Level = 1;
+                        x.Group = Prerequisite.GroupType.Any;
                     });
                 }
-              
+
             }
             else
             {
@@ -264,7 +263,7 @@ namespace TheInfiniteCrusade.Utilities
                             }
                         }
                     };
-                    
+
                 });
 
             });
@@ -292,7 +291,7 @@ namespace TheInfiniteCrusade.Utilities
                 x.ActionType = Kingmaker.UnitLogic.Commands.Base.UnitCommand.CommandType.Standard;
                 x.Type = AbilityType.Extraordinary;
                 x.Range = AbilityRange.Personal;
-                
+
 
             });
             feature.AddComponent<AddFacts>(x =>
@@ -351,14 +350,16 @@ namespace TheInfiniteCrusade.Utilities
                 Main.Context.Logger.Log($"Warning, attempt to rebuild exchanger for {define}");
             }
 
-            var exchanger = Helpers.CreateBlueprint<BlueprintFeatureSelection>(define.Source, define.InitiatorSysNameBase + "DisciplineExchangeFeatureSelection", x => {
+            var exchanger = Helpers.CreateBlueprint<BlueprintFeatureSelection>(define.Source, define.InitiatorSysNameBase + "DisciplineExchangeFeatureSelection", x =>
+            {
                 x.SetNameDescription(define.Source, define.DisplayName + " Discipline Exchange", "Exchange disciplines and finalize.");
                 x.IsClassFeature = true;
                 x.HideInUI = true;
                 x.HideInCharacterSheetAndLevelUp = true;
             });
 
-            finalize = Helpers.CreateBlueprint<BlueprintFeature>(define.Source, define.InitiatorSysNameBase + "DiscplineExchangeDone", x => {
+            finalize = Helpers.CreateBlueprint<BlueprintFeature>(define.Source, define.InitiatorSysNameBase + "DiscplineExchangeDone", x =>
+            {
                 x.SetNameDescription(define.Source, "Finished Exchanges", "Select to finish doing swaps and pick initial maneuvers");
                 x.IsClassFeature = true;
                 x.HideInUI = true;
@@ -370,7 +371,8 @@ namespace TheInfiniteCrusade.Utilities
             return exchanger;
         }
 
-        private static BlueprintFeature BuildMartialLearnManeuver(InitiatorProgressionDefine define, bool stance)
+
+        private static BlueprintFeature BuildAdditionalManeuverLearner(InitiatorProgressionDefine define, bool stance)
         {
             string sysName = define.InitiatorSysNameBase + (stance ? "Stance" : "Manuever") + "LearnSelector";
 
@@ -385,7 +387,7 @@ namespace TheInfiniteCrusade.Utilities
                     y.targetSpellbook = define.m_spellbook;
                     y.stance = stance;
                     y.mode = ManeuverSelectionFeature.Mode.Standard;
-                    y.m_SpellList = stance ? BlueprintTools.GetModBlueprintReference<BlueprintSpellListReference>(Main.Context, $"GrandMasterStanceList") : BlueprintTools.GetModBlueprintReference<BlueprintSpellListReference>(Main.Context, $"GrandMasterManeuverList");
+                    y.m_SpellList = stance ? BlueprintTools.GetModBlueprintReference<BlueprintSpellListReference>(Main.Context, $"MasterStanceList") : BlueprintTools.GetModBlueprintReference<BlueprintSpellListReference>(Main.Context, $"MasterManeuverList");
 
 
                 });
@@ -461,21 +463,32 @@ namespace TheInfiniteCrusade.Utilities
                 }
             }
 
-            
+
+            HandleExtraReadiedManeuver();
+            void HandleExtraReadiedManeuver()
+            {
+                var selector = BlueprintTools.GetModBlueprint<BlueprintFeatureSelection>(Main.Context, "ExtraReadiedManeuverSelector");
+
+                selector.AddFeatures(define.AddSlotComponent);
+            }
+
         }
+
+       
 
         private static BlueprintFeature MakeUnlock(InitiatorProgressionDefine define, DisciplineDefine unlock)
         {
             string systemName = define.InitiatorSysNameBase + "Unlock" + unlock.SysName + "Feature";
 
-        
-            var feature = Helpers.CreateDerivedBlueprint<BlueprintFeature>(define.Source, systemName, unlock.masterGuid, new List<SimpleBlueprint>() {define.m_spellbook.Get() }, x => {
+
+            var feature = Helpers.CreateDerivedBlueprint<BlueprintFeature>(define.Source, systemName, unlock.masterGuid, new List<SimpleBlueprint>() { define.m_spellbook.Get() }, x =>
+            {
                 x.SetNameDescription(define.Source, unlock.DisplayName, $"Gain access to {unlock.DisplayName} as {define.DisplayName} manuevers\n{unlock.Description}");
                 x.AddComponent<DisciplineUnlockForInitiatorProgression>(x =>
                 {
                     x.m_Progression = define.m_Progression;
                     x.disciplineType = unlock.SysName;
-                    
+
                 });
                 x.m_Icon = unlock.defaultSprite;
                 x.AddComponent<AddClassSkill>(x =>

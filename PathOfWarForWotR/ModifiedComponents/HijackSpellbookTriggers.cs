@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TheInfiniteCrusade.Backend.NewUnitParts;
 using TheInfiniteCrusade.NewComponents.ManeuverBookSystem;
 using TheInfiniteCrusade.NewComponents.UnitParts;
 
@@ -23,17 +24,7 @@ namespace TheInfiniteCrusade.ModifiedComponents
 
                 if (__instance.Blueprint.Components.OfType<ManeuverBookComponent>().Any())
                 {
-                    var part = __instance.Owner.Get<UnitPartMartialDisciple>();
-                    if (part == null)
-                    {
-
-                        return false;
-                    }
-                    else
-                    {
-                        part.ReloadAndRecharge(__instance);
-
-                    }
+                    //Tossed this into the controller.
 
                     return false;
                 }

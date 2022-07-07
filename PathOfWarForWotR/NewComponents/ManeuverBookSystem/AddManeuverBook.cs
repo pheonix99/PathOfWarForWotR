@@ -7,11 +7,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TheInfiniteCrusade.Backend.NewEvents;
+using TheInfiniteCrusade.Backend.NewUnitParts;
 using TheInfiniteCrusade.NewComponents.UnitParts;
 
 namespace TheInfiniteCrusade.NewComponents.ManeuverBookSystem
 {
-	public class AddManeuverBook : AddSpellbook, IUnitReapplyFeaturesOnLevelUpHandler, IUnitSubscriber, ISubscriber
+	public class AddManeuverBook : AddSpellbook, IUnitReapplyFeaturesOnLevelUpHandler, IUnitSubscriber, ISubscriber, IPostCombatCooldownHandler, ICombatStartedWhileCooledDownHandler
 	{
 
 		public ManeuverBookComponent ManeuverBookComponent
@@ -37,5 +39,16 @@ namespace TheInfiniteCrusade.NewComponents.ManeuverBookSystem
 
 		}
 
-	}
+        public void OnCombatStartWhileCooledDown()
+        {
+			var part = base.Owner.Ensure<UnitPartMartialDisciple>();
+			part.RechargeBookOnCombatStart(Spellbook);
+		}
+
+        public void OnPostCombatCooldown()
+        {
+			var part = base.Owner.Ensure<UnitPartMartialDisciple>();
+			part.RechargeBookOnCombatEnd(Spellbook);
+		}
+    }
 }

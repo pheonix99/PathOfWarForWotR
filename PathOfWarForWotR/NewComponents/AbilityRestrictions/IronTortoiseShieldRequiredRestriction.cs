@@ -13,7 +13,7 @@ namespace TheInfiniteCrusade.NewComponents.AbilityRestrictions
     {
         public string GetAbilityCasterRestrictionUIText()
         {
-            return "Shield Bash Enabled Shield Needed";
+            return "Iron Tortoise Maneuvers Require A Shield";
         }
 
         public bool IsCasterRestrictionPassed(UnitEntityData caster)

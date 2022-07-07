@@ -7,19 +7,24 @@ using Kingmaker.RuleSystem.Rules;
 using Kingmaker.UnitLogic;
 using Kingmaker.UnitLogic.Abilities;
 using Kingmaker.UnitLogic.Abilities.Blueprints;
+using Kingmaker.UnitLogic.Buffs.Blueprints;
 using Kingmaker.Utility;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TabletopTweaks.Core.Utilities;
+using TheInfiniteCrusade.Backend.NewEvents;
 using TheInfiniteCrusade.Extensions;
 using TheInfiniteCrusade.NewComponents.ManeuverBookSystem;
 using TheInfiniteCrusade.NewComponents.ManeuverProperties;
 using TheInfiniteCrusade.NewComponents.MartialAbilityInformation;
+using TheInfiniteCrusade.NewComponents.UnitParts;
 using TheInfiniteCrusade.NewComponents.UnitParts.ManeuverBookSystem;
+using TheInfiniteCrusade.Serialization;
 
-namespace TheInfiniteCrusade.NewComponents.UnitParts
+namespace TheInfiniteCrusade.Backend.NewUnitParts
 {
     class UnitPartMartialDisciple : OldStyleUnitPart, IUnitSubscriber, IUnitCompleteLevelUpHandler, IInitiatorRulebookHandler<RuleCombatManeuver>, IRulebookHandler<RuleCombatManeuver>, ISubscriber, IInitiatorRulebookSubscriber
     {
@@ -27,6 +32,47 @@ namespace TheInfiniteCrusade.NewComponents.UnitParts
         #region Handle Maneuver Books
 
         private List<ManeuverBook> ManeuverBooks = new();
+
+        internal void RechargeBookOnCombatStart(BlueprintSpellbook spellbook)
+        {
+            var book = GetManeuverBook(spellbook);
+            if (book == null)
+                return;
+            if (!book.GrantedType)
+            {
+                foreach(var slot in book.ManeuverSlots)
+                {
+                    slot.ClearCombatHotswap();
+                    slot.Recover();
+                }
+            }
+        }
+
+        internal void RechargeBookOnCombatEnd(BlueprintSpellbook spellbook)
+        {
+            var book = GetManeuverBook(spellbook);
+            if (book == null)
+                return;
+            if (!book.GrantedType)
+            {
+                foreach (var slot in book.ManeuverSlots)
+                {
+                    slot.ClearCombatHotswap();
+                    slot.Recover();
+                }
+            }
+        }
+
+        internal void Rest()
+        {
+            foreach(Spellbook o in Owner.Spellbooks)
+            {
+                RechargeBookOnCombatEnd(o.Blueprint);
+            }
+
+            
+        }
+
         public class ManeuverBook
         {
 
@@ -48,6 +94,8 @@ namespace TheInfiniteCrusade.NewComponents.UnitParts
             public BlueprintUnitPropertyReference ManeuverSlotsPropertyReference => ManeuverBookData.m_ManeuverSlotsReference;
             public ManeuverBookComponent ManeuverBookData => BlueprintSpellbookReference.Get().Components.OfType<ManeuverBookComponent>().First();
             public Spellbook Spellbook => source.Owner.DemandSpellbook(BlueprintSpellbookReference);
+
+            public BlueprintSpellbook BlueprintSpellbook => BlueprintSpellbookReference.Get();
 
             public ManeuverBook(UnitFact fact, BlueprintSpellbookReference blueprintSpellbookReference)
             {
@@ -116,7 +164,45 @@ namespace TheInfiniteCrusade.NewComponents.UnitParts
             }
         }
 
-        private ManeuverBook GetManeuverBook(Spellbook spellbook)
+        private void LoadBook(ManeuverBook book)
+        {
+            Main.Context.Logger.Log($"Loading {book.BlueprintSpellbook.Name} Book Info - stage : in Unit Part");
+            var record = ManeuverBookStorage.Instance.ForCharacter(Owner).ForSpellbook(book.BlueprintSpellbook);
+            book.ManeuverSlots.Clear();
+            foreach (var slot in record)
+            {
+                book.ManeuverSlots.Add(new ManeuverSlot(slot));
+            }
+            book.DemandSlotsUpdate();
+        }
+
+        public override void OnPostLoad()
+        {
+            Main.Context.Logger.Log($"Loading Maneuver  Info: from Unit Part");
+            foreach (var book in ManeuverBooks)
+            {
+                LoadBook(book);
+            }
+        }
+
+        public override void OnPreSave()
+        {
+            Main.Context.Logger.Log($"Saving Maneuver  Info: from Unit Part");
+
+            foreach (var book in ManeuverBooks)
+            {
+                Main.Context.Logger.Log($"Saving {book.BlueprintSpellbook.Name} Book Info - stage : in Unit Part");
+                var record = ManeuverBookStorage.Instance.ForCharacter(Owner).ForSpellbook(book.BlueprintSpellbook);
+                record.Clear();
+                foreach (var slot in book.ManeuverSlots)
+                {
+                    record.Add(new SlotRecord(slot));
+                }
+            }
+            
+        }
+
+        public ManeuverBook GetManeuverBook(Spellbook spellbook)
         {
             return GetManeuverBook(spellbook.Blueprint.ToReference<BlueprintSpellbookReference>());
         }
@@ -143,6 +229,59 @@ namespace TheInfiniteCrusade.NewComponents.UnitParts
             
         }
 
+        public bool InCombatMode()
+        {
+            if (Owner.Unit.CombatState.IsInCombat)
+                return true;
+            if (Owner.HasFact(BlueprintTools.GetModBlueprint<BlueprintBuff>(Main.Context, "InCombatModeSystemBuff")))
+                return true;
+
+
+            else return false;
+        }
+
+        internal int GetTimesMemorized(BlueprintAbility blueprint, SlotLayer readied, Spellbook instance)
+        {
+            var book = GetManeuverBook(instance);
+            int count = 0;
+            if (book != null)
+            {
+                foreach (var slot in book.ManeuverSlots)
+                {
+                    if (slot.Get(readied) != null && slot.Get(readied).Equals(blueprint.ToReference<BlueprintAbilityReference>()))
+                    {
+                        count++;
+                    }
+                }
+            }
+            return count;
+        }
+
+        internal int GetTimesMemorized(BlueprintAbility blueprint, SlotLayer readied)
+        {
+            int count = 0;
+            foreach(var book in ManeuverBooks)
+            {
+                foreach(var slot in book.ManeuverSlots)
+                {
+                    if (slot.Get(readied) != null && slot.Get(readied).Equals(blueprint.ToReference<BlueprintAbilityReference>()))
+                    {
+                        count++;
+                    }
+                }
+            }
+
+            return count;
+        }
+
+        internal bool CanMemorizeForBook(Spellbook instance)
+        {
+            if (InCombatMode())
+                return false;
+
+
+            return true;
+        }
 
         internal bool ExpendManeuverOnSelection(Spellbook instance, BlueprintAbility blueprint)
         {
@@ -419,11 +558,11 @@ namespace TheInfiniteCrusade.NewComponents.UnitParts
         private List<ProgressionSpecificUnlock> classSpecificUnlocks = new();
         internal void RegisterBook(UnitFact fact, BlueprintSpellbook spellbook, ManeuverBookComponent maneuverBookComponent)
         {
-            Main.Context.Logger.Log($"Registered Book {spellbook.Name} on {Owner.CharacterName}");
+           // Main.Context.Logger.Log($"Registered Book {spellbook.Name} on {Owner.CharacterName}");
 
             var book = new ManeuverBook(fact, spellbook.ToReference<BlueprintSpellbookReference>());
             ManeuverBooks.Add(book);
-
+            LoadBook(book);
 
 
 
@@ -433,7 +572,7 @@ namespace TheInfiniteCrusade.NewComponents.UnitParts
 
         internal void RegisterClassUnlock(UnitFact fact, BlueprintProgressionReference progresionRef, string disciplineType)
         {
-            Main.Context.Logger.Log($"Registered Discipline {disciplineType} on {Owner.CharacterName} for {progresionRef.NameSafe()}");
+            //Main.Context.Logger.Log($"Registered Discipline {disciplineType} on {Owner.CharacterName} for {progresionRef.NameSafe()}");
             ProgressionSpecificUnlock classSpecificUnlock = new ProgressionSpecificUnlock
             {
                 sourceFeature = fact,
@@ -453,19 +592,16 @@ namespace TheInfiniteCrusade.NewComponents.UnitParts
 
         internal void UnregisterClassUnlock(UnitFact fact, BlueprintProgressionReference progresionRef, string disciplineType)
         {
-            Main.Context.Logger.Log($"Unregisted Discipline {disciplineType} on {Owner.CharacterName} for {progresionRef.NameSafe()}");
+            //Main.Context.Logger.Log($"Unregisted Discipline {disciplineType} on {Owner.CharacterName} for {progresionRef.NameSafe()}");
             var rem = classSpecificUnlocks.RemoveAll(x => x.sourceFeature == fact && x.m_Reference == progresionRef && x.discipline.Equals(disciplineType));
-            Main.Context.Logger.Log($"Removed {rem}");
+            //Main.Context.Logger.Log($"Removed {rem}");
 
         }
 
 
 
         #endregion
-        internal void ReloadAndRecharge(Spellbook instance)
-        {
-
-        }
+        
 
         public void OnEventAboutToTrigger(RuleCombatManeuver evt)
         {
@@ -523,7 +659,7 @@ namespace TheInfiniteCrusade.NewComponents.UnitParts
                                 {
                                     Main.Context.Logger.Log($"Auto-adding {pick} to list");
                                     slot.SetAsReadied(pick.Blueprint.ToReference<BlueprintAbilityReference>());
-                                    available.Remove(pick);
+                                    available.RemoveAll(x=>x.Blueprint.AssetGuid.Equals(pick.Blueprint.AssetGuid));
                                 }
                             }
                             else
@@ -543,5 +679,7 @@ namespace TheInfiniteCrusade.NewComponents.UnitParts
             }
 
         }
+
+        
     }
 }

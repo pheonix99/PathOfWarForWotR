@@ -1,4 +1,5 @@
 ﻿using Kingmaker.Blueprints;
+using Kingmaker.UnitLogic;
 using Kingmaker.UnitLogic.Abilities.Blueprints;
 using Kingmaker.UnitLogic.Buffs.Blueprints;
 using Owlcat.QA.Validation;
@@ -12,7 +13,7 @@ namespace TheInfiniteCrusade.NewComponents.MartialAbilityInformation
 {
     [AllowedOn(typeof(BlueprintBuff))]
     [AllowedOn(typeof(BlueprintAbility))]
-    class ManeuverInformation : BlueprintComponent
+    class ManeuverInformation : UnitFactComponentDelegate
     {
         public int ManeuverLevel;
         public ManeuverType ManeuverType;
@@ -21,10 +22,12 @@ namespace TheInfiniteCrusade.NewComponents.MartialAbilityInformation
         /// </summary>
         public string[] DisciplineKeys = new string[0];
         public bool isPrcAbility = false;
+        
 
-
-       
+        
     }
+
+   
 
     public enum ManeuverType
     {
