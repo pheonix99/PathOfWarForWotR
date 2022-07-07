@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TheInfiniteCrusade.NewComponents.UnitParts;
 
 namespace TheInfiniteCrusade.NewComponents.ManeuverProperties
 {
@@ -123,6 +124,21 @@ namespace TheInfiniteCrusade.NewComponents.ManeuverProperties
                 }
 
             }
+        }
+    }
+
+    public class VariableTypeBonusDamage : AbstractBonusStrikeDamage
+    {
+
+        public override DamageDescription GetDamage(RuleCalculateWeaponStats weapon)
+        {
+            return new DamageDescription()
+            {
+                TypeDescription = weapon.Initiator.Ensure<UnitPartManeuverVariableTypeDamage>().GetVariableDamageForManeuver(weapon.Reason.Ability.Blueprint),
+                Dice = new DiceFormula(m_DiceCount, m_DiceType),
+                Bonus = m_FlatDamage
+
+            };
         }
     }
 }

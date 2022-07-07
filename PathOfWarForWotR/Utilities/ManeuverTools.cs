@@ -87,6 +87,8 @@ namespace TheInfiniteCrusade.Utilities
 
         }
 
+        
+
         public static BlueprintAbility MakeStandardStrike(ModContextBase context, string sysName, string displayName, string desc, int level, DisciplineDefine discipline, MartialAttackMode mode = MartialAttackMode.Normal,  bool fullRound = false, int extraHits = 0, int extraDice = 0, DiceType diceSize = DiceType.D6, bool WeaponDamage = true, bool VariableDamage = false, DamageTypeDescription damageType = null, int toHitShift = 0, ActionsBuilder payload = null, bool forceFlatfoot = false, bool allDamageIgnoresDr = false, bool extraIsPrecision = false, bool strikeDamageIgnoresDr = false, bool forceUnarmed = false, int flatDamage = 0, bool shieldBash = false, bool canRetarget = false,  Sprite icon = null, bool autoHit = false)
         {
             var abilty = ManeuverTools.MakeStrikeStub(context, sysName, displayName, desc, level, discipline, fullRound, icon);
@@ -125,6 +127,8 @@ namespace TheInfiniteCrusade.Utilities
                     abilty.AddComponent<WeaponBonusDamage>(x =>
                     {
                         x.m_DiceCount = extraDice;
+                        x.m_DiceType = diceSize;
+                        x.m_FlatDamage = flatDamage;
                         if (strikeDamageIgnoresDr)
                             x.IgnoresDr = true;
                         if (extraIsPrecision)
@@ -133,7 +137,24 @@ namespace TheInfiniteCrusade.Utilities
                 }
                 else if (VariableDamage)
                 {
-
+                    abilty.AddComponent<VariableTypeBonusDamage>(x =>
+                    {
+                        x.m_DiceCount = extraDice;
+                        x.m_DiceType = diceSize;
+                        x.m_FlatDamage = flatDamage;
+                        if (extraIsPrecision)
+                            x.IsPrecision = true;
+                    });
+                }
+                else if (damageType != null)
+                {
+                    abilty.AddComponent<FixedTypeBonusDamge>(x =>
+                    {
+                        x.m_DiceCount = extraDice;
+                        x.m_DiceType = diceSize;
+                        x.m_FlatDamage = flatDamage;
+                        x.DamageTypeDescription = damageType;
+                    });
                 }
             }
             return abilty;
