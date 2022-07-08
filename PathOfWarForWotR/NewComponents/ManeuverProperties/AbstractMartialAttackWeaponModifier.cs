@@ -1,5 +1,6 @@
 ﻿using Kingmaker.Blueprints;
 using Kingmaker.RuleSystem.Rules;
+using Kingmaker.RuleSystem.Rules.Damage;
 using Kingmaker.UnitLogic.Abilities.Blueprints;
 using System;
 using System.Collections.Generic;
@@ -13,7 +14,15 @@ namespace TheInfiniteCrusade.NewComponents.ManeuverProperties
     [AllowedOn(typeof(BlueprintAbility), false)]
     public abstract class AbstractMartialAttackWeaponModifier : BlueprintComponent
     {
-        public abstract void ModifyWeaponStats(RuleCalculateWeaponStats evt);
+        public virtual void ModifyWeaponStats(RuleCalculateWeaponStats evt)
+        {
+
+        }
+
+        public virtual void ModifyWeaponStats(RulePrepareDamage evt)
+        {
+
+        }
         
 
     }

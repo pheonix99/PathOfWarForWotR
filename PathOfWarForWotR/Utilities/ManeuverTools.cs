@@ -89,6 +89,11 @@ namespace TheInfiniteCrusade.Utilities
 
         }
 
+        public static ConditionsBuilder SilverCraneSpecialTarget()
+        {
+            return ConditionsBuilder.New().AddOrAndLogic(ConditionsBuilder.New().HasFact("9054d3988d491d944ac144e27b6bc318").Alignment(AlignmentComponent.Evil)).HasFact("734a29b693e9ec346ba2951b27987e33").UseOr();
+        }
+
         public static BlueprintAbility MakeWhirlwindStrike(ModContextBase context, string sysName, string displayName, string desc, int level, DisciplineDefine discipline, MartialAttackMode mode = MartialAttackMode.Normal, bool fullRound = false, int extraHits = 0, int extraDice = 0, DiceType diceSize = DiceType.D6, bool WeaponDamage = true, bool VariableDamage = false, DamageTypeDescription damageType = null, int toHitShift = 0, ActionsBuilder payload = null, bool forceFlatfoot = false, bool allDamageIgnoresDr = false, bool extraIsPrecision = false, bool strikeDamageIgnoresDr = false, bool forceUnarmed = false, int flatDamage = 0, bool shieldBash = false, bool canRetarget = false, Sprite icon = null, bool autoHit = false)
         {
             var abilty = MakeWeaponBasedStrike(context, sysName, displayName, desc, level, discipline, mode, fullRound, extraHits, extraDice, diceSize, WeaponDamage, VariableDamage, damageType, toHitShift, payload, forceFlatfoot, allDamageIgnoresDr, extraIsPrecision, strikeDamageIgnoresDr, forceUnarmed, flatDamage, shieldBash, canRetarget, icon, autoHit);

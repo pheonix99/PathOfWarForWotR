@@ -9,6 +9,7 @@ using Kingmaker.Items.Slots;
 using Kingmaker.PubSubSystem;
 using Kingmaker.RuleSystem;
 using Kingmaker.RuleSystem.Rules;
+using Kingmaker.RuleSystem.Rules.Damage;
 using Kingmaker.UnitLogic;
 using Kingmaker.UnitLogic.Abilities;
 using Kingmaker.UnitLogic.Commands;
@@ -365,14 +366,25 @@ namespace TheInfiniteCrusade.Backend.NewActions
                 
             }
 
+            public void OnEventAboutToTrigger(RulePrepareDamage evt)
+            {
+              
+            }
+
             public void OnEventDidTrigger(RuleAttackWithWeapon evt)
             {
                 m_Modifer.DoProc(evt);
             }
+
+            public void OnEventDidTrigger(RulePrepareDamage evt)
+            {
+                
+            }
         }
 
         public class MartialStrikeModifier : IInitiatorRulebookHandler<RuleCalculateWeaponStats>,
-            IRulebookHandler<RuleCalculateWeaponStats>, ISubscriber, IInitiatorRulebookSubscriber
+            IRulebookHandler<RuleCalculateWeaponStats>, IInitiatorRulebookHandler<RulePrepareDamage>,
+            IRulebookHandler<RulePrepareDamage>, ISubscriber, IInitiatorRulebookSubscriber
         {
             private readonly UnitEntityData m_Unit;
             private readonly AbstractMartialAttackWeaponModifier m_Modifer;
@@ -392,9 +404,19 @@ namespace TheInfiniteCrusade.Backend.NewActions
                 
             }
 
+            public void OnEventAboutToTrigger(RulePrepareDamage evt)
+            {
+                m_Modifer.ModifyWeaponStats(evt);
+            }
+
             public void OnEventDidTrigger(RuleCalculateWeaponStats evt)
             {
                 m_Modifer.ModifyWeaponStats(evt);
+            }
+
+            public void OnEventDidTrigger(RulePrepareDamage evt)
+            {
+               
             }
         }
 
