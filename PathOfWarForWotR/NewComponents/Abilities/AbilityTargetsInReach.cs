@@ -19,11 +19,11 @@ namespace TheInfiniteCrusade.NewComponents.Abilities
 {
     [AllowedOn(typeof(BlueprintAbility))]
     class AbilityTargetsInReach : UnitFactComponentDelegate
-    { 
+    {
         public Feet Reach()
         {
 
-            return new Feet( Owner.Body.PrimaryHand.Weapon.AttackRange.Meters + Owner.Corpulence);
+            return new Feet(Owner.Body.PrimaryHand.Weapon.AttackRange.Meters + Owner.Corpulence);
 
         }
     }
@@ -31,17 +31,17 @@ namespace TheInfiniteCrusade.NewComponents.Abilities
     static class HackAbilityTargetsAround
     {
 
-        /*
+
         [HarmonyPatch(typeof(AbilityTargetsAround), nameof(AbilityTargetsAround.AoERadius), MethodType.Getter)]
-        static class HackAbilityTargetsAround_AoERadius//This hijacking is for the spellbook display - just plain hijacking the level 1 display
+        static class HackAbilityTargetsAround_AoERadius
         {
             static void Postfix(AbilityTargetsAround __instance, ref Feet __result)
             {
                 var hijacker = __instance.OwnerBlueprint.GetComponent<AbilityTargetsInReach>();
-               
+
                 try
                 {
-                    if (hijacker.Owner != null)
+                    if (hijacker != null && hijacker.Owner != null)
                     {
                         __result = hijacker.Reach();
                         return;
@@ -52,15 +52,15 @@ namespace TheInfiniteCrusade.NewComponents.Abilities
                 }
                 catch
                 {
-                    
+
                 }
 
 
             }
 
         }
-        */
-        //TODO INTERPILE
 
     }
+
 }
+

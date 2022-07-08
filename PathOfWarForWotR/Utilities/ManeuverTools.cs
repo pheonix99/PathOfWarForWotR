@@ -13,6 +13,7 @@ using Kingmaker.RuleSystem;
 using Kingmaker.RuleSystem.Rules;
 using Kingmaker.RuleSystem.Rules.Damage;
 using Kingmaker.UnitLogic.Abilities.Blueprints;
+using Kingmaker.UnitLogic.Abilities.Components;
 using Kingmaker.UnitLogic.Buffs.Blueprints;
 using Kingmaker.UnitLogic.FactLogic;
 using Kingmaker.UnitLogic.Mechanics;
@@ -28,6 +29,7 @@ using TabletopTweaks.Core.Utilities;
 using TheInfiniteCrusade.Backend.NewActions;
 using TheInfiniteCrusade.Defines;
 using TheInfiniteCrusade.NewComponents;
+using TheInfiniteCrusade.NewComponents.Abilities;
 using TheInfiniteCrusade.NewComponents.AbilityRestrictions;
 using TheInfiniteCrusade.NewComponents.ManeuverProperties;
 using TheInfiniteCrusade.NewComponents.MartialAbilityInformation;
@@ -87,13 +89,30 @@ namespace TheInfiniteCrusade.Utilities
 
         }
 
-        
+        public static BlueprintAbility MakeWhirlwindStrike(ModContextBase context, string sysName, string displayName, string desc, int level, DisciplineDefine discipline, MartialAttackMode mode = MartialAttackMode.Normal, bool fullRound = false, int extraHits = 0, int extraDice = 0, DiceType diceSize = DiceType.D6, bool WeaponDamage = true, bool VariableDamage = false, DamageTypeDescription damageType = null, int toHitShift = 0, ActionsBuilder payload = null, bool forceFlatfoot = false, bool allDamageIgnoresDr = false, bool extraIsPrecision = false, bool strikeDamageIgnoresDr = false, bool forceUnarmed = false, int flatDamage = 0, bool shieldBash = false, bool canRetarget = false, Sprite icon = null, bool autoHit = false)
+        {
+            var abilty = MakeWeaponBasedStrike(context, sysName, displayName, desc, level, discipline, mode, fullRound, extraHits, extraDice, diceSize, WeaponDamage, VariableDamage, damageType, toHitShift, payload, forceFlatfoot, allDamageIgnoresDr, extraIsPrecision, strikeDamageIgnoresDr, forceUnarmed, flatDamage, shieldBash, canRetarget, icon, autoHit);
+            abilty.Range = AbilityRange.Personal;
+            abilty.AddComponent<AbilityTargetsAround>(x => { x.m_Radius = new Kingmaker.Utility.Feet(5f); x.m_IncludeDead = false; x.m_TargetType = TargetType.Enemy; });
+            abilty.AddComponent<AbilityTargetsInReach>();
+            return abilty;
+        }
 
         public static BlueprintAbility MakeStandardStrike(ModContextBase context, string sysName, string displayName, string desc, int level, DisciplineDefine discipline, MartialAttackMode mode = MartialAttackMode.Normal,  bool fullRound = false, int extraHits = 0, int extraDice = 0, DiceType diceSize = DiceType.D6, bool WeaponDamage = true, bool VariableDamage = false, DamageTypeDescription damageType = null, int toHitShift = 0, ActionsBuilder payload = null, bool forceFlatfoot = false, bool allDamageIgnoresDr = false, bool extraIsPrecision = false, bool strikeDamageIgnoresDr = false, bool forceUnarmed = false, int flatDamage = 0, bool shieldBash = false, bool canRetarget = false,  Sprite icon = null, bool autoHit = false)
         {
-            var abilty = ManeuverTools.MakeStrikeStub(context, sysName, displayName, desc, level, discipline, fullRound, icon);
+            var abilty = MakeWeaponBasedStrike(context, sysName, displayName, desc, level, discipline, mode, fullRound, extraHits, extraDice, diceSize, WeaponDamage, VariableDamage, damageType, toHitShift, payload, forceFlatfoot, allDamageIgnoresDr, extraIsPrecision, strikeDamageIgnoresDr, forceUnarmed, flatDamage, shieldBash, canRetarget, icon, autoHit);
             abilty.Range = AbilityRange.Weapon;
+            return abilty;
+        }
+
+
+        private static BlueprintAbility MakeWeaponBasedStrike(ModContextBase context, string sysName, string displayName, string desc, int level, DisciplineDefine discipline, MartialAttackMode mode = MartialAttackMode.Normal, bool fullRound = false, int extraHits = 0, int extraDice = 0, DiceType diceSize = DiceType.D6, bool WeaponDamage = true, bool VariableDamage = false, DamageTypeDescription damageType = null, int toHitShift = 0, ActionsBuilder payload = null, bool forceFlatfoot = false, bool allDamageIgnoresDr = false, bool extraIsPrecision = false, bool strikeDamageIgnoresDr = false, bool forceUnarmed = false, int flatDamage = 0, bool shieldBash = false, bool canRetarget = false, Sprite icon = null, bool autoHit = false)
+        {
+            var abilty = ManeuverTools.MakeStrikeStub(context, sysName, displayName, desc, level, discipline, fullRound, icon);
+           
             abilty.CanTargetEnemies = true;
+            abilty.CanTargetSelf = false;
+            abilty.CanTargetFriends = false;
             abilty.Animation = Kingmaker.Visual.Animation.Kingmaker.Actions.UnitAnimationActionCastSpell.CastAnimationStyle.Special;
             abilty.EffectOnEnemy = AbilityEffectOnUnit.Harmful;
 
@@ -160,7 +179,9 @@ namespace TheInfiniteCrusade.Utilities
             return abilty;
         }
 
-       public static void AddBonusToCombatManeuversInAbility( this BlueprintAbility ability, int bonus, ModifierDescriptor descriptor, params CombatManeuver[] maneuvers )
+
+
+        public static void AddBonusToCombatManeuversInAbility( this BlueprintAbility ability, int bonus, ModifierDescriptor descriptor, params CombatManeuver[] maneuvers )
         {
 
             ability.AddComponent<TICManeuverCMBBonus>(x =>

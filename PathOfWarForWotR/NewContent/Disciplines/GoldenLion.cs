@@ -203,7 +203,7 @@ namespace TheInfiniteCrusade.NewContent.Disciplines
             AlphasRoar();
             void AlphasRoar()
             {
-                var roar = MakeGoldenLionRoar("AlphasRoar", "Alpha's Roar", "With an awesome cry for victory and bravery from his allies, the Golden Lion disciple bolsters allies’ defenses and attacks for a moment as his allies cannot help themselves but to win. Allies within 30-ft. of the disciple gain a +4 morale bonus to their saving throws and increase to the DC’s of their abilities (maneuvers, spells, powers, etc) for one round.", 4, 60, x =>
+                var roar = MakeGoldenLionRoar("AlphasRoar", "Alpha's Roar", "With an awesome cry for victory and bravery from his allies, the Golden Lion disciple bolsters allies’ defenses and attacks for a moment as his allies cannot help themselves but to win. Allies within 30-ft. of the disciple gain a +4 morale bonus to their saving throws and increase to the DC’s of their abilities (maneuvers, spells, powers, etc) for one round.", 8, 60, x =>
                 {
                     x.AddComponent<AddStatBonus>(x =>
                     {

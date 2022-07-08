@@ -10,6 +10,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TheInfiniteCrusade.Backend.NewUnitParts;
 using TheInfiniteCrusade.NewComponents.UnitParts;
 using TheInfiniteCrusade.NewComponents.UnitParts.ManeuverBookSystem;
 
@@ -60,82 +61,93 @@ namespace TheInfiniteCrusade.Serialization
             return record;
         }
 
-        
-          [HarmonyPatch]
-          static class SaveHooker
-          {
 
-              [HarmonyPatch(typeof(ZipSaver))]
-              [HarmonyPatch("SaveJson"), HarmonyPostfix]
-              static void Zip_Saver(string name, ZipSaver __instance)
-              {
-                  DoSave(name, __instance);
-              }
+        [HarmonyPatch]
+        static class SaveHooker
+        {
 
-              [HarmonyPatch(typeof(FolderSaver))]
-              [HarmonyPatch("SaveJson"), HarmonyPostfix]
-              static void Folder_Saver(string name, FolderSaver __instance)
-              {
-                  DoSave(name, __instance);
-              }
+            [HarmonyPatch(typeof(ZipSaver))]
+            [HarmonyPatch("SaveJson"), HarmonyPostfix]
+            static void Zip_Saver(string name, ZipSaver __instance)
+            {
+                DoSave(name, __instance);
+            }
 
-              static void DoSave(string name, ISaver saver)
-              {
-                  if (name != "header")
-                      return;
-                  Main.Context.Logger.Log($"Saving Maneuver Books! - from ManeuverBookStorage");
-                  Main.Safely(() => {
-                      var serializer = new JsonSerializer();
-                      serializer.Formatting = Formatting.Indented;
-                      var writer = new StringWriter();
-                      serializer.Serialize(writer, ManeuverBookStorage.Instance);
-                      writer.Flush();
-                      saver.SaveJson(LoadHooker.FileName, writer.ToString());
-                  });
-              }
-          }
+            [HarmonyPatch(typeof(FolderSaver))]
+            [HarmonyPatch("SaveJson"), HarmonyPostfix]
+            static void Folder_Saver(string name, FolderSaver __instance)
+            {
+                DoSave(name, __instance);
+            }
 
-          [HarmonyPatch(typeof(Game))]
-          static class LoadHooker
-          {
-              public const string FileName = "header.json.PotCDiscipleRecords";
+            static void DoSave(string name, ISaver saver)
+            {
+                foreach (var character in Game.Instance.Player.GetCharactersList(Player.CharactersList.Everyone))
+                {
+                    var part = character.Get<UnitPartMartialDisciple>();
+                    if (part != null)
+                    {
+                        part.OnPreSave();
+                    }
+                }
 
-              [HarmonyPatch("LoadGame"), HarmonyPostfix]
-              static void LoadGame(SaveInfo saveInfo)
-              {
-                  Main.Context.Logger.Log($"Loading DisciplineSaveInfo - from ManeuverBookStorage");
-                  using (saveInfo)
-                  {
-                      using (saveInfo.GetReadScope())
-                      {
-                          ThreadedGameLoader.RunSafelyInEditor((Action)(() => {
-                              string raw;
-                              using (ISaver saver = saveInfo.Saver.Clone())
-                              {
-                                  raw = saver.ReadJson(FileName);
-                              }
-                              if (raw != null)
-                              {
-                                  var serializer = new JsonSerializer();
-                                  var rawReader = new StringReader(raw);
-                                  var jsonReader = new JsonTextReader(rawReader);
-                                  ManeuverBookStorage.Instance = serializer.Deserialize<ManeuverBookStorage>(jsonReader);
-                              }
-                              else
-                              {
-                                  ManeuverBookStorage.Instance = new ManeuverBookStorage();
-                              }
-                          })).Wait();
-                      }
-                  }
-              }
-          }
+                if (name != "header")
+                    return;
+                Main.Context.Logger.Log($"Saving Maneuver Books! - from ManeuverBookStorage");
+                Main.Safely(() =>
+                {
+                    var serializer = new JsonSerializer();
+                    serializer.Formatting = Formatting.Indented;
+                    var writer = new StringWriter();
+                    serializer.Serialize(writer, ManeuverBookStorage.Instance);
+                    writer.Flush();
+                    saver.SaveJson(LoadHooker.FileName, writer.ToString());
+                });
+            }
+        }
 
-        
+        [HarmonyPatch(typeof(Game))]
+        static class LoadHooker
+        {
+            public const string FileName = "header.json.PotCDiscipleRecords";
+
+            [HarmonyPatch("LoadGame"), HarmonyPostfix]
+            static void LoadGame(SaveInfo saveInfo)
+            {
+                Main.Context.Logger.Log($"Loading DisciplineSaveInfo - from ManeuverBookStorage");
+                using (saveInfo)
+                {
+                    using (saveInfo.GetReadScope())
+                    {
+                        ThreadedGameLoader.RunSafelyInEditor((Action)(() =>
+                        {
+                            string raw;
+                            using (ISaver saver = saveInfo.Saver.Clone())
+                            {
+                                raw = saver.ReadJson(FileName);
+                            }
+                            if (raw != null)
+                            {
+                                var serializer = new JsonSerializer();
+                                var rawReader = new StringReader(raw);
+                                var jsonReader = new JsonTextReader(rawReader);
+                                ManeuverBookStorage.Instance = serializer.Deserialize<ManeuverBookStorage>(jsonReader);
+                            }
+                            else
+                            {
+                                ManeuverBookStorage.Instance = new ManeuverBookStorage();
+                            }
+                        })).Wait();
+                    }
+                }
+            }
+        }
+
+
     }
 
 
-    
+
     public class SlotRecord
     {
         [JsonProperty]
@@ -168,7 +180,7 @@ namespace TheInfiniteCrusade.Serialization
             PlannedGuid = slot.Layers[2]?.deserializedGuid.ToString() ?? string.Empty;
             State = (int)slot.State;
             Index = slot.Index;
-            SlotType = (int) slot.SlotType;
+            SlotType = (int)slot.SlotType;
 
         }
 

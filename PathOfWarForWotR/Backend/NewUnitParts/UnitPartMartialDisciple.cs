@@ -195,6 +195,18 @@ namespace TheInfiniteCrusade.Backend.NewUnitParts
             }
         }
 
+        private void SaveBook(ManeuverBook book)
+        {
+            var record = ManeuverBookStorage.Instance.ForCharacter(Owner).ForSpellbook(book.BlueprintSpellbook);
+            record.Clear();
+            foreach (var slot in book.ManeuverSlots)
+            {
+
+                record.Add(new SlotRecord(slot));
+
+            }
+        }
+
         public override void OnPreSave()
         {
             Main.Context.Logger.Log($"Saving Maneuver  Info: from Unit Part");
@@ -202,12 +214,7 @@ namespace TheInfiniteCrusade.Backend.NewUnitParts
             foreach (var book in ManeuverBooks)
             {
                 Main.Context.Logger.Log($"Saving {book.BlueprintSpellbook.Name} Book Info - stage : in Unit Part");
-                var record = ManeuverBookStorage.Instance.ForCharacter(Owner).ForSpellbook(book.BlueprintSpellbook);
-                record.Clear();
-                foreach (var slot in book.ManeuverSlots)
-                {
-                    record.Add(new SlotRecord(slot));
-                }
+                SaveBook(book);
             }
             
         }
