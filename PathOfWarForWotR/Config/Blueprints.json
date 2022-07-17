@@ -124,7 +124,13 @@
     "SteelFlurryStrike": "345b4247-ff52-4db5-b9a2-9ba7c916d57d",
     "TICEnforcedFlatfootBuff": "3d7fd54e-d139-4230-bad3-baad9d0083f1",
     "UnfetteredMovement": "78d97ce3-cc13-4975-befb-e3c212d48763",
-    "UnfetteredMovementBuff": "f3ca9b84-4aa3-4320-be95-2bb21a827452"
+    "UnfetteredMovementBuff": "f3ca9b84-4aa3-4320-be95-2bb21a827452",
+    "BlazingCranesWing": "8bf02047-9914-4938-ad4c-8d7683829d7e",
+    "BlazingCranesWingBuff": "80da7c75-c4d0-465d-8384-d14f802c6602",
+    "BlessedPinions": "279fdd95-b060-4d04-b304-f7378189f16e",
+    "ExorcismStrike": "a0595b0e-c0a9-4d2c-aad6-5d38630a5d3b",
+    "FlashingWings": "1492ffa6-51d0-4d8d-9dfa-38028356273b",
+    "SacredPinions": "fdf6d035-9bff-4ecd-95ab-a42cf71f0e4b"
   },
   "DerivedBlueprintMasters": {
     "BrokenBladeMasterGUID": "67aef14b-243b-4574-8659-ba475976d562",

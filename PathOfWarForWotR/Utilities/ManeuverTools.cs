@@ -27,6 +27,7 @@ using TabletopTweaks.Core.ModLogic;
 using TabletopTweaks.Core.NewComponents;
 using TabletopTweaks.Core.Utilities;
 using TheInfiniteCrusade.Backend.NewActions;
+using TheInfiniteCrusade.Backend.NewComponents.MartialAttackComponents;
 using TheInfiniteCrusade.Defines;
 using TheInfiniteCrusade.NewComponents;
 using TheInfiniteCrusade.NewComponents.Abilities;
@@ -73,7 +74,10 @@ namespace TheInfiniteCrusade.Utilities
                         maneuver.AddComponent<ScarletThroneNoShieldRule>(x=>x.AllowTwoHanderAtAll = true);
                     }
                 }
-                
+                if (comp.DisciplineKeys.Contains("SilverCrane"))
+                {
+                    maneuver.AddComponent<SilverCraneStrikeIncorporeal>();
+                }
 
 
                 if (comp.ManeuverType == ManeuverType.Stance)

@@ -1,4 +1,5 @@
-﻿using Kingmaker.RuleSystem;
+﻿using Kingmaker.ElementsSystem;
+using Kingmaker.RuleSystem;
 using Kingmaker.RuleSystem.Rules;
 using Kingmaker.RuleSystem.Rules.Damage;
 using Kingmaker.UnitLogic.Abilities;
@@ -15,8 +16,8 @@ namespace TheInfiniteCrusade.NewComponents.ManeuverProperties
 {
     public abstract class AbstractBonusStrikeDamage : AbstractMartialAttackWeaponModifier
     {
-        public ContextCondition targetCondition;
-        public ContextCondition userCondition;
+        public ConditionsChecker targetCondition;
+        public ConditionsChecker userCondition;
         public int m_FlatDamage = 0;
         public int m_DiceCount = 0;
         public DiceType m_DiceType = DiceType.D6;

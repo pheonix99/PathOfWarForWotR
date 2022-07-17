@@ -1,4 +1,6 @@
-﻿using Kingmaker.Enums;
+﻿using BlueprintCore.Utils.Types;
+using Kingmaker.Blueprints;
+using Kingmaker.Enums;
 using Kingmaker.UnitLogic.ActivatableAbilities;
 using Kingmaker.UnitLogic.FactLogic;
 using Kingmaker.UnitLogic.Mechanics.Components;
@@ -8,6 +10,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TabletopTweaks.Core.Utilities;
+using TheInfiniteCrusade.NewComponents.ManeuverProperties;
 using TheInfiniteCrusade.Utilities;
 
 namespace TheInfiniteCrusade.NewContent.Disciplines
@@ -22,6 +25,19 @@ namespace TheInfiniteCrusade.NewContent.Disciplines
             DisciplineTools.Disciplines.TryGetValue("SilverCrane", out var silverCrane);
 
             SilverCraneWaltz();
+
+            FlashingWings();
+            void FlashingWings()
+            {
+                var strike = ManeuverTools.MakeStandardStrike(Main.Context, "FlashingWings", "Flashing Wings", "The flashing wings of the Silver Crane daze the foes of the martial disciple, burning their eyes with the light of Heaven. Make a melee attack and if successful, this attack inflicts an additional 1d4 points of damage and the target is dazzled for one round.", 1, silverCrane, extraDice: 1, diceSize: Kingmaker.RuleSystem.DiceType.D4, WeaponDamage: false, damageType: new Kingmaker.RuleSystem.Rules.Damage.DamageTypeDescription()
+                {
+                    Type = Kingmaker.RuleSystem.Rules.Damage.DamageType.Energy,
+                    Energy = Kingmaker.Enums.Damage.DamageEnergyType.Holy
+                }, payload: ManeuverTools.ApplyBuff("df6d1025da07524429afbae248845ecc", ContextDuration.Fixed(1)));
+
+                ManeuverTools.FinishManeuver(strike);
+            }
+
 
             void SilverCraneWaltz()
             {
@@ -61,6 +77,80 @@ namespace TheInfiniteCrusade.NewContent.Disciplines
 
                 });
                 ManeuverTools.FinishManeuver(StanceOfTheDefendingShell);
+            }
+
+            BlazingCranesWing();
+            void BlazingCranesWing(){
+
+                var boost = ManeuverTools.MakeBoostStub(Main.Context, "BlazingCranesWing", "Blazing Crane's Wing", "By filling the Silver Crane disciple’s weapon with the strength of his celestial patrons, the warrior funnels their righteous wrath against those that are abominations in the eyes of all that is good. The initiator’s attacks until his next turn inflict an additional 2d6 points of damage against undead or evil outsiders.", 2, silverCrane, out var buff, x =>
+                {
+                    x.AddComponent<AdditionalDiceOnAttack>(x =>
+                    {
+                        x.TargetConditions = ManeuverTools.SilverCraneSpecialTarget().Build();
+                        x.DamageType = new Kingmaker.RuleSystem.Rules.Damage.DamageTypeDescription()
+                        {
+                            Type = Kingmaker.RuleSystem.Rules.Damage.DamageType.Energy,
+                            Energy = Kingmaker.Enums.Damage.DamageEnergyType.Holy
+                        };
+                        x.Value = new Kingmaker.UnitLogic.Mechanics.ContextDiceValue()
+                        {
+                            DiceType = Kingmaker.RuleSystem.DiceType.D6,
+                            DiceCountValue = ContextValues.Constant(2)
+                        };
+                        x.m_RandomizeDamage = false;
+                        x.m_DamageEntries = new List<AdditionalDiceOnAttack.DamageEntry>();
+                    });
+                });
+
+                ManeuverTools.FinishManeuver(boost);
+            };
+
+            BlessedPinions();
+            void BlessedPinions()
+            {
+                var strike = ManeuverTools.MakeStandardStrike(Main.Context, "BlessedPinions", "Blessed Pinions", "The pinion feathers of the Silver Crane’s wings gain an ethereal glimmer as if they were blessed steel. Heavenly agents guide their disciple’s attack so it may strike true as if it were blessed, even allowing it to strike the unseen. Make an attack against a foe that inflicts an additional 2d6 points of sacred damage and the attack is considered good aligned for the purposes of overcoming damage reduction. The disciple may also choose to strike incorporeal foes with this strike as if they were made manifest, including fiends who currently possess a creature. To strike a possessing fiend, the body they inhabit must be also struck, but all damage from the attack is inflicted upon the possessing fiend without harming the host.", 2, silverCrane, extraDice: 2, WeaponDamage: false, damageType: new Kingmaker.RuleSystem.Rules.Damage.DamageTypeDescription()
+                {
+                    Type = Kingmaker.RuleSystem.Rules.Damage.DamageType.Energy,
+                    Energy = Kingmaker.Enums.Damage.DamageEnergyType.Holy
+                });
+
+                ManeuverTools.FinishManeuver(strike);
+            }
+
+            ExorcismStrike();
+            void ExorcismStrike()
+            {
+                var strike = ManeuverTools.MakeStandardStrike(Main.Context, "ExorcismStrike", "Exorcism Strike", "The foes of the celestial realms tremble in fear at the wrath of the Heavens themselves, and a disciple of the Silver Crane wields that righteous anger in battle. This strike inflicts an additional 6d6 points of sacred damage to the foe if it is an undead creature or an outsider with the evil subtype, with a chance to daze the target for 1 round if it fails a Fortitude save (DC 13 + initiation modifier). Success negates the daze effect. If the target is a possessing entity within a host creature, the damage inflicted from this strike is solely inflicted upon the possessor, not the host. If the target is neither undead nor an evil outsider, this attack inflicts an additional 2d6 points of damage, and does not daze the target.", 3, silverCrane, extraDice: 4, WeaponDamage: false, damageType: new Kingmaker.RuleSystem.Rules.Damage.DamageTypeDescription()
+                {
+                    Type = Kingmaker.RuleSystem.Rules.Damage.DamageType.Energy,
+                    Energy = Kingmaker.Enums.Damage.DamageEnergyType.Holy
+                }, payload: ManeuverTools.ApplyBuffIfNotSaved("9934fedff1b14994ea90205d189c8759", ContextDuration.Fixed(1), Kingmaker.EntitySystem.Stats.SavingThrowType.Fortitude, ManeuverTools.SilverCraneSpecialTarget()));
+
+                strike.GetComponent<AbstractBonusStrikeDamage>().targetCondition = ManeuverTools.SilverCraneSpecialTarget().Build();
+
+                strike.AddComponent<FixedTypeBonusDamge>(x =>
+                {
+                    x.m_DiceType = Kingmaker.RuleSystem.DiceType.D6;
+                    x.m_DiceCount = 2;
+                    x.DamageTypeDescription = new Kingmaker.RuleSystem.Rules.Damage.DamageTypeDescription()
+                    {
+                        Type = Kingmaker.RuleSystem.Rules.Damage.DamageType.Energy,
+                        Energy = Kingmaker.Enums.Damage.DamageEnergyType.Holy
+                    };
+                });
+
+                ManeuverTools.FinishManeuver(strike);
+            }
+            SacredPinions();
+            void SacredPinions()
+            {
+                var strike = ManeuverTools.MakeStandardStrike(Main.Context, "SacredPinions", "Sacred Pinions", "The martial disciple enhances his melee strikes with the blessed wings of the Silver Crane, infusing them with celestial might to strike beyond flesh and bite spirit. Make an attack against a foe that inflicts an additional 5d6 points of damage. The initiator may also choose to strike incorporeal foes with this strike as if they were made manifest, including fiends who currently possess a creature. To strike a possessing fiend, the body they inhabit must be also struck, but all damage goes to the possessing fiend without harming the host.", 4, silverCrane, extraDice: 5, WeaponDamage: false, damageType: new Kingmaker.RuleSystem.Rules.Damage.DamageTypeDescription()
+                {
+                    Type = Kingmaker.RuleSystem.Rules.Damage.DamageType.Energy,
+                    Energy = Kingmaker.Enums.Damage.DamageEnergyType.Holy
+                });
+
+                ManeuverTools.FinishManeuver(strike);
             }
         }
     }

@@ -25,7 +25,9 @@ namespace TheInfiniteCrusade.Backend.NewComponents.MartialAttackComponents
                     if (condition.Check())
                     {
                         evt.DamageBundle.WeaponDamage.Reality |= Kingmaker.Enums.Damage.DamageRealityType.Ghost;
+                       
                     }
+                    evt.DamageBundle.WeaponDamage.AddAlignment(Kingmaker.Enums.Damage.DamageAlignment.Good);
                 }
             }
         }
