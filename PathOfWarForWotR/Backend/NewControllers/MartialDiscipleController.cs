@@ -39,6 +39,8 @@ namespace TheInfiniteCrusade.Backend.NewControllers
             }
             else
             {
+                
+
                 EventBus.RaiseEvent<ICombatStartedWhileCooledDownHandler>(unit, h => h.OnCombatStartWhileCooledDown());
             }
 

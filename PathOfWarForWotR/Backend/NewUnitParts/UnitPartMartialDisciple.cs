@@ -29,7 +29,7 @@ using TheInfiniteCrusade.Serialization;
 
 namespace TheInfiniteCrusade.Backend.NewUnitParts
 {
-    class UnitPartMartialDisciple : OldStyleUnitPart, IUnitSubscriber, IUnitCompleteLevelUpHandler, ISubscriber, IInitiatorRulebookSubscriber
+    class UnitPartMartialDisciple : OldStyleUnitPart, IUnitSubscriber, IUnitCompleteLevelUpHandler, ISubscriber, IInitiatorRulebookSubscriber, ICombatStartedWhileCooledDownHandler, IPostCombatCooldownHandler
     {
 
         #region Handle Maneuver Books
@@ -214,67 +214,7 @@ namespace TheInfiniteCrusade.Backend.NewUnitParts
 
 
         #region learn Maneuvers
-        /*
-        internal bool CanLearnManeuver(BlueprintAbilityReference manuever, ManeuverSelectionMode mode, ManeuverBook book, BlueprintCharacterClass currentClass)
-        {
-            if (KnowsManeuver(manuever))
-                return false;
-
-            var maenuverData = manuever.Get().GetComponent<ManeuverInformation>();
-
-            if (maenuverData == null)
-                return false;
-            if (book == null)
-                return false;
-            if (maenuverData.isPrcAbility)
-            {
-                return false;
-            }
-            if (maenuverData.DisciplineKeys.Length != 1)
-                return false;
-            if (book.Blueprint.BookType == BlueprintManeuverBook.ManeuverBookType.MartialTraining)//If Martial Training, redirect (TODO convert this to using redirect components
-            {
-
-
-                var martialPart = Owner.Ensure<UnitPartMartialTraining>();
-                return martialPart.CanLearnManeuver(manuever);
-            }
-            if (mode == ManeuverSelectionMode.Standard && book.Blueprint.BookType == BlueprintManeuverBook.ManeuverBookType.Level6Archetype)
-            {
-                if (maenuverData.ManeuverLevel > ArchetypeAllowedLevel(book.Blueprint.GrantingProgression))//do archetype check
-                {
-                    return false;
-                }
-            }
-            else if (maenuverData.ManeuverLevel > InitiatorLevelPermittedManeuverLevel(book))//If ML too low, block - thus comes after MT because MT doesn't care about that - use if-else because if prior check applies and is passed, ML is absolutely high enough
-                return false;
-            if (mode == ManeuverSelectionMode.Standard)//If normal learning for level up do normal ding things
-            {
-                if (!DisciplineIsValidForClass(maenuverData.DisciplineKeys[0], currentClass, false))//Check if this class can learn it (class discipline list plus weirdo global unlocks (battle templar
-                {
-                    return false;
-                }
-
-
-            }
-            else if (mode == ManeuverSelectionMode.AdvancedStudy)
-            {
-                if (!DisciplineIsValidForClass(maenuverData.DisciplineKeys[0], currentClass, true))
-                {
-                    return false;
-                }
-            }
-
-            return ManeuverKnowledgeRequirementMet(maenuverData.ManeuverLevel, maenuverData.DisciplineKeys[0]);
-
-
-
-
-
-
-
-        }
-        */
+        
 
         public static int ManeuverKnowledgeRequirementForLevel(int level)
         {
@@ -302,23 +242,7 @@ namespace TheInfiniteCrusade.Backend.NewUnitParts
             return found;
         }
 
-        public bool ManeuverKnowledgeRequirementMet(int maneuverLevel, string key)
-        {
-
-            int knownNeeded = ManeuverKnowledgeRequirementForLevel(maneuverLevel);
-
-            
-
-            if (knownNeeded == 0)
-                return true;
-
-            var list = Owner.Spellbooks.Where(x => x.Blueprint.GetComponent<AddManeuverBookComponent>() != null).SelectMany(x => x.GetAllKnownSpells());
-            
-
-            return false;
-
-
-        }
+        
 
         public int ArchetypeAllowedLevel(BlueprintProgressionReference grantingProgression)
         {
@@ -417,32 +341,7 @@ namespace TheInfiniteCrusade.Backend.NewUnitParts
         }
         private List<ProgressionSpecificUnlock> classSpecificUnlocks = new();
 
-        private void RegisterBook(AddManeuverBookComponent maneuverBookComponent)
-        {
-            throw new NotImplementedException();
-        }
-
-        /*
-        internal void RegisterBook(UnitFact fact)
-        {
-            if (fact.Blueprint.GetComponent<AddManeuverBookComponent>() == null)
-            {
-                return;
-            }
-
-            // Main.Context.Logger.Log($"Registered Book {spellbook.Name} on {Owner.CharacterName}");
-            if (!ManeuverBooks.Any(x => x.source.Blueprint.AssetGuid.Equals(fact.Blueprint.AssetGuid)))
-            {
-                var book = new ManeuverBook(fact);
-                ManeuverBooks.Add(book);
-                LoadBook(book);
-            }
-
-
-
-
-        }
-        */
+        
         internal void RegisterClassUnlock(UnitFact fact, BlueprintManeuverBookReference bookReference, string disciplineType)
         {
             //Main.Context.Logger.Log($"Registered Discipline {disciplineType} on {Owner.CharacterName} for {progresionRef.NameSafe()}");
@@ -544,6 +443,22 @@ namespace TheInfiniteCrusade.Backend.NewUnitParts
         internal void RecoverManeuver(BlueprintAbilityReference blueprintAbilityReference)
         {
             ManeuverBooks.FirstOrDefault(x => x.CanRecover(blueprintAbilityReference))?.RecoverManeuver(blueprintAbilityReference);
+        }
+
+        public void OnCombatStartWhileCooledDown()
+        {
+            foreach(var book in ManeuverBooks)
+            {
+                book.OnCombatStartWhileCooledDown();
+            }
+        }
+
+        public void OnPostCombatCooldown()
+        {
+            foreach (var book in ManeuverBooks)
+            {
+                book.OnPostCombatCooldown ();
+            }
         }
     }
 }

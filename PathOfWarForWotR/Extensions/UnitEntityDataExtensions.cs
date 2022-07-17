@@ -84,7 +84,7 @@ namespace TheInfiniteCrusade.Extensions
 
         [HarmonyPatch(typeof(UnitDescriptor), nameof(UnitDescriptor.Dispose))]
       
-        static class UnitDescriptor_DisposeManeuverBooks//This hijacking is for the spellbook display - just plain hijacking the level 1 display
+        static class UnitDescriptor_DisposeManeuverBooks
         {
             static void Postfix(UnitDescriptor __instance)
             {

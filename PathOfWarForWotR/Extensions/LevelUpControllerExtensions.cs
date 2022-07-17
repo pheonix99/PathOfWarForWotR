@@ -24,18 +24,7 @@ namespace TheInfiniteCrusade.Extensions
 
         }
 
-        //public static bool SelectManeuver(this LevelUpController controller, [NotNull] BlueprintManeuverBook spellbook, [NotNull] BlueprintSpellList spellList,  [NotNull] BlueprintAbility spell, int slotIndex)
-        //{
-        //    return controller.AddAction(new SelectManeuver(spellbook, spellList, spell, slotIndex), false);
-        //}
-
-        //public static void UnselectManeuver(this LevelUpController controller, [NotNull] BlueprintManeuverBook spellbook, [NotNull] BlueprintSpellList spellList, int slotIndex)
-        //{
-            
-        //        controller.RemoveAction<SelectManeuver>((SelectManeuver a) => a.SlotIndex == slotIndex && a.SpellList == spellList && a.ManeuverBook == spellbook);
-           
-        //    controller.UpdatePreview();
-        //}
+        
 
         [HarmonyPatch(typeof(LevelUpController), nameof(LevelUpController.ApplySpellbook))]
        

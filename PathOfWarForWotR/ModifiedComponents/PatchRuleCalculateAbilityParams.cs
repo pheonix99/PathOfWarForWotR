@@ -26,7 +26,10 @@ namespace TheInfiniteCrusade.ModifiedComponents
                     var comp = __instance.AbilityData.Blueprint.GetComponent<ManeuverInformation>();
 
                     var disciple = __instance.Initiator.Ensure<UnitPartMartialDisciple>();
-                    
+                    if (comp != null)
+                    {
+                       
+                    }
 
                 }
             }

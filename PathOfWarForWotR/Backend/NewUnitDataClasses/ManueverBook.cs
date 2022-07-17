@@ -375,6 +375,11 @@ namespace TheInfiniteCrusade.Backend.NewUnitDataClasses
         {
             ManeuverSlots.FirstOrDefault(x => x.Combat.Equals(blueprintAbilityReference) && x.State == SlotManeuverState.Exhausted)?.Recover();
         }
+
+        internal void OnPostCombatCooldown()
+        {
+            RechargeBookOnCombatEnd();
+        }
     }
 
 }

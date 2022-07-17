@@ -207,8 +207,6 @@
 
   <ItemGroup>
     <Folder Include="Assets\" />
-    <Folder Include="CustomUI\MVVM\_PCView\Chargen\Phases\Maneuvers\" />
-    <Folder Include="CustomUI\MVVM\_VM\Chargen\Phases\Maneuvers\" />
     <Folder Include="NewComponents\Actions\" />
     <Folder Include="NewComponents\Controllers\" />
   </ItemGroup>
