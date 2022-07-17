@@ -76,7 +76,7 @@ namespace TheInfiniteCrusade.NewContent.Disciplines
                     };
 
                 });
-                ManeuverTools.FinishManeuver(StanceOfTheDefendingShell);
+                ManeuverTools.FinishManeuver(StanceOfTheDefendingShell, Main.Context);
             }
 
             BlazingCranesWing();

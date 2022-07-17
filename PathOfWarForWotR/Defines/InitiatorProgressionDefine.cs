@@ -7,6 +7,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TabletopTweaks.Core.ModLogic;
+using TheInfiniteCrusade.Backend.NewBlueprints;
+using TheInfiniteCrusade.Backend.NewUnitDataClasses;
 using TheInfiniteCrusade.NewComponents.ManeuverBookSystem;
 using UnityEngine;
 
@@ -19,7 +21,7 @@ namespace TheInfiniteCrusade.Defines
         private readonly string _displayName;
         public readonly ModContextBase Source;
         public readonly bool GrantedType;
-        public readonly ManeuverBookComponent.ManeuverBookType maneuverBookType = ManeuverBookComponent.ManeuverBookType.Level9Class;
+        public readonly BlueprintManeuverBook.ManeuverBookType maneuverBookType = BlueprintManeuverBook.ManeuverBookType.Level9Class;
 
         public string DisplayName => string.IsNullOrEmpty(_displayName) ? InitiatorSysNameBase : _displayName;
 
@@ -33,10 +35,10 @@ namespace TheInfiniteCrusade.Defines
         public int[] ManeuversLearnedAtLevels = new int[0];
         public int[] NormalSlotsIncreaseAtLevels = new int[0];
 
-        
 
 
-        public StatType DefaultInitiatingStat;
+
+        public StatType DefaultInitiatingStat = StatType.Wisdom;
         public string[] FixedUnlocks = new string[0];//All members of the class get this
         public string[] SelectionUnlocks = new string[0];//Selector picks
         public int SelectionCount = 0;//Selection count
@@ -60,7 +62,7 @@ namespace TheInfiniteCrusade.Defines
 
         #endregion
         #region builtComponents
-        public BlueprintSpellbookReference m_spellbook;
+        public BlueprintManeuverBookReference m_spellbook;
         public BlueprintFeatureSelectionReference m_exchanger;
         public BlueprintFeatureSelectionReference m_disciplineSelector;
         public BlueprintProgressionReference m_Progression;
@@ -70,13 +72,15 @@ namespace TheInfiniteCrusade.Defines
         public BlueprintFeatureReference m_FullRoundRestoreFeature;
         public BlueprintAbilityReference m_FullRoundRestore;
         public BlueprintAbilityReference m_StandardActionRestore;
+        internal BlueprintFeatureSelectionReference maneuverSelector;
+        internal BlueprintFeatureSelectionReference stanceSelector;
 
         public BlueprintFeatureReference AddSlotComponent { get; internal set; }
         public BlueprintUnitPropertyReference SlotsProperty { get; internal set; }
 
         #endregion
 
-        public InitiatorProgressionDefine(ModContextBase source, string initiatorSysNameBase, string displayName = null,  bool grantedType = false, ManeuverBookComponent.ManeuverBookType maneuverBookType = ManeuverBookComponent.ManeuverBookType.Level9Class)
+        public InitiatorProgressionDefine(ModContextBase source, string initiatorSysNameBase, string displayName = null,  bool grantedType = false, BlueprintManeuverBook.ManeuverBookType maneuverBookType = BlueprintManeuverBook.ManeuverBookType.Level9Class)
         {
             InitiatorSysNameBase = initiatorSysNameBase;
             _displayName = displayName;

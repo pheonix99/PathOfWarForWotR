@@ -22,7 +22,7 @@ namespace TheInfiniteCrusade.ModifiedComponents
             static bool Prefix(Spellbook __instance)
             {
 
-                if (__instance.Blueprint.Components.OfType<ManeuverBookComponent>().Any())
+                if (__instance.Blueprint.Components.OfType<AddManeuverBookComponent>().Any())
                 {
                     //Tossed this into the controller.
 

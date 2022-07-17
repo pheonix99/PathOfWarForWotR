@@ -6,6 +6,7 @@ using BlueprintCore.Conditions.Builder.ContextEx;
 using BlueprintCore.Utils;
 using BlueprintCore.Utils.Types;
 using Kingmaker.Blueprints;
+using Kingmaker.Blueprints.Classes;
 using Kingmaker.Blueprints.Classes.Spells;
 using Kingmaker.EntitySystem.Stats;
 using Kingmaker.Enums;
@@ -27,8 +28,11 @@ using TabletopTweaks.Core.ModLogic;
 using TabletopTweaks.Core.NewComponents;
 using TabletopTweaks.Core.Utilities;
 using TheInfiniteCrusade.Backend.NewActions;
+using TheInfiniteCrusade.Backend.NewComponents;
+using TheInfiniteCrusade.Backend.NewComponents.Prerequisites;
 using TheInfiniteCrusade.Backend.NewComponents.MartialAttackComponents;
 using TheInfiniteCrusade.Defines;
+using TheInfiniteCrusade.Extensions;
 using TheInfiniteCrusade.NewComponents;
 using TheInfiniteCrusade.NewComponents.Abilities;
 using TheInfiniteCrusade.NewComponents.AbilityRestrictions;
@@ -40,15 +44,17 @@ namespace TheInfiniteCrusade.Utilities
 {
     public static class ManeuverTools
     {
-        public static void FinishManeuver(BlueprintAbility maneuver)
+        public static List<BlueprintFeatureReference> ManeuverLearnFeatures = new();
+        public static List<BlueprintFeatureReference> StanceLearnFeatures = new();
+        public static void FinishManeuver(BlueprintAbility maneuver, ModContextBase context)
         {
             var comp = maneuver.GetComponent<ManeuverInformation>();
             if (comp == null)
             {
                 return;
             }
-          
-            
+
+
 
             //Any universal stuff goes here.
 
@@ -71,7 +77,7 @@ namespace TheInfiniteCrusade.Utilities
                     }
                     if (comp.DisciplineKeys[0] == "ScarletThrone" && !maneuver.Components.OfType<ScarletThroneNoShieldRule>().Any())
                     {
-                        maneuver.AddComponent<ScarletThroneNoShieldRule>(x=>x.AllowTwoHanderAtAll = true);
+                        maneuver.AddComponent<ScarletThroneNoShieldRule>(x => x.AllowTwoHanderAtAll = true);
                     }
                 }
                 if (comp.DisciplineKeys.Contains("SilverCrane"))
@@ -83,13 +89,41 @@ namespace TheInfiniteCrusade.Utilities
                 if (comp.ManeuverType == ManeuverType.Stance)
                 {
                     BlueprintTools.GetModBlueprint<BlueprintSpellList>(Main.Context, "MasterStanceList").SpellsByLevel.FirstOrDefault(x => x.SpellLevel == comp.ManeuverLevel).m_Spells.Add(maneuver.ToReference<BlueprintAbilityReference>());
+                    MakeManuverPicker(maneuver, context, true);
                 }
                 else
                 {
                     BlueprintTools.GetModBlueprint<BlueprintSpellList>(Main.Context, "MasterManeuverList").SpellsByLevel.FirstOrDefault(x => x.SpellLevel == comp.ManeuverLevel).m_Spells.Add(maneuver.ToReference<BlueprintAbilityReference>());
+                    MakeManuverPicker(maneuver, context, false);
                 }
                 Main.Context.Logger.LogPatch("Finished", maneuver);
             }
+
+        }
+
+     
+
+
+
+        private static void MakeManuverPicker(BlueprintAbility v, ModContextBase context, bool stance)
+        {
+            var picker = Helpers.CreateDerivedBlueprint<BlueprintFeature>(context, v.name + "PickDummyFeature", Main.Context.Blueprints.GetDerivedMaster("ManeuverPickDummyFeatureMaster"), new SimpleBlueprint[] { v }, x =>
+            {
+                x.SetNameDescription(context, v.Name, v.Description);
+                x.m_Icon = v.Icon;
+                x.AddComponent<ManeuverSelectorPickComponent>(x => { x.Maneuver = v.ToReference<BlueprintAbilityReference>(); });
+                x.AddComponent<PrerequisiteManeuverSelectionDisciplineAccess>();
+                x.AddComponent<PrerequisiteManeuverSelectionInitiatorLevelAccess>();
+                //x.AddComponent<PrerequisiteManeuverSelectionNotKnown>();
+                x.AddComponent<PrerequisiteManeuverSelectionLevelAllowed>();
+                x.AddComponent<PrerequisiteManeuverSelectionDisciplineManeuversKnown>();
+                x.IsClassFeature = true;
+                
+            });
+            if (stance)
+                StanceLearnFeatures.Add(picker.ToReference<BlueprintFeatureReference>());
+            else
+                ManeuverLearnFeatures.Add(picker.ToReference<BlueprintFeatureReference>());
 
         }
 
@@ -107,7 +141,7 @@ namespace TheInfiniteCrusade.Utilities
             return abilty;
         }
 
-        public static BlueprintAbility MakeStandardStrike(ModContextBase context, string sysName, string displayName, string desc, int level, DisciplineDefine discipline, MartialAttackMode mode = MartialAttackMode.Normal,  bool fullRound = false, int extraHits = 0, int extraDice = 0, DiceType diceSize = DiceType.D6, bool WeaponDamage = true, bool VariableDamage = false, DamageTypeDescription damageType = null, int toHitShift = 0, ActionsBuilder payload = null, bool forceFlatfoot = false, bool allDamageIgnoresDr = false, bool extraIsPrecision = false, bool strikeDamageIgnoresDr = false, bool forceUnarmed = false, int flatDamage = 0, bool shieldBash = false, bool canRetarget = false,  Sprite icon = null, bool autoHit = false)
+        public static BlueprintAbility MakeStandardStrike(ModContextBase context, string sysName, string displayName, string desc, int level, DisciplineDefine discipline, MartialAttackMode mode = MartialAttackMode.Normal, bool fullRound = false, int extraHits = 0, int extraDice = 0, DiceType diceSize = DiceType.D6, bool WeaponDamage = true, bool VariableDamage = false, DamageTypeDescription damageType = null, int toHitShift = 0, ActionsBuilder payload = null, bool forceFlatfoot = false, bool allDamageIgnoresDr = false, bool extraIsPrecision = false, bool strikeDamageIgnoresDr = false, bool forceUnarmed = false, int flatDamage = 0, bool shieldBash = false, bool canRetarget = false, Sprite icon = null, bool autoHit = false)
         {
             var abilty = MakeWeaponBasedStrike(context, sysName, displayName, desc, level, discipline, mode, fullRound, extraHits, extraDice, diceSize, WeaponDamage, VariableDamage, damageType, toHitShift, payload, forceFlatfoot, allDamageIgnoresDr, extraIsPrecision, strikeDamageIgnoresDr, forceUnarmed, flatDamage, shieldBash, canRetarget, icon, autoHit);
             abilty.Range = AbilityRange.Weapon;
@@ -118,7 +152,7 @@ namespace TheInfiniteCrusade.Utilities
         private static BlueprintAbility MakeWeaponBasedStrike(ModContextBase context, string sysName, string displayName, string desc, int level, DisciplineDefine discipline, MartialAttackMode mode = MartialAttackMode.Normal, bool fullRound = false, int extraHits = 0, int extraDice = 0, DiceType diceSize = DiceType.D6, bool WeaponDamage = true, bool VariableDamage = false, DamageTypeDescription damageType = null, int toHitShift = 0, ActionsBuilder payload = null, bool forceFlatfoot = false, bool allDamageIgnoresDr = false, bool extraIsPrecision = false, bool strikeDamageIgnoresDr = false, bool forceUnarmed = false, int flatDamage = 0, bool shieldBash = false, bool canRetarget = false, Sprite icon = null, bool autoHit = false)
         {
             var abilty = ManeuverTools.MakeStrikeStub(context, sysName, displayName, desc, level, discipline, fullRound, icon);
-           
+
             abilty.CanTargetEnemies = true;
             abilty.CanTargetSelf = false;
             abilty.CanTargetFriends = false;
@@ -190,7 +224,7 @@ namespace TheInfiniteCrusade.Utilities
 
 
 
-        public static void AddBonusToCombatManeuversInAbility( this BlueprintAbility ability, int bonus, ModifierDescriptor descriptor, params CombatManeuver[] maneuvers )
+        public static void AddBonusToCombatManeuversInAbility(this BlueprintAbility ability, int bonus, ModifierDescriptor descriptor, params CombatManeuver[] maneuvers)
         {
 
             ability.AddComponent<TICManeuverCMBBonus>(x =>
@@ -201,7 +235,7 @@ namespace TheInfiniteCrusade.Utilities
 
             });
         }
-       
+
 
         public static BlueprintAbility MakeStrikeStub(ModContextBase source, string sysName, string displayName, string description, int level, DisciplineDefine discipline, bool fullRound = false, Sprite icon = null)
         {
@@ -234,7 +268,7 @@ namespace TheInfiniteCrusade.Utilities
         public static ActionsBuilder ApplyBuffIfNotSaved(Blueprint<BlueprintBuffReference> buff, ContextDurationValue durationValue, SavingThrowType savingThrowType, ConditionsBuilder conditions = null)
         {
             var baseEffect = ActionsBuilder.New().SavingThrow(savingThrowType).ConditionalSaved(failed: ApplyBuff(buff, durationValue));
-            
+
             if (conditions != null)
             {
                 return ActionsBuilder.New().Conditional(conditions, baseEffect);
@@ -259,7 +293,7 @@ namespace TheInfiniteCrusade.Utilities
         }
         public static ActionsBuilder ApplyBuff(Blueprint<BlueprintBuffReference> buff, ContextDurationValue durationValue)
         {
-            return ActionsBuilder.New().ApplyBuff(buff: buff, durationValue: durationValue, isNotDispelable:true, isFromSpell:false);
+            return ActionsBuilder.New().ApplyBuff(buff: buff, durationValue: durationValue, isNotDispelable: true, isFromSpell: false);
         }
 
         public static ActionsBuilder ApplyBuff(Blueprint<BlueprintBuffReference> buff, ContextDurationValue durationValue, ConditionsBuilder conditions)
@@ -321,7 +355,7 @@ namespace TheInfiniteCrusade.Utilities
             buff.AddComponent<ContextRankConfig>(x =>
             {
                 x.MakeScalingConfig(AbilityRankType.DamageBonus, baseValue, levelsToIncrease);
-                
+
             });
 
             return ability;
@@ -341,7 +375,7 @@ namespace TheInfiniteCrusade.Utilities
             config.m_Progression = ContextRankProgression.StartPlusDivStep;
             if (baseValue > 1)
             {
-                config.m_StartLevel = 1 - ((baseValue -1) * levelsToIncrease);
+                config.m_StartLevel = 1 - ((baseValue - 1) * levelsToIncrease);
             }
             else
             {
@@ -394,7 +428,7 @@ namespace TheInfiniteCrusade.Utilities
             {
                 x.m_Type = PseudoActivatable.PseudoActivatableType.BuffToggle;
                 x.m_GroupName = "MartialStance";
-                
+
                 x.m_Buff = localbuff.ToReference<BlueprintBuffReference>();
             });
             ability.AddComponent<AbilityEffectToggleBuff>(x => { x.m_Buff = localbuff.ToReference<BlueprintBuffReference>(); });

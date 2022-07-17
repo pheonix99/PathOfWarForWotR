@@ -12,9 +12,17 @@ namespace TheInfiniteCrusade.NewComponents.UnitParts
     {
         internal bool CanLearnManeuver(BlueprintAbilityReference manuever)
         {
-            throw new NotImplementedException();
+            return false;
         }
 
-        
+        internal bool IsThisDiscipline(string v)
+        {
+            return false;
+        }
+
+        internal int GetMaxLevel()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

@@ -14,6 +14,7 @@ using System.Threading.Tasks;
 using TabletopTweaks.Core.Utilities;
 using TheInfiniteCrusade.Backend.NewEvents;
 using TheInfiniteCrusade.Backend.NewUnitParts;
+using TheInfiniteCrusade.Extensions;
 using TheInfiniteCrusade.NewComponents.UnitParts;
 
 namespace TheInfiniteCrusade.Backend.NewControllers
@@ -58,11 +59,12 @@ namespace TheInfiniteCrusade.Backend.NewControllers
 
         public void HandleUnitRest(UnitEntityData unit)
         {
-            var part = unit.Get<UnitPartMartialDisciple>();
-            if (part != null)
+            foreach(var book in unit.ManeuverBooks())
             {
-                part.Rest();
+                book.Rest();
             }
+
+            
         }
 
         public void Tick()

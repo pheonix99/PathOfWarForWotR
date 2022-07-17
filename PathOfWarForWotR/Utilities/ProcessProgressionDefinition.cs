@@ -12,6 +12,8 @@ using System.Linq;
 using TabletopTweaks.Core.NewComponents.Properties;
 using TabletopTweaks.Core.Utilities;
 using TheInfiniteCrusade.Backend.NewActions;
+using TheInfiniteCrusade.Backend.NewBlueprints;
+using TheInfiniteCrusade.Backend.NewComponents;
 using TheInfiniteCrusade.Defines;
 using TheInfiniteCrusade.NewComponents.ManeuverBookSystem;
 using TheInfiniteCrusade.NewComponents.Properties;
@@ -26,12 +28,12 @@ namespace TheInfiniteCrusade.Utilities
         {
             string stringProgressionBlueprintSysName;
             var source = define.Source;
-            if (define.maneuverBookType == ManeuverBookComponent.ManeuverBookType.Level6Archetype)
+            if (define.maneuverBookType == BlueprintManeuverBook.ManeuverBookType.Level6Archetype)
             {
                 stringProgressionBlueprintSysName = define.InitiatorSysNameBase + "InitiatorProgression";
 
             }
-            else if (define.maneuverBookType == ManeuverBookComponent.ManeuverBookType.Level9Class)
+            else if (define.maneuverBookType == BlueprintManeuverBook.ManeuverBookType.Level9Class)
             {
                 stringProgressionBlueprintSysName = define.InitiatorSysNameBase + "Progression";
             }
@@ -48,7 +50,7 @@ namespace TheInfiniteCrusade.Utilities
                 x.SetDescription(source, "");
                 x.HideInCharacterSheetAndLevelUp = true;
                 x.IsClassFeature = true;
-                if (define.maneuverBookType == ManeuverBookComponent.ManeuverBookType.Level6Archetype)
+                if (define.maneuverBookType == BlueprintManeuverBook.ManeuverBookType.Level6Archetype)
                 {
                     foreach (var v in define.ArchetypesForArchetypeTemplate)
                     {
@@ -65,34 +67,9 @@ namespace TheInfiniteCrusade.Utilities
 
             var spellbookSysName = define.InitiatorSysNameBase + "ManeuverBook";
 
-
-            var spellbook = Helpers.CreateBlueprint<BlueprintSpellbook>(source, spellbookSysName, x =>
-            {
-                x.Name = LocalizationTool.CreateString(spellbookSysName + ".Name", define.DisplayName, false);
-                x.m_SpellsPerDay = BlueprintTools.GetModBlueprintReference<BlueprintSpellsTableReference>(Main.Context, "MartialManeuversTable");
-                x.m_SpellSlots = BlueprintTools.GetModBlueprintReference<BlueprintSpellsTableReference>(Main.Context, "MartialManeuversTable");
-                x.m_SpellList = BlueprintTools.GetModBlueprintReference<BlueprintSpellListReference>(Main.Context, "DummyManeuverList");
-                x.CastingAttribute = define.DefaultInitiatingStat;
-                x.CanCopyScrolls = false;
-                x.CantripsType = CantripsType.Orisions;
-                x.m_CharacterClass = define.ClassesForClassTemplate[0];
-                x.AddComponent<ManeuverBookComponent>(bookdef =>
-                {
-                    bookdef.BookType = define.maneuverBookType;
-                    bookdef.ArchetypeReference = define.ArchetypesForArchetypeTemplate.ToArray();
-                    bookdef.IsGranted = define.GrantedType;
-                    bookdef.ClassReference = define.ClassesForClassTemplate.ToArray();
-                    bookdef.GrantingProgression = progression.ToReference<BlueprintProgressionReference>();
-
-
-                });
-            });
-            Main.LogPatch(spellbook);
-            define.m_spellbook = spellbook.ToReference<BlueprintSpellbookReference>();
-
             var MLProperty = Helpers.CreateBlueprint<BlueprintUnitProperty>(source, define.InitiatorSysNameBase + "InitiatorLevelProperty", x =>
             {
-                if (define.maneuverBookType == ManeuverBookComponent.ManeuverBookType.Level6Archetype)
+                if (define.maneuverBookType == BlueprintManeuverBook.ManeuverBookType.Level6Archetype)
                 {
                     x.AddComponent<ArchetypeInitiatorLevelPropertyGetter>(x =>
                     {
@@ -100,6 +77,7 @@ namespace TheInfiniteCrusade.Utilities
                         x.m_Classes = define.ClassesForClassTemplate.ToArray();
 
                     });
+
                 }
                 else
                 {
@@ -111,28 +89,51 @@ namespace TheInfiniteCrusade.Utilities
                     });
                 }
 
+
             });
+
             Main.LogPatch(MLProperty);
-            //PRIMAL DISCIPLE ASPLODES NORTH OF HERE
-            var addSpellbookSysName = define.InitiatorSysNameBase + "AddManeuverBook";
 
-            var AddSpellbookFact = Helpers.CreateBlueprint<BlueprintFeature>(source, addSpellbookSysName, x =>
+            var ManeuverBook = Helpers.CreateBlueprint<BlueprintManeuverBook>(source, spellbookSysName, x =>
             {
-                x.SetNameDescription(source, $"{define.DisplayName} Maneuvers", "Temp Placeholder");
-                x.AddComponent<AddManeuverBook>(y =>
-                {
-                    y.m_CasterLevel = new Kingmaker.UnitLogic.Mechanics.ContextValue { m_CustomProperty = MLProperty.ToReference<BlueprintUnitPropertyReference>(), ValueType = Kingmaker.UnitLogic.Mechanics.ContextValueType.CasterCustomProperty };
-                    y.m_Spellbook = spellbook.ToReference<BlueprintSpellbookReference>();
-
-
-                });
-                x.ReapplyOnLevelUp = true;
-
-
+                x.Name = LocalizationTool.CreateString(spellbookSysName + ".Name", define.DisplayName, false);
+                x.DefaultMainStat = define.DefaultInitiatingStat;
+                x.BookType = define.maneuverBookType;
+                x.ArchetypeReference = define.ArchetypesForArchetypeTemplate.ToArray();
+                x.IsGranted = define.GrantedType;
+                x.ClassReference = define.ClassesForClassTemplate.ToArray();
+                x.GrantingProgression = progression.ToReference<BlueprintProgressionReference>();
+                x.m_InitiatorLevelReference = MLProperty.ToReference<BlueprintUnitPropertyReference>();
+                x.BaseManeuversKnown = define.ManeuversKnownAtLevel1;
+                x.BaseManeuversReadied = define.ManeuverSlotsAtLevel1;
+                
+                x.ManeuversLearnedAtLevels = define.ManeuversLearnedAtLevels;
+                x.SlotsGainedAtLevels = define.NormalSlotsIncreaseAtLevels;
+                x.StancesLearnedAtLevels = define.StancesLearnedAtLevels;
             });
-            spellbook.GetComponent<ManeuverBookComponent>().GrantingFeature = AddSpellbookFact.ToReference<BlueprintFeatureReference>();
 
-            progression.AddToProgressionLevels(1, AddSpellbookFact.ToReference<BlueprintFeatureBaseReference>());
+            
+            define.m_spellbook = ManeuverBook.ToReference<BlueprintManeuverBookReference>();
+
+            
+            //PRIMAL DISCIPLE ASPLODES NORTH OF HERE
+            
+            if (define.maneuverBookType == BlueprintManeuverBook.ManeuverBookType.Level9Class)
+            {
+                foreach(var v in define.ClassesForClassTemplate)
+                {
+                    v.Get().AddComponent<InitiatorClassComponent>(x => x.m_ManeuverBook = ManeuverBook.ToReference<BlueprintManeuverBookReference>());
+                }
+            }
+            else if (define.maneuverBookType == BlueprintManeuverBook.ManeuverBookType.Level6Archetype)
+            {
+                foreach(var v in define.ArchetypesForArchetypeTemplate)
+                {
+                    v.Get().AddComponent<InitiatorArchetypeComponent>(x => x.m_ManeuverBook = ManeuverBook.ToReference<BlueprintManeuverBookReference>());
+                }
+            }
+
+            
 
             var standardRestore = MakeStandardActionRestore(define);
             progression.AddToProgressionLevels(1, standardRestore.ToReference<BlueprintFeatureBaseReference>());
@@ -146,26 +147,25 @@ namespace TheInfiniteCrusade.Utilities
             var exchangerBuild = BuildExchanger(define, out var finalPick);
 
 
-            finalPick.AddComponent<ManeuverSelectionFeature>(x =>
-            {
-                x.Count = define.ManeuversKnownAtLevel1;
-                x.targetSpellbook = spellbook.ToReference<BlueprintSpellbookReference>();
-                x.stance = false;
-                x.mode = ManeuverSelectionFeature.Mode.Standard;
-                x.m_SpellList = BlueprintTools.GetModBlueprintReference<BlueprintSpellListReference>(Main.Context, $"MasterManeuverList");
-            });
+           
 
-            finalPick.AddComponent<ManeuverSelectionFeature>(x =>
-            {
-                x.Count = 1;
-                x.targetSpellbook = spellbook.ToReference<BlueprintSpellbookReference>();
-                x.stance = true;
-                x.mode = ManeuverSelectionFeature.Mode.Standard;
-                x.m_SpellList = BlueprintTools.GetModBlueprintReference<BlueprintSpellListReference>(Main.Context, $"MasterStanceList");
-            });
+            
 
-            var maneuverPick = BuildAdditionalManeuverLearner(define, false);
-            var stancePick = BuildAdditionalManeuverLearner(define, true);
+            define.maneuverSelector = BuildAdditionalManeuverLearner(define, false).ToReference<BlueprintFeatureSelectionReference>();
+            define.stanceSelector = BuildAdditionalManeuverLearner(define, true).ToReference<BlueprintFeatureSelectionReference>();
+
+            var factsToAdd = new List<BlueprintUnitFactReference>();
+            for (int i = 0; i < define.ManeuversKnownAtLevel1; i++)
+            {
+                factsToAdd.Add(define.maneuverSelector.Get().ToReference<BlueprintUnitFactReference>());
+            }
+            factsToAdd.Add(define.stanceSelector.Get().ToReference<BlueprintUnitFactReference>());
+
+            /*finalPick.AddComponent<AddFacts>(x =>
+            {
+
+                x.m_Facts = factsToAdd.ToArray();
+            });*/
             var featureUp = BuildAdditionalSlotFeatures(define);
             if (!define.ManuallyBuildSelectors)
             {
@@ -193,11 +193,11 @@ namespace TheInfiniteCrusade.Utilities
 
             foreach (int i in define.ManeuversLearnedAtLevels)
             {
-                progression.AddToProgressionLevels(i, maneuverPick.ToReference<BlueprintFeatureBaseReference>());
+                progression.AddToProgressionLevels(i, define.maneuverSelector.Get().ToReference<BlueprintFeatureBaseReference>());
             }
             foreach (int i in define.StancesLearnedAtLevels)
             {
-                progression.AddToProgressionLevels(i, stancePick.ToReference<BlueprintFeatureBaseReference>());
+                progression.AddToProgressionLevels(i, define.stanceSelector.Get().ToReference<BlueprintFeatureBaseReference>());
             }
             foreach (int i in define.NormalSlotsIncreaseAtLevels)
             {
@@ -206,7 +206,12 @@ namespace TheInfiniteCrusade.Utilities
 
 
             progression.AddToProgressionLevels(1, exchangerBuild.ToReference<BlueprintFeatureBaseReference>());
-
+            for (int i = 0; i < define.ManeuversKnownAtLevel1; i++)
+            {
+                progression.AddToProgressionLevels(1, define.maneuverSelector.Get().ToReference<BlueprintFeatureBaseReference>());
+               
+            }
+            progression.AddToProgressionLevels(1, define.stanceSelector.Get().ToReference<BlueprintFeatureBaseReference>());
             define.m_Progression = progression.ToReference<BlueprintProgressionReference>();
 
             return progression;
@@ -269,7 +274,7 @@ namespace TheInfiniteCrusade.Utilities
 
             });
             definition.SlotsProperty = slotprop.ToReference<BlueprintUnitPropertyReference>();
-            definition.m_spellbook.Get().GetComponent<ManeuverBookComponent>().m_ManeuverSlotsReference = slotprop.ToReference<BlueprintUnitPropertyReference>();
+            definition.m_spellbook.Get().m_ManeuverSlotsReference = slotprop.ToReference<BlueprintUnitPropertyReference>();
             definition.AddSlotComponent = feature.ToReference<BlueprintFeatureReference>();
             Main.LogPatch(feature);
             Main.LogPatch(slotprop);
@@ -294,7 +299,7 @@ namespace TheInfiniteCrusade.Utilities
                 x.Range = AbilityRange.Personal;
                 x.AddComponent<RecoverSelectedManeuver>(x =>
                 {
-                    x.spellbookReference = define.m_spellbook;
+                    x.m_maneuverBook = define.m_spellbook;
                 });
                 if (define.CustomStandardActionRestoreSprite != null)
                 {
@@ -384,26 +389,22 @@ namespace TheInfiniteCrusade.Utilities
         }
 
 
-        private static BlueprintFeature BuildAdditionalManeuverLearner(InitiatorProgressionDefine define, bool stance)
+        private static BlueprintFeatureSelection BuildAdditionalManeuverLearner(InitiatorProgressionDefine define, bool stance)
         {
             string sysName = define.InitiatorSysNameBase + (stance ? "Stance" : "Manuever") + "LearnSelector";
 
-            var feature = Helpers.CreateBlueprint<BlueprintFeature>(define.Source, sysName, x =>
+            var feature = Helpers.CreateBlueprint<BlueprintFeatureSelection>(define.Source, sysName, x =>
             {
                 x.SetName(define.Source, "Learn " + (stance ? "Stance" : "Manuever"));
                 x.SetDescription(define.Source, "Learn " + (stance ? "Stance" : "Manuever") + " as " + define.DisplayName);
                 x.IsClassFeature = true;
-                x.AddComponent<ManeuverSelectionFeature>(y =>
+                x.AddComponent<ManeuverSelectorMenuComponent>(x =>
                 {
-                    y.Count = 1;
-                    y.targetSpellbook = define.m_spellbook;
-                    y.stance = stance;
-                    y.mode = ManeuverSelectionFeature.Mode.Standard;
-                    y.m_SpellList = stance ? BlueprintTools.GetModBlueprintReference<BlueprintSpellListReference>(Main.Context, $"MasterStanceList") : BlueprintTools.GetModBlueprintReference<BlueprintSpellListReference>(Main.Context, $"MasterManeuverList");
-
-
+                    x.targetBook = define.m_spellbook;
+                    x.SelectionMode = ManeuverSelectionMode.Standard;
                 });
                 x.Ranks = 50;
+                x.Obligatory = false;
 
             });
 
@@ -484,6 +485,19 @@ namespace TheInfiniteCrusade.Utilities
                 selector.AddFeatures(define.AddSlotComponent);
             }
 
+            HandleLearn();
+            void HandleLearn()
+            {
+                var selector = define.stanceSelector.Get();
+                selector.AddFeatures(ManeuverTools.StanceLearnFeatures.ToArray());
+
+                Main.Context.Logger.Log($"{selector.name} options length:{selector.m_Features.Length}");
+
+                var selector2 = define.maneuverSelector.Get();
+                selector2.AddFeatures(ManeuverTools.ManeuverLearnFeatures.ToArray());
+                Main.Context.Logger.Log($"{selector2.name} options length:{selector2.m_Features.Length}");
+            }
+
         }
 
        
@@ -498,7 +512,7 @@ namespace TheInfiniteCrusade.Utilities
                 x.SetNameDescription(define.Source, unlock.DisplayName, $"Gain access to {unlock.DisplayName} as {define.DisplayName} manuevers\n{unlock.Description}");
                 x.AddComponent<DisciplineUnlockForInitiatorProgression>(x =>
                 {
-                    x.m_Progression = define.m_Progression;
+                    x.bookRef = define.m_spellbook;
                     x.disciplineType = unlock.SysName;
 
                 });

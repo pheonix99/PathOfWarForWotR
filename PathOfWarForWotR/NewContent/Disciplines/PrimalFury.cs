@@ -36,7 +36,7 @@ namespace TheInfiniteCrusade.NewContent.Disciplines
             {
                 var crushing = MakePrimalFiryStrike("CrushingBlow", "Crushing Blow", "By bringing his weapon high and bringing it down with ferocious finality, the disciple’s forceful blow is enough to weaken the defenses of his foe momentarily.The initiator makes an attack and if successful, the strike inflicts an additional 1d6 points of damage and may potentially render his foe flat-footed until its next turn on a failed Fortitude save(DC 11 + initiation modifier).", 1, extraDice: 1, payload: ManeuverTools.ApplyBuffIfNotSaved(buff: CommonBuffs.enforcedFlatfooted, ContextDuration.Fixed(1), savingThrowType: Kingmaker.EntitySystem.Stats.SavingThrowType.Fortitude));
 
-                ManeuverTools.FinishManeuver(crushing);
+                ManeuverTools.FinishManeuver(crushing, Main.Context);
 
             }
 
@@ -45,7 +45,7 @@ namespace TheInfiniteCrusade.NewContent.Disciplines
             {
                 var crushing = MakePrimalFiryStrike("PrimalWrath", "Primal Wrath","A wild but powerful strike is better than a frail and accurate one, says the disciple of Primal Fury.By sacrificing accuracy for potency, the disciple achieves his desired result.The initiator inflicts an additional 4 points of damage upon a successful attack, or an additional 6 points of damage if the initiator is wielding the weapon in two hands.", 1, extraDice: 0, flatDamage: 4, twohandBonusDamage: 2);
 
-                ManeuverTools.FinishManeuver(crushing);
+                ManeuverTools.FinishManeuver(crushing, Main.Context);
 
             }
 
@@ -61,7 +61,7 @@ namespace TheInfiniteCrusade.NewContent.Disciplines
                     x.Value = -2;
                 });
 
-                ManeuverTools.FinishManeuver(stance);
+                ManeuverTools.FinishManeuver(stance, Main.Context);
 
             }
             CripplingStrike();
@@ -69,7 +69,7 @@ namespace TheInfiniteCrusade.NewContent.Disciplines
             {
                 var crushing = MakePrimalFiryStrike("CripplingStrike", "Crippling Strike", "By specifically targeting a victim’s most vulnerable areas, the disciple is capable of rending arterial injuries into his foe. The initiator initiating this maneuver inflicts an additional 2d6 points of damage upon a successful melee attack, and his victim gains the bleeding condition suffering 1d4 points of damage per round until the application of any spell or effect that cures hit point damage or someone staunches the blood with a DC 15 Heal check.", 2, extraDice: 2, payload: ManeuverTools.ApplyBuffForever(buff: "5eb68bfe186d71a438d4f85579ce40c1") );
 
-                ManeuverTools.FinishManeuver(crushing);
+                ManeuverTools.FinishManeuver(crushing, Main.Context);
 
             }
 
@@ -78,7 +78,7 @@ namespace TheInfiniteCrusade.NewContent.Disciplines
             {
                 var crushing = MakePrimalFiryStrike("DevastatingRush", "Devastating Rush", "The disciple performing this attack executes a powerful attack that rushes in past a foe’s defenses to shatter them completely. The initiator inflicts an additional 2d6 points of damage upon a successful attack and his strike ignores the damage reduction of a subject or the hardness of an object he is attacking.", 2, extraDice: 2, allDamageignoresDR: true);
 
-                ManeuverTools.FinishManeuver(crushing);
+                ManeuverTools.FinishManeuver(crushing, Main.Context);
 
             }
 
@@ -87,7 +87,7 @@ namespace TheInfiniteCrusade.NewContent.Disciplines
             {
                 var crushing = MakePrimalFiryStrike("FrenzyStrike", "Frenzy Strike", "By emulating the ferocious assault of a raging great cat, the disciple’s knowledge of the natural world and the way its predators operate assists him in combat with a furious set of attacks. The initiator makes one attack with each weapon he has wielded (or with both heads of a double weapon; this includes natural attacks and armor or shield spikes) at his full base attack bonus. Upon a each successful attack, the initiator inflicts an additional 2d6 points of damage.", 3, extraDice: 2, mode: MartialAttackMode.EveryWeapon );
 
-                ManeuverTools.FinishManeuver(crushing);
+                ManeuverTools.FinishManeuver(crushing, Main.Context);
 
             }
 
@@ -96,7 +96,7 @@ namespace TheInfiniteCrusade.NewContent.Disciplines
             {
                 var crushing = MakePrimalFiryStrike("FuriousPrimalWrath", "Furious Primal Wrath", "The disciple’s attacks grow strong with practiced fury and primal power, forgoing accuracy for pure deadly force. The initiator suffers a -4 penalty to his attack roll, and makes an attack against a target creature. If successful, this attack inflicts an additional 20 points of damage, or 35 if the weapon is wielded in two hands.", 4, toHitShift: -4, extraDice: 0, flatDamage: 20, twohandBonusDamage: 15);
 
-                ManeuverTools.FinishManeuver(crushing);
+                ManeuverTools.FinishManeuver(crushing, Main.Context);
 
             }
 
@@ -111,7 +111,7 @@ namespace TheInfiniteCrusade.NewContent.Disciplines
 
                 })));
 
-                ManeuverTools.FinishManeuver(crushing);
+                ManeuverTools.FinishManeuver(crushing, Main.Context);
 
             }
             CorneredFrenzyStrike();
@@ -119,7 +119,7 @@ namespace TheInfiniteCrusade.NewContent.Disciplines
             {
                 var crushing = ManeuverTools.MakeWhirlwindStrike(Main.Context, "CorneredFrenzyStrike", "Cornered Frenzy Strike", "As an animal cornered lashes out at all comers, so does the Primal Fury disciple when he finds himself surrounded. By using his intuition and striking where he feels a foe to be, he uses his instincts as a powerful weapon. As a full attack action, the initiator makes an attack roll at full base attack bonus against each target within his reach with each weapon he is currently wielding (including natural attacks; armor and shield spikes always count as wielded weapons), and each successful attack inflicts an additional 4d6 points of damage. After initiating this maneuver, the initiator’s focus on offense causes his AC to suffer a -2 penalty until his next turn.", 5, primalFury, extraDice: 4, fullRound: true, mode: MartialAttackMode.EveryWeapon);
 
-                ManeuverTools.FinishManeuver(crushing);
+                ManeuverTools.FinishManeuver(crushing, Main.Context);
             }
             BloodSprayStrike();
             void BloodSprayStrike()
@@ -132,7 +132,7 @@ namespace TheInfiniteCrusade.NewContent.Disciplines
 
                 })));
 
-                ManeuverTools.FinishManeuver(crushing);
+                ManeuverTools.FinishManeuver(crushing, Main.Context);
 
             }
 

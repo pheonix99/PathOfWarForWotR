@@ -61,13 +61,13 @@ namespace TheInfiniteCrusade.ModifiedComponents
 
         }
         */
-
+        /*
         [HarmonyPatch(typeof(Spellbook), nameof(Spellbook.GetMemorizedSpellSlots), new Type[] { typeof(int) })]
         static class Spellbook_GetMemorizedSpellSlots//This hijacking is for the spellbook display - just plain hijacking the level 1 display
         {
             static bool Prefix(Spellbook __instance, ref IEnumerable<SpellSlot> __result, int spellLevel)
             {
-                var bookdef = __instance.Blueprint.Components.OfType<ManeuverBookComponent>().FirstOrDefault();
+                var bookdef = __instance.Blueprint.Components.OfType<AddManeuverBookComponent>().FirstOrDefault();
 
                 if (bookdef != null)
                 {
@@ -110,7 +110,7 @@ namespace TheInfiniteCrusade.ModifiedComponents
         {
             static bool Prefix(Spellbook __instance, ref IEnumerable<SpellSlot> __result, int spellLevel)
             {
-                var bookdef = __instance.Blueprint.Components.OfType<ManeuverBookComponent>().FirstOrDefault();
+                var bookdef = __instance.Blueprint.Components.OfType<AddManeuverBookComponent>().FirstOrDefault();
 
                 if (bookdef != null)
                 {
@@ -158,7 +158,7 @@ namespace TheInfiniteCrusade.ModifiedComponents
 
             static bool Prefix(Spellbook __instance, ref bool __result, [NotNull] AbilityData data, [CanBeNull] SpellSlot slot = null)
             {
-                if (__instance.Blueprint.Components.OfType<ManeuverBookComponent>().Any())
+                if (__instance.Blueprint.Components.OfType<AddManeuverBookComponent>().Any())
                 {
 
                     var disciple = __instance.Owner.Get<UnitPartMartialDisciple>();
@@ -240,7 +240,7 @@ namespace TheInfiniteCrusade.ModifiedComponents
         {
             static bool Prefix(Spellbook __instance, ref bool __result, [NotNull] AbilityData data, [CanBeNull] SpellSlot slot = null)
             {
-                if (__instance.Blueprint.Components.OfType<ManeuverBookComponent>().Any())
+                if (__instance.Blueprint.Components.OfType<AddManeuverBookComponent>().Any())
                 {
                     var disciple = __instance.Owner.Ensure<UnitPartMartialDisciple>();
                     if (!disciple.CanMemorizeForBook(__instance))
@@ -314,6 +314,6 @@ namespace TheInfiniteCrusade.ModifiedComponents
 
 
 
-
+        */
     }
 }

@@ -18,6 +18,7 @@ using Kingmaker.UnitLogic.Abilities.Components;
 using TheInfiniteCrusade.Defines;
 using TheInfiniteCrusade.Backend.NewComponents.AbilitySpecific;
 using TheInfiniteCrusade.Backend.NewActions;
+using TheInfiniteCrusade.Backend.NewBlueprints;
 
 namespace TheInfiniteCrusade.NewContent.MartialArchetypes
 {
@@ -211,7 +212,7 @@ namespace TheInfiniteCrusade.NewContent.MartialArchetypes
                 x.AddToAddFeatures(10, WarriorsDetermination2.ToReference<BlueprintFeatureBaseReference>());
                 x.AddToAddFeatures(14, WarriorsDetermination3.ToReference<BlueprintFeatureBaseReference>());
             });
-            InitiatorProgressionDefine myrmidonDefine = new InitiatorProgressionDefine(Main.Context, "Myrmidon", maneuverBookType: NewComponents.ManeuverBookSystem.ManeuverBookComponent.ManeuverBookType.Level6Archetype);
+            InitiatorProgressionDefine myrmidonDefine = new InitiatorProgressionDefine(Main.Context, "Myrmidon", maneuverBookType: BlueprintManeuverBook.ManeuverBookType.Level6Archetype);
             myrmidonDefine.ClassesForClassTemplate.Add(fighter.ToReference<BlueprintCharacterClassReference>());
             myrmidonDefine.ArchetypesForArchetypeTemplate.Add(myrm.ToReference<BlueprintArchetypeReference>());
             myrmidonDefine.DefaultInitiatingStat = Kingmaker.EntitySystem.Stats.StatType.Wisdom;
@@ -227,7 +228,7 @@ namespace TheInfiniteCrusade.NewContent.MartialArchetypes
             HeroicRecoveryAbility.AddComponent<RecoverSelectedManeuver>(x =>
             {
 
-                x.spellbookReference = myrmidonDefine.m_spellbook;
+                x.m_maneuverBook = myrmidonDefine.m_spellbook;
             });
 
             var prog = ProcessProgressionDefinition.BuildInitiatorProgress(myrmidonDefine);

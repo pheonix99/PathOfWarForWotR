@@ -24,7 +24,7 @@ namespace TheInfiniteCrusade.NewComponents.MartialAbilityInformation
         public string[] DisciplineKeys = new string[0];
         public bool isPrcAbility = false;
 
-        internal string GetManeuverSchoolString()
+        public string GetManeuverSchoolString()
         {
             StringBuilder s = new();
             if (DisciplineKeys.Length == 0)

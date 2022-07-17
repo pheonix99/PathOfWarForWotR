@@ -13,14 +13,15 @@ using TheInfiniteCrusade.NewComponents.UnitParts;
 
 namespace TheInfiniteCrusade.NewComponents.ManeuverBookSystem
 {
-	public class AddManeuverBook : AddSpellbook, IUnitReapplyFeaturesOnLevelUpHandler, IUnitSubscriber, ISubscriber, IPostCombatCooldownHandler, ICombatStartedWhileCooledDownHandler
+	/*
+	public class AddManeuverBook : AddSpellbook, IUnitReapplyFeaturesOnLevelUpHandler
 	{
 
-		public ManeuverBookComponent ManeuverBookComponent
+		public AddManeuverBookComponent ManeuverBookComponent
 		{
 			get
 			{
-				return Spellbook.Components.OfType<ManeuverBookComponent>().FirstOrDefault();
+				return Spellbook.Components.OfType<AddManeuverBookComponent>().FirstOrDefault();
 			}
 		}
 
@@ -39,16 +40,7 @@ namespace TheInfiniteCrusade.NewComponents.ManeuverBookSystem
 
 		}
 
-        public void OnCombatStartWhileCooledDown()
-        {
-			var part = base.Owner.Ensure<UnitPartMartialDisciple>();
-			part.RechargeBookOnCombatStart(Spellbook);
-		}
-
-        public void OnPostCombatCooldown()
-        {
-			var part = base.Owner.Ensure<UnitPartMartialDisciple>();
-			part.RechargeBookOnCombatEnd(Spellbook);
-		}
+        
     }
+	*/
 }

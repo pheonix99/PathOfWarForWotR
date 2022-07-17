@@ -40,7 +40,7 @@ namespace TheInfiniteCrusade.NewContent.Disciplines
 
 
 
-                ManeuverTools.FinishManeuver(snapping);
+                ManeuverTools.FinishManeuver(snapping, Main.Context);
 
 
             }
@@ -52,14 +52,14 @@ namespace TheInfiniteCrusade.NewContent.Disciplines
 
                 BuffConfigurator.For(buff).AddFacts(facts: new List<BlueprintCore.Utils.Blueprint<Kingmaker.Blueprints.BlueprintUnitFactReference>>() { "3bb6b76ed5b38ab4f957c7f923c23b68" }).Configure();
 
-                ManeuverTools.FinishManeuver(snappingStance);
+                ManeuverTools.FinishManeuver(snappingStance, Main.Context);
             }
 
             void StanceOfTheDefendingShell()
             {
                 var StanceOfTheDefendingShell = ManeuverTools.MakeSimpleStatUpStance(Main.Context, "StanceoftheDefendingShell", "Stance of the Defending Shell", "An Iron Tortoise disciple learns a valuable stance that forms the core of their discipline, that being the nature of the unbreakable wall. By focusing one’s attention to defense with their shield, their martial skill improves their defense. The initiator gains an additional +1 bonus to his shield AC while in this stance, and this bonus increases by +1 for every 4 initiator levels he possesses after 1st level (+2 at 5th, +3 at 9th, +4 at 13th, and to a maximum of +5 at 17th level).", 1, ironTortoise, Kingmaker.EntitySystem.Stats.StatType.AC, Kingmaker.Enums.ModifierDescriptor.ShieldFocus, 1, 4, out var IHSbuff);
 
-                ManeuverTools.FinishManeuver(StanceOfTheDefendingShell);
+                ManeuverTools.FinishManeuver(StanceOfTheDefendingShell, Main.Context);
             
             }
 
@@ -71,7 +71,7 @@ namespace TheInfiniteCrusade.NewContent.Disciplines
 
 
 
-                ManeuverTools.FinishManeuver(snapping);
+                ManeuverTools.FinishManeuver(snapping, Main.Context);
 
 
             }
@@ -84,7 +84,7 @@ namespace TheInfiniteCrusade.NewContent.Disciplines
 
 
 
-                ManeuverTools.FinishManeuver(snapping);
+                ManeuverTools.FinishManeuver(snapping, Main.Context);
 
 
             }

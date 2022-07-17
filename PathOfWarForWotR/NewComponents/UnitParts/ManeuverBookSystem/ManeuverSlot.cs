@@ -99,7 +99,10 @@ namespace TheInfiniteCrusade.NewComponents.UnitParts.ManeuverBookSystem
             }
         }
 
-        
+        internal void PlannedToReadied()
+        {
+            SetAsReadied(Planned);
+        }
 
         public bool Grant()
         {

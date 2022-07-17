@@ -58,7 +58,7 @@ namespace TheInfiniteCrusade.NewContent.Disciplines
                     blueprintAbility.EffectOnEnemy = AbilityEffectOnUnit.Harmful;
                 }
 
-                ManeuverTools.FinishManeuver(baseBlade);
+                ManeuverTools.FinishManeuver(baseBlade, Main.Context);
 
             }
 
@@ -89,7 +89,7 @@ namespace TheInfiniteCrusade.NewContent.Disciplines
                     });
                 });
 
-                ManeuverTools.FinishManeuver(ability);
+                ManeuverTools.FinishManeuver(ability, Main.Context);
             }
 
             ScarletEinhander();
@@ -122,7 +122,7 @@ namespace TheInfiniteCrusade.NewContent.Disciplines
                 });
                 stance.AddComponent<ScarletThroneNoShieldRule>(x => { x.AllowTwoHanderAtAll = false; });
 
-                ManeuverTools.FinishManeuver(stance);
+                ManeuverTools.FinishManeuver(stance, Main.Context);
             }
 
             GarnetLance();
@@ -131,7 +131,7 @@ namespace TheInfiniteCrusade.NewContent.Disciplines
                 var gl = ManeuverTools.MakeStandardStrike(Main.Context, "GarnetLance", "Garnet Lance", "With a sudden and powerful thrust, the disciple penetrates the defenses of his foe with devastating alacrity. The initiator makes a melee attack against a target creature, and if successful the attack inflicts an additional 2d6 points of damage and the attack automatically bypasses the target’s damage reduction.", 2, scarletThrone, extraDice: 2, allDamageIgnoresDr: true);
 
 
-                ManeuverTools.FinishManeuver(gl);
+                ManeuverTools.FinishManeuver(gl, Main.Context);
 
             }
             DazingAttack();
@@ -140,7 +140,7 @@ namespace TheInfiniteCrusade.NewContent.Disciplines
                 var gl = ManeuverTools.MakeStandardStrike(Main.Context, "DazingAttack", "Dazing Attack", "The swiftness of the Scarlet Throne disciple’s blade is a thing of terrific power, and by initiating this strike he demonstrates this potency. The disciple makes a melee attack against a target which if successful inflicts an additional 3d6 points of damage and upon a failed Fortitude save (DC 13 + initiation modifier) dazes the opponent for one round.", 3, scarletThrone, extraDice: 3, payload: ManeuverTools.ApplyBuffIfNotSaved("9934fedff1b14994ea90205d189c8759", durationValue: ContextDuration.Fixed(1), Kingmaker.EntitySystem.Stats.SavingThrowType.Fortitude));
 
 
-                ManeuverTools.FinishManeuver(gl);
+                ManeuverTools.FinishManeuver(gl, Main.Context);
 
             }
             UnfetteredMovement();
@@ -163,7 +163,7 @@ namespace TheInfiniteCrusade.NewContent.Disciplines
 
                 });
 
-                ManeuverTools.FinishManeuver(stance);
+                ManeuverTools.FinishManeuver(stance, Main.Context);
 
             }
             RiddleofIron();
@@ -172,7 +172,7 @@ namespace TheInfiniteCrusade.NewContent.Disciplines
                 var gl = ManeuverTools.MakeStandardStrike(Main.Context, "RiddleOfIron", "Riddle of Iron", "With a flourishing of his blade, the Scarlet Throne disciple confuses the senses of his foe as he lands a strike from an unexpected angle.The initiator must make a melee attack against a foe, and if successful the strike inflicts an additional 5d6 points of damage and dazes the target for one round on a failed Will save(DC 15 + initiation modifier).", 5, scarletThrone, extraDice: 5, payload: ManeuverTools.ApplyBuffIfNotSaved("9934fedff1b14994ea90205d189c8759", durationValue: ContextDuration.Fixed(1), Kingmaker.EntitySystem.Stats.SavingThrowType.Will));
 
 
-                ManeuverTools.FinishManeuver(gl);
+                ManeuverTools.FinishManeuver(gl, Main.Context);
 
             }
 
@@ -209,7 +209,7 @@ namespace TheInfiniteCrusade.NewContent.Disciplines
                     x.Descriptor = ModifierDescriptor.Insight;
 
                 });
-                ManeuverTools.FinishManeuver(stance);
+                ManeuverTools.FinishManeuver(stance, Main.Context);
 
             }
 
@@ -219,7 +219,7 @@ namespace TheInfiniteCrusade.NewContent.Disciplines
                 var gl = ManeuverTools.MakeStandardStrike(Main.Context, "SanguineProclamation", "Sanguine Proclamation", "With a mighty overhand swing the Scarlet Throne disciple puts his foe in their place; on their knees before the majesty of a prince of warriors. The initiator must make a melee attack against a target creature which if successful inflicts an additional 10d6 points of damage and the target must make a successful Will save (DC 17 + initiation modifier) to resist being driven to its knees, knocked prone.", 7, scarletThrone, extraDice: 10, payload: ManeuverTools.ApplyBuffIfNotSaved("24cf3deb078d3df4d92ba24b176bda97", durationValue: ContextDuration.Fixed(1), Kingmaker.EntitySystem.Stats.SavingThrowType.Will));
                 gl = AbilityConfigurator.For(gl).AddSpellDescriptorComponent(new Kingmaker.Blueprints.Classes.Spells.SpellDescriptorWrapper(Kingmaker.Blueprints.Classes.Spells.SpellDescriptor.MindAffecting)).Configure();
 
-                ManeuverTools.FinishManeuver(gl);
+                ManeuverTools.FinishManeuver(gl, Main.Context);
 
             }
 
@@ -229,7 +229,7 @@ namespace TheInfiniteCrusade.NewContent.Disciplines
                 var gl = ManeuverTools.MakeStandardStrike(Main.Context, "RiddleofSteel", "Riddle of Steel", "With a swift and deadly strike, the disciple is capable of disabling a foe’s senses for a few moments, effectively eliminating the threat. The disciple makes a melee attack against his opponent which if successful deals an additional 10d6 points of damage and stuns his opponent for 1d4 rounds on a failed Will save (DC 18 + initiation modifier).", 8, scarletThrone, extraDice: 10, payload: ManeuverTools.ApplyBuffIfNotSaved("09d39b38bb7c6014394b6daced9bacd3", durationValue: new Kingmaker.UnitLogic.Mechanics.ContextDurationValue() { DiceType = Kingmaker.RuleSystem.DiceType.D4, BonusValue = 0, DiceCountValue = 1, m_IsExtendable = false, Rate = Kingmaker.UnitLogic.Mechanics.DurationRate.Rounds }, Kingmaker.EntitySystem.Stats.SavingThrowType.Will));
 
 
-                ManeuverTools.FinishManeuver(gl);
+                ManeuverTools.FinishManeuver(gl, Main.Context);
 
             }
 
@@ -239,7 +239,7 @@ namespace TheInfiniteCrusade.NewContent.Disciplines
                 var gl = ManeuverTools.MakeStandardStrike(Main.Context, "HeavenlyBladeoftheScarletThrone", "Heavenly Blade of the Scarlet Throne", "The supreme technique of the Scarlet Throne, the disciple who knows of it is the lord of all battlefields and marks his name amongst the legends of war. The disciple makes a melee attack which if successful inflicts an additional 100 points of damage. The target must then make a Will save (DC 19 + initiation modifier) to resist becoming paralyzed for 1d4 rounds.", 8, scarletThrone, flatDamage: 100, payload: ManeuverTools.ApplyBuffIfNotSaved("af1e2d232ebbb334aaf25e2a46a92591", durationValue: new Kingmaker.UnitLogic.Mechanics.ContextDurationValue() { DiceType = Kingmaker.RuleSystem.DiceType.D4, BonusValue = 0, DiceCountValue = 1, m_IsExtendable = false, Rate = Kingmaker.UnitLogic.Mechanics.DurationRate.Rounds }, Kingmaker.EntitySystem.Stats.SavingThrowType.Will));
 
 
-                ManeuverTools.FinishManeuver(gl);
+                ManeuverTools.FinishManeuver(gl, Main.Context);
 
             }
         }

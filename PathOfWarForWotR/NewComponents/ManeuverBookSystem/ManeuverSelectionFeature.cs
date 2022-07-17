@@ -12,37 +12,35 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TabletopTweaks.Core.Utilities;
+using TheInfiniteCrusade.Backend.NewBlueprints;
+using TheInfiniteCrusade.Backend.NewUnitDataClasses;
 using TheInfiniteCrusade.Backend.NewUnitParts;
+using TheInfiniteCrusade.CustomUI.UnitLogic.Class.LevelUp;
+using TheInfiniteCrusade.Extensions;
 using TheInfiniteCrusade.NewComponents.MartialAbilityInformation;
 using TheInfiniteCrusade.NewComponents.UnitParts;
 
 namespace TheInfiniteCrusade.NewComponents.ManeuverBookSystem
 {
+    /*
     [AllowMultipleComponents]
-    class ManeuverSelectionFeature : UnitFactComponentDelegate, IUnitCompleteLevelUpHandler, IGlobalSubscriber, ISubscriber
+    partial class ManeuverSelectionFeature : UnitFactComponentDelegate, IUnitCompleteLevelUpHandler, IGlobalSubscriber, ISubscriber
     {
 
 
 
       
-        public BlueprintSpellbookReference targetSpellbook;
-        private Spellbook SpellBookToAddTo => Owner.DemandSpellbook(targetSpellbook.Get());
+        public BlueprintManeuverBookReference targetSpellbook;
+        private ManeuverBook SpellBookToAddTo => Owner.DemandManeuverBook(targetSpellbook.Get());
 
-        public Mode mode;
+        public ManeuverSelectionMode mode;
 
         public bool stance;
-        public enum Mode
-        {
-            Standard,
-            MartialTraining,
-            AdvancedStudy,
-            AdvancedStudySpecial
-        }
 
 
 
 
-        private List<SpellSelectionData> spellSelections = new List<SpellSelectionData>();
+        private List<ManeuverSelectionData> spellSelections = new List<ManeuverSelectionData>();
         public BlueprintSpellListReference m_SpellList;
 
 
@@ -52,7 +50,7 @@ namespace TheInfiniteCrusade.NewComponents.ManeuverBookSystem
         {
             get
             {
-                if (mode == Mode.Standard && targetSpellbook.Get().Components.OfType<ManeuverBookComponent>().FirstOrDefault()?.BookType == ManeuverBookComponent.ManeuverBookType.Level6Archetype)
+                if (mode == ManeuverSelectionMode.Standard && targetSpellbook.Get().BookType == BlueprintManeuverBook.ManeuverBookType.Level6Archetype)
                     return 6;
 
                 else return 9;
@@ -95,24 +93,24 @@ namespace TheInfiniteCrusade.NewComponents.ManeuverBookSystem
             {
                 Main.Context.Logger.Log($"Class At Selection Is: {controller.State.SelectedClass.Name}");
             }
-            BlueprintSpellList SpellList = ProxyList(m_SpellList ?? SpellBookToAddTo?.Blueprint?.SpellList, selectedclass);
+            BlueprintSpellList SpellList = ProxyList(selectedclass);
 
             Main.Context.Logger.Log($"Spell List is {SpellList.NameSafe()}, spells included:{SpellList.SpellsByLevel.SelectMany(x => x.m_Spells).Count()}");
             for (; i < spellSelections.Count && i < selectionCount; i++)
             {
-                controller.State.SpellSelections.Add(spellSelections[i]);
-                spellSelections[i].SetExtraSpells(Count, AdjustedMaxLevel);
+                controller.State.ManeuverSelections().Add(spellSelections[i]);
+                spellSelections[i].SetExtraManuevers(Count);
             }
             for (; i < selectionCount; i++)
             {
 
                 if (i >= selectionCount) { continue; }
-                var selection = controller.State.DemandSpellSelection(SpellBookToAddTo.Blueprint, SpellList);
-                selection.SetExtraSpells(Count, AdjustedMaxLevel);
+                var selection = controller.State.DemandManeuverSelection(SpellBookToAddTo.Blueprint, SpellList);
+                selection.SetExtraManuevers(Count);
 
                 spellSelections.Add(selection);
             }
-            /*
+            
             if (selectionCount > 0)
             {
                 Main.ModContextPathOfTheCrusade.Logger.Log($"SelectionCount > 0");
@@ -137,7 +135,7 @@ namespace TheInfiniteCrusade.NewComponents.ManeuverBookSystem
                 selection.SetExtraSpells(Count, AdjustedMaxLevel);
                 spellSelections.Add(selection);
             }
-            */
+            
 
         }
         public override void OnTurnOff()
@@ -146,7 +144,7 @@ namespace TheInfiniteCrusade.NewComponents.ManeuverBookSystem
             LevelUpController controller = Kingmaker.Game.Instance?.LevelUpController;
             if (controller == null) { return; }
             if (SpellBookToAddTo == null) { return; }
-            spellSelections.ForEach(selection => controller.State.SpellSelections.Remove(selection));
+            spellSelections.ForEach(selection => controller.State.ManeuverSelections().Remove(selection));
         }
 
         public void HandleUnitCompleteLevelup(UnitEntityData unit)
@@ -154,15 +152,15 @@ namespace TheInfiniteCrusade.NewComponents.ManeuverBookSystem
             spellSelections.Clear();
         }
 
-        private BlueprintSpellList ProxyList(BlueprintSpellList referenced, BlueprintCharacterClass currentClass)
+        private BlueprintSpellList ProxyList(BlueprintCharacterClass currentClass)
         {
 
             
             var bookPart = Owner.Parts.Ensure<UnitPartMartialDisciple>();
+            BlueprintSpellList relevantMasterList = stance ? BlueprintTools.GetModBlueprint<BlueprintSpellList>(Main.Context, "MasterStanceList") : BlueprintTools.GetModBlueprint<BlueprintSpellList>(Main.Context, "MasterManeuverList");
 
 
-
-            return Helpers.CreateCopy(referenced, bp =>
+            return Helpers.CreateCopy(relevantMasterList, bp =>
             {
 
                 bp.name = $"{bp.name}Proxy";
@@ -178,7 +176,7 @@ namespace TheInfiniteCrusade.NewComponents.ManeuverBookSystem
 
                         var manuever = spellLevelList.m_Spells[placeInLevelList];
 
-                        if (bookPart.CanLearnManeuver(manuever, mode, targetSpellbook, currentClass))
+                        if (bookPart.CanLearnManeuver(manuever, mode, SpellBookToAddTo, currentClass))
                         {
                             placeInLevelList++;
                         }
@@ -202,5 +200,6 @@ namespace TheInfiniteCrusade.NewComponents.ManeuverBookSystem
 
 
 
-    }
+    }*/
+
 }

@@ -10,7 +10,9 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TheInfiniteCrusade.Backend.NewBlueprints;
 using TheInfiniteCrusade.Backend.NewUnitParts;
+using TheInfiniteCrusade.NewComponents.ManeuverBookSystem;
 using TheInfiniteCrusade.NewComponents.UnitParts;
 using TheInfiniteCrusade.NewComponents.UnitParts.ManeuverBookSystem;
 
@@ -19,8 +21,8 @@ namespace TheInfiniteCrusade.Serialization
     class ManeuverBookStorage
     {
         [JsonProperty]
-        public Dictionary<string, ManeuverBooksRecord> PerCharacter = new();
-        public ManeuverBooksRecord ForCharacter(UnitEntityData unit)
+        public Dictionary<string, MartialDiscipleRecord> PerCharacter = new();
+        public MartialDiscipleRecord ForCharacter(UnitEntityData unit)
         {
             var key = unit.UniqueId;
             if (!PerCharacter.TryGetValue(key, out var record))
@@ -34,13 +36,13 @@ namespace TheInfiniteCrusade.Serialization
         public static ManeuverBookStorage Instance = new();
     }
 
-    public class ManeuverBooksRecord
+    public class MartialDiscipleRecord
     {
         /// <summary>
         /// Dictionary of maneuver guid -> manuever data pairs, key is spellbook guid
         /// </summary>
         [JsonProperty]
-        public Dictionary<string, List<SlotRecord>> ManeuverBooks = new();
+        public Dictionary<string, ManeuverBookRecord> ManeuverBooks = new();
 
         //public List<ManeuverBookRecord> ManeuverBooks = new();
 
@@ -49,7 +51,7 @@ namespace TheInfiniteCrusade.Serialization
 
 
 
-        public List<SlotRecord> ForSpellbook(BlueprintSpellbook book)
+        public ManeuverBookRecord ForSpellbook(BlueprintManeuverBook book)
         {
             var key = book.AssetGuidThreadSafe;
 
@@ -146,7 +148,17 @@ namespace TheInfiniteCrusade.Serialization
 
     }
 
+    public class ManeuverBookRecord
+    {
+        [JsonProperty]
+        public List<SlotRecord> SlotRecords = new();
 
+        [JsonProperty]
+        public List<string> ManeuverGuids = new();
+
+
+       
+    }
 
     public class SlotRecord
     {

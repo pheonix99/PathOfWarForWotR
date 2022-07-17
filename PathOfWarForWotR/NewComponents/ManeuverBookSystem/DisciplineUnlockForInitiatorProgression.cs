@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TheInfiniteCrusade.Backend.NewBlueprints;
 using TheInfiniteCrusade.Backend.NewUnitParts;
 using TheInfiniteCrusade.NewComponents.UnitParts;
 
@@ -16,7 +17,9 @@ namespace TheInfiniteCrusade.NewComponents.ManeuverBookSystem
     {
         public BlueprintProgression Progression => m_Progression.Get();
 
-        public BlueprintProgressionReference m_Progression;
+        public BlueprintProgressionReference m_Progression => bookRef.Get().GrantingProgression;
+
+        public BlueprintManeuverBookReference bookRef;
 
         public string disciplineType;
 
@@ -35,14 +38,14 @@ namespace TheInfiniteCrusade.NewComponents.ManeuverBookSystem
            
             base.OnTurnOn();
             var part = base.Owner.Ensure<UnitPartMartialDisciple>();
-            part.RegisterClassUnlock(base.Fact, m_Progression, disciplineType);
+            part.RegisterClassUnlock(base.Fact, bookRef, disciplineType);
 
         }
 
         public override void OnTurnOff()
         {
             var part = base.Owner.Get<UnitPartMartialDisciple>();
-            part.UnregisterClassUnlock(base.Fact, m_Progression, disciplineType);
+            part.UnregisterClassUnlock(base.Fact, bookRef, disciplineType);
 
         }
     }

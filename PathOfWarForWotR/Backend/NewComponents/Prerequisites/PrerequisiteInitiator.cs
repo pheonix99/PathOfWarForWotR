@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TheInfiniteCrusade.Extensions;
 using TheInfiniteCrusade.NewComponents.ManeuverBookSystem;
 
 namespace TheInfiniteCrusade.Backend.NewComponents.Prerequisites
@@ -16,9 +17,9 @@ namespace TheInfiniteCrusade.Backend.NewComponents.Prerequisites
         public override bool CheckInternal([CanBeNull] FeatureSelectionState selectionState, [NotNull] UnitDescriptor unit, [CanBeNull] LevelUpState state)
         {
             if (IncludeMartialTraining)
-                return unit.Spellbooks.Any(x => x.Blueprint.Components.OfType<ManeuverBookComponent>().Any());
+                return unit.ManeuverBooks().Any();
             else
-                return unit.Spellbooks.Any(x => x.Blueprint.Components.OfType<ManeuverBookComponent>().Any(y=>y.BookType != ManeuverBookComponent.ManeuverBookType.MartialTraining));
+                return unit.ManeuverBooks().Any(x => !x.Blueprint.IsMartialTraining);
             
         }
 

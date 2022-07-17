@@ -47,8 +47,9 @@ namespace TheInfiniteCrusade.NewContent
             [HarmonyPriority(Priority.Last)]
             static void Postfix()
             {
-
+                
                 ProcessProgressionDefinition.FinalRun();
+                
             }
         }
     }

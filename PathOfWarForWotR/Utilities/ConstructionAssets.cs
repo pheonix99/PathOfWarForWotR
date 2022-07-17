@@ -41,6 +41,8 @@ namespace TheInfiniteCrusade.Utilities
             BlueprintTool.AddGuidsByName(("NauseatedBuff", "956331dba5125ef48afe41875a00ca0e"));
             itemBondSprite = BlueprintTool.Get<BlueprintFeature>("2fb5e65bd57caa943b45ee32d825e9b9").Icon;
 
+            Main.Context.Blueprints.GetDerivedMaster("ManeuverPickDummyFeatureMaster");
+
         }
         public static BlueprintRoot Root()
         {

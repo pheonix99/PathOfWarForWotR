@@ -17,13 +17,14 @@ namespace TheInfiniteCrusade.ModifiedComponents
 {
     class HijackSpellbookSpending
     {
+        /*
         [HarmonyPatch(typeof(Spellbook), nameof(Spellbook.GetAvailableForCastSpellCount))]
         static class Spellbook_GetAvailableForCastSpellCount_RerouteToCustomData
         {
 
             static bool Prefix(Spellbook __instance, ref int __result, AbilityData spell)
             {
-                var bookdef = __instance.Blueprint.Components.OfType<ManeuverBookComponent>().FirstOrDefault();
+                var bookdef = __instance.Blueprint.Components.OfType<AddManeuverBookComponent>().FirstOrDefault();
 
                 if (bookdef != null)
                 {
@@ -56,7 +57,7 @@ namespace TheInfiniteCrusade.ModifiedComponents
         {
             static bool Prefix(Spellbook __instance, ref bool __result, [NotNull] BlueprintAbility blueprint, [CanBeNull] AbilityData spell, bool doSpend, bool excludeSpecial)
             {
-                if (__instance.Blueprint.Components.OfType<ManeuverBookComponent>().Any())
+                if (__instance.Blueprint.Components.OfType<AddManeuverBookComponent>().Any())
                 {
                     var part = __instance.Owner.Get<UnitPartMartialDisciple>();
                     if (part == null)
@@ -111,7 +112,7 @@ namespace TheInfiniteCrusade.ModifiedComponents
 
             static bool Prefix(Spellbook __instance, ref string __result, BlueprintAbility blueprint)
             {
-                if (__instance.Blueprint.Components.OfType<ManeuverBookComponent>().Any())
+                if (__instance.Blueprint.Components.OfType<AddManeuverBookComponent>().Any())
                 {
                     var part = __instance.Owner.Ensure<UnitPartMartialDisciple>();
                     bool canUse = part.ManeuverReadedAndUsable(__instance, blueprint);
@@ -130,5 +131,6 @@ namespace TheInfiniteCrusade.ModifiedComponents
                     return true;
             }
         }
+        */
     }
 }

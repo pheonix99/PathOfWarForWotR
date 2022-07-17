@@ -8,7 +8,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TheInfiniteCrusade.Backend.NewBlueprints;
 using TheInfiniteCrusade.Backend.NewUnitParts;
+using TheInfiniteCrusade.Extensions;
+using TheInfiniteCrusade.NewComponents.ManeuverBookSystem;
 
 namespace TheInfiniteCrusade.Backend.NewActions
 {
@@ -18,18 +21,11 @@ namespace TheInfiniteCrusade.Backend.NewActions
 
         public override void Apply(AbilityExecutionContext context, TargetWrapper target)
         {
-            if (context.Ability.ParamSpellSlot == null || context.Ability.ParamSpellSlot.Spell == null)
-            {
-                PFLog.Default.Error(context.AbilityBlueprint, string.Format("Target spell is missing: {0}", context.AbilityBlueprint), Array.Empty<object>());
-                return;
-            }
-            if (context.Ability.ParamSpellSlot.Spell.Spellbook == null)
-            {
-                PFLog.Default.Error(context.AbilityBlueprint, string.Format("Spellbook is missing: {0}", context.AbilityBlueprint), Array.Empty<object>());
-                return;
-            }
-            context.Caster.Get<UnitPartMartialDisciple>().DoRecoverManeuversForBook(context.Ability.ParamSpellSlot.Spell.Spellbook, context.Ability.ParamSpellSlot.Spell.Blueprint.ToReference<BlueprintAbilityReference>());
+
+            context.Caster.DemandManeuverBook(maneuverBook).RecoverManeuver(context.Ability.Blueprint.ToReference<BlueprintAbilityReference>());
         }
+
+       
 
 
         public string GetAbilityRestrictionUIText()
@@ -46,12 +42,14 @@ namespace TheInfiniteCrusade.Backend.NewActions
             }
             else
             {
-                return part.CanRecoverManeuverForBook(spellbookReference, ability.Blueprint.ToReference<BlueprintAbilityReference>());
+                return ability.Caster.DemandManeuverBook(maneuverBook).CanRecover(ability.Blueprint.ToReference<BlueprintAbilityReference>());
+                
             }
         }
 
-        
 
-        public BlueprintSpellbookReference spellbookReference;
+
+        public BlueprintManeuverBook maneuverBook => m_maneuverBook.Get();
+        public BlueprintManeuverBookReference m_maneuverBook;
     }
 }

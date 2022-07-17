@@ -42,7 +42,7 @@ namespace TheInfiniteCrusade.NewContent.Disciplines
                 var IronHandStance = ManeuverTools.MakeSimpleStatUpStance(Main.Context, "IronHandStance", "Iron Hand Stance", "By keeping his hands stiff and his arms loose and ready, the disciple uses his bare palms as shields to protect himself from the weapons of his foes. While in this stance, the initiator gains a +2 shield bonus to his AC while he has at least one free hand. At the initiator’s 6th initiator level, this bonus increases by +1, again at 12th level, and a final time at 18th level.", 1, brokenBlade, Kingmaker.EntitySystem.Stats.StatType.AC, Kingmaker.Enums.ModifierDescriptor.Shield, 2, 6, out var IHSbuff);
                 IronHandStance.SetLocalizedDuration(Main.Context, "");
                 IronHandStance.SetLocalizedSavingThrow(Main.Context, "");
-                ManeuverTools.FinishManeuver(IronHandStance);
+                ManeuverTools.FinishManeuver(IronHandStance, Main.Context);
             }
 
             PugilistStance();
@@ -51,7 +51,7 @@ namespace TheInfiniteCrusade.NewContent.Disciplines
                 var PugilistStance = ManeuverTools.MakeSimpleDamageUpStance(Main.Context, "PugilistStance", "Pugilist Stance", "By adopting a powerful kickboxing stance, the initiator positions himself for lightning fast, potent strikes with his hands and feet. While in this stance, unarmed or discipline weapon strikes inflict an additional 1d6 points of damage, increasing to 2d6 at initator level 8 and another die every eight levels", 1, brokenBlade, baseValue: 1, levelsToIncrease: 8, out var IHSbuff);
                 PugilistStance.SetLocalizedDuration(Main.Context, "");
                 PugilistStance.SetLocalizedSavingThrow(Main.Context, "");
-                ManeuverTools.FinishManeuver(PugilistStance);
+                ManeuverTools.FinishManeuver(PugilistStance, Main.Context);
             }
 
             FlurryStrike();
@@ -59,7 +59,7 @@ namespace TheInfiniteCrusade.NewContent.Disciplines
             {
                 var flurry = BrokenBladeStandardStrikeStrike(Main.Context, "FlurryStrike", "Flurry Strike", "The disciple of the Broken Blade learns to maximize openings in his opponent’s defenses and makes lightning fast attacks whenever possible. As a standard action, the initiator may make two attacks at his full base attack bonus.", 1, unarmedOnly: false, extraHits: 1, icon: ius.Icon);
 
-                ManeuverTools.FinishManeuver(flurry);
+                ManeuverTools.FinishManeuver(flurry, Main.Context);
             }
 
             PommelBash();
@@ -67,7 +67,7 @@ namespace TheInfiniteCrusade.NewContent.Disciplines
             {
                 var bash = BrokenBladeStandardStrikeStrike(Main.Context, "PommelBash", "Pommel Bash", "When watching a Broken Blade fighter work his art, most watch for the fists and feet. The disciple knows this, and surprises his foe, catching him unaware. The disciple makes a surprise elbow strike to the foe that leaves them reeling. The initiator makes an unarmed attack against the target’s flat-footed armor class, and the blow inflicts 1d6 points of additional damage. Creatures immune to sneak attacks and critical hits are unaffected by this extra damage.", 1, unarmedOnly: true, extraDice: 1, extraIsPrecision: true, forceFlatfoot: false, icon: ius.Icon);
 
-                ManeuverTools.FinishManeuver(bash);
+                ManeuverTools.FinishManeuver(bash, Main.Context);
             }
 
             ShardsofIronStrike();
@@ -75,7 +75,7 @@ namespace TheInfiniteCrusade.NewContent.Disciplines
             {
                 var shards = BrokenBladeStandardStrikeStrike(Main.Context, "ShardsofIronStrike", "Shards of Iron Strike", "By mimicking the speed and piercing power of the legendary shattered blade of the founder of this discipline, the disciple makes a hard jabbing strike at his opponent’s vulnerable spots for maximum pain. The initiator makes an attack against his target foe and if successful, the target is staggered for one round in addition to normal damage.", 1, unarmedOnly: false, payload: ManeuverTools.ApplyBuff("df3950af5a783bd4d91ab73eb8fa0fd3", ContextDuration.Fixed(1)), icon: ius.Icon);
 
-                ManeuverTools.FinishManeuver(shards);
+                ManeuverTools.FinishManeuver(shards, Main.Context);
             }
 
             BrawlersAttitude();
@@ -175,7 +175,7 @@ namespace TheInfiniteCrusade.NewContent.Disciplines
             {
                 var knuckle = BrokenBladeStandardStrikeStrike(Main.Context, "KnuckleToTheBlade", "Knuckle To The Blade", "By striking at the weapon-wielding arm of his opponent, the disciple of the Broken Blade can cleverly disarm his opponent and potentially even bring his foe’s weapon to bear against him. The initiator makes an attack as normal upon his foe, if successful, the initiator may make a free disarm attempt against the opponent without provoking attacks of opportunity.", 2, unarmedOnly: false, payload: ActionsBuilder.New().CombatManeuver(onSuccess: ActionsBuilder.New(), type: Kingmaker.RuleSystem.Rules.CombatManeuver.Disarm), icon: ius.Icon);
 
-                ManeuverTools.FinishManeuver(knuckle);
+                ManeuverTools.FinishManeuver(knuckle, Main.Context);
             }
 
             BronzeKnuckle();
@@ -211,7 +211,7 @@ namespace TheInfiniteCrusade.NewContent.Disciplines
                 lsh.Animation = Kingmaker.Visual.Animation.Kingmaker.Actions.UnitAnimationActionCastSpell.CastAnimationStyle.Special;
                 lsh.EffectOnEnemy = AbilityEffectOnUnit.Harmful;
 
-                ManeuverTools.FinishManeuver(lsh);
+                ManeuverTools.FinishManeuver(lsh, Main.Context);
             }
 
             #endregion
@@ -223,7 +223,7 @@ namespace TheInfiniteCrusade.NewContent.Disciplines
             {
                 var flurry = BrokenBladeStandardStrikeStrike(Main.Context, "SteelFlurryStrike", "Steel Flurry Strike", "The disciple makes a furious set of attacks upon his foe, hammering through defenses and striking rapidly. The initiator may make three attacks against his foe at full base attack bonus with a -2 penalty to hit. Successful hits inflict an additional 3d6 points of damage per hit.", 3, unarmedOnly: false, extraHits: 2, toHitShift: -2, extraDice: 3, icon: ius.Icon);
 
-                ManeuverTools.FinishManeuver(flurry);
+                ManeuverTools.FinishManeuver(flurry, Main.Context);
             }
 
             IronDust();
@@ -246,7 +246,7 @@ namespace TheInfiniteCrusade.NewContent.Disciplines
 
                 //TODO ADD Acrobatics effect (HOW ON EARTH)
 
-                ManeuverTools.FinishManeuver(stance);
+                ManeuverTools.FinishManeuver(stance, Main.Context);
             }
 
             #endregion
@@ -264,7 +264,7 @@ namespace TheInfiniteCrusade.NewContent.Disciplines
             {
                 var flurry = BrokenBladeStandardStrikeStrike(Main.Context, "IronAxeKick", "Iron Axe Kick", "The disciple leaps up into the air and raises his leg up to hammer it down in a bone-shattering axe kick. The initiator delivers a potent kick (as an unarmed strike) that inflicts an additional 6d6 points of damage. The target must make a Fortitude save (DC 14 + primary initiation modifier) or be dazed for 1d4 rounds.", 4, unarmedOnly: true, extraDice: 6, icon: ius.Icon, payload: ManeuverTools.ApplyBuffIfNotSaved("9934fedff1b14994ea90205d189c8759", new Kingmaker.UnitLogic.Mechanics.ContextDurationValue() { DiceType = Kingmaker.RuleSystem.DiceType.D4, BonusValue = 0, DiceCountValue = 1, m_IsExtendable = false, Rate = Kingmaker.UnitLogic.Mechanics.DurationRate.Rounds }, Kingmaker.EntitySystem.Stats.SavingThrowType.Fortitude));
 
-                ManeuverTools.FinishManeuver(flurry);
+                ManeuverTools.FinishManeuver(flurry, Main.Context);
             }
 
 
@@ -300,7 +300,7 @@ namespace TheInfiniteCrusade.NewContent.Disciplines
 
                 var shards2 = BrokenBladeStandardStrikeStrike(Main.Context, "ShardsOfSteelStrike", "Shards Of Steel Strike", "By targeting vital soft tissues with a pointed, viper head-like finger jab, the disciple punctures flesh and releases the vital blood supply of his foe all over the ground in a deluge. The initiator makes an attack at a target creature, and if successful this strike inflicts an additional 8d6 points of damage which ignores damage reduction and the target suffers the bleeding condition, bleeding 2d4 points of damage per round for the initiator’s initiation modifier in rounds. A successful DC 20 Heal check or the application of any effect that cures hit point damage will stop the bleeding.", 5, unarmedOnly: false, extraDice: 8, strikeDamageIgnoresDr: true, payload: ManeuverTools.ApplyBuff(bleed, ManeuverTools.InitiatorModifierRounds(), ManeuverTools.LivingTargetsOnly()), icon: ius.Icon);
 
-                ManeuverTools.FinishManeuver(shards2);
+                ManeuverTools.FinishManeuver(shards2, Main.Context);
             }
 
             IronKnuckle();
@@ -319,7 +319,7 @@ namespace TheInfiniteCrusade.NewContent.Disciplines
             {
                 var flurry = BrokenBladeStandardStrikeStrike(Main.Context, "SteelAxeKick", "Steel Axe Kick", "With a sweeping axe kick that strikes as hard as any hammer strike could ever be hoped to, the disciple of the Broken Blade lands a crushing blow that causes even the strongest of opponents to pause in pain. The initiator delivers a devastating spinning kick (as an unarmed strike) that inflicts an additional 10d6 points of damage and potentially dazes the target for 2d3 rounds on a failed Fortitude save (DC 16 + initiation modifier).", 6, unarmedOnly: true, extraDice: 10, icon: ius.Icon, payload: ManeuverTools.ApplyBuffIfNotSaved("9934fedff1b14994ea90205d189c8759", new Kingmaker.UnitLogic.Mechanics.ContextDurationValue() { DiceType = Kingmaker.RuleSystem.DiceType.D3, BonusValue = 0, DiceCountValue = 2, m_IsExtendable = false, Rate = Kingmaker.UnitLogic.Mechanics.DurationRate.Rounds }, Kingmaker.EntitySystem.Stats.SavingThrowType.Fortitude));
 
-                ManeuverTools.FinishManeuver(flurry);
+                ManeuverTools.FinishManeuver(flurry, Main.Context);
             }
 
             PitFightersStance();
@@ -356,7 +356,7 @@ namespace TheInfiniteCrusade.NewContent.Disciplines
                     Rate = Kingmaker.UnitLogic.Mechanics.DurationRate.Rounds
                 }, Kingmaker.EntitySystem.Stats.SavingThrowType.Fortitude, ManeuverTools.LivingTargetsOnly()), icon: ius.Icon);
 
-                ManeuverTools.FinishManeuver(shards3);
+                ManeuverTools.FinishManeuver(shards3, Main.Context);
             }
 
             #endregion

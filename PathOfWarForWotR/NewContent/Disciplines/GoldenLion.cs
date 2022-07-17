@@ -47,7 +47,7 @@ namespace TheInfiniteCrusade.NewContent.Disciplines
                     });
                 }, out var buff);
                
-                ManeuverTools.FinishManeuver(roar);
+                ManeuverTools.FinishManeuver(roar, Main.Context);
 
             }
 
@@ -85,7 +85,7 @@ namespace TheInfiniteCrusade.NewContent.Disciplines
                     });
                     
                 }, out var buff);
-                ManeuverTools.FinishManeuver(roar);
+                ManeuverTools.FinishManeuver(roar, Main.Context);
 
             }
 
@@ -95,7 +95,7 @@ namespace TheInfiniteCrusade.NewContent.Disciplines
                 var strike = ManeuverTools.MakeStandardStrike(Main.Context, "DistractingStrike", "Distracting Strike", "By attracting the attentions of a foe with a well- placed and vicious blow, the disciple of the Golden Lion may distract and weaken his foe to the predations of his allies. Upon a successful attack when using this strike, the initiator inflicts an additional 2d6 points of damage and the target creature is left flat-footed until its next turn. Creatures immune to critical hits are not left flat-footed.", 2, goldenLion, extraDice: 2, payload: ManeuverTools.ApplyBuff(CommonBuffs.enforcedFlatfooted, ContextDuration.Fixed(1), ManeuverTools.CrittableTargetsOnly()));
                 strike.SetLocalizedSavingThrow(Main.Context, "");
                 strike.SetLocalizedDuration(Main.Context, "1 round");
-                ManeuverTools.FinishManeuver(strike);
+                ManeuverTools.FinishManeuver(strike, Main.Context);
             }
 
             PyriteStrike();
@@ -232,7 +232,7 @@ namespace TheInfiniteCrusade.NewContent.Disciplines
                     });
 
                 }, out var buff);
-                ManeuverTools.FinishManeuver(roar);
+                ManeuverTools.FinishManeuver(roar, Main.Context);
 
             }
 

@@ -9,6 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TabletopTweaks.Core.Utilities;
+using TheInfiniteCrusade.Backend.NewBlueprints;
 using TheInfiniteCrusade.Defines;
 using TheInfiniteCrusade.Utilities;
 
@@ -45,7 +46,7 @@ namespace TheInfiniteCrusade.NewContent.MartialArchetypes
             {
                 primal.AddToRemoveFeatures(i, BlueprintTool.GetRef<BlueprintFeatureBaseReference>("28710502f46848d48b3f0d6132817c4e"));
             }
-            var primalDefine = new InitiatorProgressionDefine(Main.Context, "PrimalDisciple", "Primal Disciple", false, NewComponents.ManeuverBookSystem.ManeuverBookComponent.ManeuverBookType.Level6Archetype);
+            var primalDefine = new InitiatorProgressionDefine(Main.Context, "PrimalDisciple", "Primal Disciple", false, BlueprintManeuverBook.ManeuverBookType.Level6Archetype);
             primalDefine.LoadDefaultArchetypeProgression();
             primalDefine.FixedUnlocks = new string[] { "GoldenLion", "PiercingThunder", "PrimalFury", "ThrashingDragon" };
             primalDefine.ClassesForClassTemplate.Add(barbarian.ToReference<BlueprintCharacterClassReference>());
