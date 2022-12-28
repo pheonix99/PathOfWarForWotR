@@ -4,15 +4,8 @@ using Kingmaker.Blueprints.Classes.Prerequisites;
 using Kingmaker.Blueprints.Classes.Selection;
 using Kingmaker.UnitLogic;
 using Kingmaker.UnitLogic.Class.LevelUp;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using TheInfiniteCrusade.Backend.NewComponents.ManeuverBookSystem;
 using TheInfiniteCrusade.Backend.NewUnitParts;
-using TheInfiniteCrusade.NewComponents.ManeuverBookSystem;
-using TheInfiniteCrusade.NewComponents.MartialAbilityInformation;
-using TheInfiniteCrusade.NewComponents.UnitParts;
 
 namespace TheInfiniteCrusade.Backend.NewComponents.Prerequisites
 {

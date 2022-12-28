@@ -1,20 +1,14 @@
 ﻿using HarmonyLib;
 using Kingmaker;
-using Kingmaker.Blueprints.Classes.Spells;
 using Kingmaker.EntitySystem.Entities;
 using Kingmaker.EntitySystem.Persistence;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TheInfiniteCrusade.Backend.NewBlueprints;
 using TheInfiniteCrusade.Backend.NewUnitParts;
-using TheInfiniteCrusade.NewComponents.ManeuverBookSystem;
-using TheInfiniteCrusade.NewComponents.UnitParts;
-using TheInfiniteCrusade.NewComponents.UnitParts.ManeuverBookSystem;
+
 
 namespace TheInfiniteCrusade.Serialization
 {

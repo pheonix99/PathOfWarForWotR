@@ -1,13 +1,6 @@
-﻿using BlueprintCore.Blueprints.CustomConfigurators.UnitLogic.Buffs;
-using Kingmaker.Blueprints;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Kingmaker.Blueprints;
 using TabletopTweaks.Core.NewComponents;
-using TabletopTweaks.Core.Utilities;
-using TheInfiniteCrusade.NewComponents;
+using TheInfiniteCrusade.Backend.NewComponents;
 using TheInfiniteCrusade.Utilities;
 
 namespace TheInfiniteCrusade.NewContent
@@ -22,23 +15,19 @@ namespace TheInfiniteCrusade.NewContent
             EnforcedFlatfoot();
             void EnforcedFlatfoot()
             {
-                var buff = BuffTools.MakeBuff(Main.Context, "TICEnforcedFlatfootBuff", x =>
-                {
-                    x.SetNameDescription(Main.Context, "Forced Flatfooted", "This unit has been rended flatfooted by a martial strike");
-                    x.m_Icon = ConstructionAssets.FlatfootedSprite();
-                    x.AddComponent<ForceFlatFooted>();
-
-                });
-                enforcedFlatfooted = buff.ToReference<BlueprintBuffReference>();
+                var buff = BuffTools.MakeBuff(Main.Context, "TICEnforcedFlatfootBuff", "Forced Flatfooted", "This unit has been rended flatfooted by a martial strike", ConstructionAssets.FlatfootedSprite());
+                buff.AddComponent<ForceFlatFooted>();
+                var buffmade = buff.Configure();
+                enforcedFlatfooted = buffmade.ToReference<BlueprintBuffReference>();
             }
             BuildExtendedCombatTime();
             void BuildExtendedCombatTime()
             {
-                var buff = BuffTools.MakeBuff(Main.Context, "InCombatModeSystemBuff", x=> {
-                    x.SetNameDescription(Main.Context, "The Thrill Of Battle", "You Shouldn't See This");
-                    x.m_Flags = Kingmaker.UnitLogic.Buffs.Blueprints.BlueprintBuff.Flags.HiddenInUi;
-                });
-                var configurator = BuffConfigurator.For(buff).AddNotDispelable().SetStacking(Kingmaker.UnitLogic.Buffs.Blueprints.StackingType.Replace).AddComponent<OnCombatModeExpired>().Configure();
+                var buff = BuffTools.MakeBuff(Main.Context, "InCombatModeSystemBuff", "The Thrill Of Battle", "You Shouldn't See This");
+                buff.SetFlags(Kingmaker.UnitLogic.Buffs.Blueprints.BlueprintBuff.Flags.HiddenInUi);
+
+                
+                buff.AddNotDispelable().SetStacking(Kingmaker.UnitLogic.Buffs.Blueprints.StackingType.Replace).AddComponent<OnCombatModeExpired>().Configure();
 
                 
 

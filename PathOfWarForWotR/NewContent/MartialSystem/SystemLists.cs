@@ -1,11 +1,9 @@
 ﻿using BlueprintCore.Blueprints.Configurators.Classes.Spells;
-using BlueprintCore.Utils;
 using Kingmaker.Blueprints.Classes.Spells;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using TabletopTweaks.Core.Utilities;
 
 namespace TheInfiniteCrusade.NewContent.MartialSystem

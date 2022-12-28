@@ -4,16 +4,9 @@ using Kingmaker.Blueprints.Classes.Prerequisites;
 using Kingmaker.Blueprints.Classes.Selection;
 using Kingmaker.UnitLogic;
 using Kingmaker.UnitLogic.Class.LevelUp;
-using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using TheInfiniteCrusade.Backend.NewComponents.ManeuverBookSystem;
 using TheInfiniteCrusade.Backend.NewUnitParts;
-using TheInfiniteCrusade.Extensions;
-using TheInfiniteCrusade.NewComponents;
-using TheInfiniteCrusade.NewComponents.MartialAbilityInformation;
-using TheInfiniteCrusade.NewComponents.UnitParts;
 using TheInfiniteCrusade.Utilities;
 
 namespace TheInfiniteCrusade.Backend.NewComponents.Prerequisites
@@ -35,23 +28,23 @@ namespace TheInfiniteCrusade.Backend.NewComponents.Prerequisites
                     return false;
                 switch (selectionData.SelectionMode)
                 {
-                    case TheInfiniteCrusade.NewComponents.ManeuverBookSystem.ManeuverSelectionMode.Standard:
+                    case ManeuverSelectionMode.Standard:
                        
                         return part.DisciplineIsValidForClass(abilityData2.DisciplineKeys[0], classData, false);
                         
-                    case TheInfiniteCrusade.NewComponents.ManeuverBookSystem.ManeuverSelectionMode.MartialTraining:
+                    case ManeuverSelectionMode.MartialTraining:
                         var part2 = unit.Get<UnitPartMartialTraining>();
                         if (part2 == null)
                             return false;
                         return part2.IsThisDiscipline(abilityData2.DisciplineKeys[0]);
 
                         
-                    case TheInfiniteCrusade.NewComponents.ManeuverBookSystem.ManeuverSelectionMode.AdvancedStudy:
+                    case ManeuverSelectionMode.AdvancedStudy:
                         
                         return selectionData.targetBook.Get().ClassReference.Any(x=> part.DisciplineIsValidForClass(abilityData2.DisciplineKeys[0], x, true));
 
                        
-                    case TheInfiniteCrusade.NewComponents.ManeuverBookSystem.ManeuverSelectionMode.AdvancedStudySpecial:
+                    case ManeuverSelectionMode.AdvancedStudySpecial:
                         return true;
                         
                     default:

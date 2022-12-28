@@ -7,15 +7,10 @@ using Kingmaker.Utility;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TabletopTweaks.Core.Utilities;
 using TheInfiniteCrusade.Backend.NewBlueprints;
+using TheInfiniteCrusade.Backend.NewComponents.ManeuverBookSystem;
 using TheInfiniteCrusade.Backend.NewUnitParts;
-using TheInfiniteCrusade.Extensions;
-using TheInfiniteCrusade.NewComponents.ManeuverBookSystem;
-using TheInfiniteCrusade.NewComponents.MartialAbilityInformation;
-using TheInfiniteCrusade.NewComponents.UnitParts.ManeuverBookSystem;
 using TheInfiniteCrusade.Serialization;
 
 namespace TheInfiniteCrusade.Backend.NewUnitDataClasses

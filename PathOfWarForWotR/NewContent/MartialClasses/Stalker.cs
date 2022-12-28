@@ -1,12 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace TheInfiniteCrusade.NewContent.MartialClassses
+﻿namespace TheInfiniteCrusade.NewContent.MartialClassses
 {
     class Stalker
     {
+        public static void BuildStalker()
+        {
+            
+        }
+
     }
 }

@@ -1,15 +1,9 @@
 ﻿using HarmonyLib;
 using JetBrains.Annotations;
-using Kingmaker.Blueprints;
-using Kingmaker.Blueprints.Classes.Spells;
 using Kingmaker.UnitLogic;
 using Kingmaker.UnitLogic.Class.LevelUp;
 using Kingmaker.UnitLogic.Class.LevelUp.Actions;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TheInfiniteCrusade.Extensions;
 
 namespace TheInfiniteCrusade.CustomUI.UnitLogic.Class.LevelUp.Actions

@@ -1,28 +1,21 @@
 ﻿using Kingmaker.Blueprints.Classes;
 using TheInfiniteCrusade.Utilities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TabletopTweaks.Core.Utilities;
 using TabletopTweaks.Core.ModLogic;
 using UnityEngine;
 using Kingmaker.UnitLogic.Abilities.Blueprints;
-using TheInfiniteCrusade.NewComponents.Abilities;
 using BlueprintCore.Blueprints.CustomConfigurators.UnitLogic.Abilities;
 using BlueprintCore.Actions.Builder;
-using TheInfiniteCrusade.NewComponents.ManeuverProperties;
 using BlueprintCore.Actions.Builder.ContextEx;
 using BlueprintCore.Utils.Types;
-using TheInfiniteCrusade.NewComponents.AbilityRestrictions;
 using Kingmaker.Designers.Mechanics.Facts;
 using Kingmaker.Designers.Mechanics.Buffs;
 using Kingmaker.UnitLogic.Buffs.Blueprints;
-using BlueprintCore.Blueprints.CustomConfigurators.UnitLogic.Buffs;
 using Kingmaker.UnitLogic.Mechanics;
 using Kingmaker.RuleSystem.Rules;
 using TheInfiniteCrusade.Backend.NewActions;
+using TheInfiniteCrusade.Backend.NewComponents.AbilityRestrictions;
+using TheInfiniteCrusade.Backend.NewComponents.MartialAttackComponents;
 
 namespace TheInfiniteCrusade.NewContent.Disciplines
 {
@@ -282,23 +275,15 @@ namespace TheInfiniteCrusade.NewContent.Disciplines
             ShardsOfSteelStrike();
             void ShardsOfSteelStrike()
             {
-                var bleed = BuffTools.MakeBuff(Main.Context, "Bleed2d4Buff", x =>
-                {
-                    x.SetNameDescription(Main.Context, "Bleed", "This creature takes {g|Encyclopedia:Dice}2d4{/g} hit point {g|Encyclopedia:Damage}damage{/g} each turn. Bleeding can be stopped through the application of any {g|Encyclopedia:Spell}spell{/g} that cures hit point damage (even if the bleed is {g|Encyclopedia:AbilityDamage}ability damage{/g}).");
-                    x.m_Icon = BlueprintTools.GetBlueprint<BlueprintBuff>("16249b8075ab8684ca105a78a047a5ef").Icon;
-
-
-
-
-                });
+                var bleed = BuffTools.MakeBuff(Main.Context, "Bleed2d4Buff", "Bleed", "This creature takes {g|Encyclopedia:Dice}2d4{/g} hit point {g|Encyclopedia:Damage}damage{/g} each turn. Bleeding can be stopped through the application of any {g|Encyclopedia:Spell}spell{/g} that cures hit point damage (even if the bleed is {g|Encyclopedia:AbilityDamage}ability damage{/g}).", BlueprintTools.GetBlueprint<BlueprintBuff>("16249b8075ab8684ca105a78a047a5ef").Icon);
                 var bleedActOnRound = ActionsBuilder.New().DealDamage(new Kingmaker.RuleSystem.Rules.Damage.DamageTypeDescription() { Type = Kingmaker.RuleSystem.Rules.Damage.DamageType.Direct }, new ContextDiceValue()
                 {
                     DiceCountValue = new ContextValue() { Value = 2 },
                     DiceType = Kingmaker.RuleSystem.DiceType.D6
                 });
-                bleed = BuffConfigurator.For(bleed).AddFactContextActions(newRound: bleedActOnRound).AddHealTrigger(action: ActionsBuilder.New().RemoveSelf(), allowZeroHealDamage: true, onHealDamage: true).Configure();
+                var bleedmade = bleed.AddFactContextActions(newRound: bleedActOnRound).AddHealTrigger(action: ActionsBuilder.New().RemoveSelf(), allowZeroHealDamage: true, onHealDamage: true).Configure();
 
-                var shards2 = BrokenBladeStandardStrikeStrike(Main.Context, "ShardsOfSteelStrike", "Shards Of Steel Strike", "By targeting vital soft tissues with a pointed, viper head-like finger jab, the disciple punctures flesh and releases the vital blood supply of his foe all over the ground in a deluge. The initiator makes an attack at a target creature, and if successful this strike inflicts an additional 8d6 points of damage which ignores damage reduction and the target suffers the bleeding condition, bleeding 2d4 points of damage per round for the initiator’s initiation modifier in rounds. A successful DC 20 Heal check or the application of any effect that cures hit point damage will stop the bleeding.", 5, unarmedOnly: false, extraDice: 8, strikeDamageIgnoresDr: true, payload: ManeuverTools.ApplyBuff(bleed, ManeuverTools.InitiatorModifierRounds(), ManeuverTools.LivingTargetsOnly()), icon: ius.Icon);
+                var shards2 = BrokenBladeStandardStrikeStrike(Main.Context, "ShardsOfSteelStrike", "Shards Of Steel Strike", "By targeting vital soft tissues with a pointed, viper head-like finger jab, the disciple punctures flesh and releases the vital blood supply of his foe all over the ground in a deluge. The initiator makes an attack at a target creature, and if successful this strike inflicts an additional 8d6 points of damage which ignores damage reduction and the target suffers the bleeding condition, bleeding 2d4 points of damage per round for the initiator’s initiation modifier in rounds. A successful DC 20 Heal check or the application of any effect that cures hit point damage will stop the bleeding.", 5, unarmedOnly: false, extraDice: 8, strikeDamageIgnoresDr: true, payload: ManeuverTools.ApplyBuff(bleedmade, ManeuverTools.InitiatorModifierRounds(), ManeuverTools.LivingTargetsOnly()), icon: ius.Icon);
 
                 ManeuverTools.FinishManeuver(shards2, Main.Context);
             }

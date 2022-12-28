@@ -1,14 +1,6 @@
 ﻿using HarmonyLib;
-using JetBrains.Annotations;
-using Kingmaker.Blueprints.Classes.Spells;
-using Kingmaker.UnitLogic.Abilities.Blueprints;
 using Kingmaker.UnitLogic.Class.LevelUp;
-using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TheInfiniteCrusade.Backend.NewBlueprints;
 using TheInfiniteCrusade.CustomUI.UnitLogic.Class.LevelUp.Actions;
 
 namespace TheInfiniteCrusade.Extensions

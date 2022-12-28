@@ -3,7 +3,6 @@ using Kingmaker.Blueprints;
 using Kingmaker.Blueprints.Classes;
 using Kingmaker.Blueprints.Classes.Prerequisites;
 using Kingmaker.Blueprints.Classes.Selection;
-using Kingmaker.Blueprints.Classes.Spells;
 using Kingmaker.UnitLogic.Abilities.Blueprints;
 using Kingmaker.UnitLogic.FactLogic;
 using Kingmaker.UnitLogic.Mechanics.Properties;
@@ -14,9 +13,9 @@ using TabletopTweaks.Core.Utilities;
 using TheInfiniteCrusade.Backend.NewActions;
 using TheInfiniteCrusade.Backend.NewBlueprints;
 using TheInfiniteCrusade.Backend.NewComponents;
+using TheInfiniteCrusade.Backend.NewComponents.ManeuverBookSystem;
+using TheInfiniteCrusade.Backend.NewComponents.Properties;
 using TheInfiniteCrusade.Defines;
-using TheInfiniteCrusade.NewComponents.ManeuverBookSystem;
-using TheInfiniteCrusade.NewComponents.Properties;
 
 namespace TheInfiniteCrusade.Utilities
 {
@@ -133,10 +132,12 @@ namespace TheInfiniteCrusade.Utilities
                 }
             }
 
-            
 
-            var standardRestore = MakeStandardActionRestore(define);
-            progression.AddToProgressionLevels(1, standardRestore.ToReference<BlueprintFeatureBaseReference>());
+            if (define.HasStandardActionRestore)
+            {
+                var standardRestore = MakeStandardActionRestore(define);
+                progression.AddToProgressionLevels(1, standardRestore.ToReference<BlueprintFeatureBaseReference>());
+            }
             if (define.HasFullRoundRestore)
             {
                 var fullRoundRestore = MakeFullRoundRestore(define);

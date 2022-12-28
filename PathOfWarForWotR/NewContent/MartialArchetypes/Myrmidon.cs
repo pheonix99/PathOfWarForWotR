@@ -4,21 +4,21 @@ using Kingmaker.Blueprints.Classes;
 using Kingmaker.Designers.Mechanics.Facts;
 using Kingmaker.UnitLogic.FactLogic;
 using TheInfiniteCrusade.Utilities;
-using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TabletopTweaks.Core.Utilities;
 using Kingmaker.UnitLogic.Buffs.Blueprints;
-using Kingmaker.Blueprints.Classes.Spells;
-using TheInfiniteCrusade.NewComponents;
 using Kingmaker.UnitLogic.Abilities.Blueprints;
 using Kingmaker.UnitLogic.Abilities.Components;
 using TheInfiniteCrusade.Defines;
 using TheInfiniteCrusade.Backend.NewComponents.AbilitySpecific;
 using TheInfiniteCrusade.Backend.NewActions;
 using TheInfiniteCrusade.Backend.NewBlueprints;
+using TheInfiniteCrusade.Backend.NewComponents.ActionTriggers;
+using BlueprintCore.Actions.Builder;
+using BlueprintCore.Actions.Builder.ContextEx;
+using BlueprintCore.Utils.Types;
+using BlueprintCore.Conditions.Builder;
+using BlueprintCore.Conditions.Builder.BasicEx;
 
 namespace TheInfiniteCrusade.NewContent.MartialArchetypes
 {
@@ -27,18 +27,29 @@ namespace TheInfiniteCrusade.NewContent.MartialArchetypes
         public static void BuildMyrmidon()
         {
             BlueprintCharacterClass fighter = BlueprintTool.Get<BlueprintCharacterClass>("48ac8db94d5de7645906c7d0ad3bcfbd");
-            var GritResource = Helpers.CreateBlueprint<BlueprintAbilityResource>(Main.Context, "MyrmidonGritResource", x =>
-            {
-                x.m_MaxAmount = new BlueprintAbilityResource.Amount
+            
+                var GritResource = Helpers.CreateBlueprint<BlueprintAbilityResource>(Main.Context, "MyrmidonGritResource", x =>
                 {
-                    IncreasedByStat = true,
-                    ResourceBonusStat = Kingmaker.EntitySystem.Stats.StatType.Wisdom
-                };
-                x.m_Min = 1;
+                    x.m_MaxAmount = new BlueprintAbilityResource.Amount
+                    {
+                        IncreasedByStat = true,
+                        ResourceBonusStat = Kingmaker.EntitySystem.Stats.StatType.Wisdom
+                    };
+                    x.m_Min = 1;
+                    
 
+                });
+                Main.Context.Logger.LogPatch(GritResource);
+                var GritCritCooldownBuff = BuffTools.MakeBuff(Main.Context, "GritCritGainCooldown", "Cooldown: Gain Grit On Crit", "");
+                GritCritCooldownBuff.AddToFlags(BlueprintBuff.Flags.HiddenInUi);
+                GritCritCooldownBuff.Configure();
+                var GritKillCooldownBuff = BuffTools.MakeBuff(Main.Context, "GritKillGainCooldown", "Cooldown: Gain Grit On Kill", "");
+                GritKillCooldownBuff.AddToFlags(BlueprintBuff.Flags.HiddenInUi);
+                GritKillCooldownBuff.Configure();
+            
 
-            });
-            Main.Context.Logger.LogPatch(GritResource);
+           
+
             var SkillFeature = Helpers.CreateBlueprint<BlueprintFeature>(Main.Context, "MyrmidonSkillsFeature",x =>
             {
                 x.SetNameDescription(Main.Context, "Myrmidon Skills", "");
@@ -69,10 +80,34 @@ namespace TheInfiniteCrusade.NewContent.MartialArchetypes
                     x.RestoreOnLevelUp = false;
 
                 });
-                
-
+                x.AddComponent<ActionOnCrit>(x =>
+                {
+                    x.ActionsOnInitiator = true;
+                    x.RequiresWorthy = true;
+                    x.RequiresFocusedWeapon = true;
+                    x.ActionsOnInitiator = true;
+                    x.Action = ActionsBuilder.New().RestoreResource(GritResource.ToReference<BlueprintAbilityResourceReference>(), ContextValues.Constant(1)).ApplyBuff(BlueprintTool.GetRef<BlueprintBuffReference>("GritCritGainCooldown"), ContextDuration.Fixed(1, Kingmaker.UnitLogic.Mechanics.DurationRate.Rounds), isNotDispelable: true).Build();
+                    x.attackerConditions = ConditionsBuilder.New().HasBuff(BlueprintTool.GetRef<BlueprintBuffReference>("GritCritGainCooldown"), true).Build();
+                });
+                x.AddComponent<ActionOnKill>(x =>
+                {
+                    x.ActionsOnInitiator = true;
+                    x.RequiresWorthy = true;
+                    x.RequiresWeaponFocus = true;
+                    x.Action = ActionsBuilder.New().RestoreResource(GritResource.ToReference<BlueprintAbilityResourceReference>(), ContextValues.Constant(1)).ApplyBuff(BlueprintTool.GetRef<BlueprintBuffReference>("GritKillGainCooldown"), ContextDuration.Fixed(1, Kingmaker.UnitLogic.Mechanics.DurationRate.Rounds), isNotDispelable: true).Build();
+                    x.attackerConditions = ConditionsBuilder.New().HasBuff(BlueprintTool.GetRef<BlueprintBuffReference>("GritKillGainCooldown"), true).Build();
+                });
+                x.AddComponent<ActionOnKill>(x =>
+                {
+                    x.ActionsOnInitiator = true;
+                    x.RequiresWorthy = true;
+                    x.RequiresStrike = true;
+                    x.Action = ActionsBuilder.New().RestoreResource(GritResource.ToReference<BlueprintAbilityResourceReference>(), ContextValues.Constant(1)).ApplyBuff(BlueprintTool.GetRef<BlueprintBuffReference>("GritKillGainCooldown"), ContextDuration.Fixed(1, Kingmaker.UnitLogic.Mechanics.DurationRate.Rounds), isNotDispelable: true).Build();
+                    x.attackerConditions = ConditionsBuilder.New().HasBuff(BlueprintTool.GetRef<BlueprintBuffReference>("GritKillGainCooldown"), true).Build();
+                });
             });
             Main.LogPatch(GritFeature);
+
             var unbreakableDeed = Helpers.CreateBlueprint<BlueprintFeature>(Main.Context, "MyrmidonUnbreakableDeedFeature", x =>
             {
                 x.SetName(Main.Context, "Unbreakable");

@@ -1,16 +1,11 @@
 ﻿using BlueprintCore.Utils.Types;
 using Kingmaker.Blueprints;
 using Kingmaker.Enums;
-using Kingmaker.UnitLogic.ActivatableAbilities;
 using Kingmaker.UnitLogic.FactLogic;
 using Kingmaker.UnitLogic.Mechanics.Components;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TabletopTweaks.Core.Utilities;
-using TheInfiniteCrusade.NewComponents.ManeuverProperties;
+using TheInfiniteCrusade.Backend.NewComponents.MartialAttackComponents;
 using TheInfiniteCrusade.Utilities;
 
 namespace TheInfiniteCrusade.NewContent.Disciplines
@@ -35,7 +30,7 @@ namespace TheInfiniteCrusade.NewContent.Disciplines
                     Energy = Kingmaker.Enums.Damage.DamageEnergyType.Holy
                 }, payload: ManeuverTools.ApplyBuff("df6d1025da07524429afbae248845ecc", ContextDuration.Fixed(1)));
 
-                ManeuverTools.FinishManeuver(strike);
+                ManeuverTools.FinishManeuver(strike, Main.Context);
             }
 
 
@@ -102,7 +97,7 @@ namespace TheInfiniteCrusade.NewContent.Disciplines
                     });
                 });
 
-                ManeuverTools.FinishManeuver(boost);
+                ManeuverTools.FinishManeuver(boost, Main.Context);
             };
 
             BlessedPinions();
@@ -114,7 +109,7 @@ namespace TheInfiniteCrusade.NewContent.Disciplines
                     Energy = Kingmaker.Enums.Damage.DamageEnergyType.Holy
                 });
 
-                ManeuverTools.FinishManeuver(strike);
+                ManeuverTools.FinishManeuver(strike, Main.Context);
             }
 
             ExorcismStrike();
@@ -139,7 +134,7 @@ namespace TheInfiniteCrusade.NewContent.Disciplines
                     };
                 });
 
-                ManeuverTools.FinishManeuver(strike);
+                ManeuverTools.FinishManeuver(strike, Main.Context);
             }
             SacredPinions();
             void SacredPinions()
@@ -150,7 +145,7 @@ namespace TheInfiniteCrusade.NewContent.Disciplines
                     Energy = Kingmaker.Enums.Damage.DamageEnergyType.Holy
                 });
 
-                ManeuverTools.FinishManeuver(strike);
+                ManeuverTools.FinishManeuver(strike, Main.Context);
             }
         }
     }

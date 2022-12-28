@@ -2,13 +2,9 @@
 using BlueprintCore.Blueprints.CustomConfigurators.UnitLogic.Buffs;
 using Kingmaker.UnitLogic.Abilities.Blueprints;
 using Kingmaker.UnitLogic.ActivatableAbilities;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TabletopTweaks.Core.Utilities;
-using TheInfiniteCrusade.NewComponents.AbilityRestrictions;
+using TheInfiniteCrusade.Backend.NewComponents.AbilityRestrictions;
 using TheInfiniteCrusade.Utilities;
 using UnityEngine;
 

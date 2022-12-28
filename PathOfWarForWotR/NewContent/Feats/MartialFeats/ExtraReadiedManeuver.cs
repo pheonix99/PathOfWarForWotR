@@ -1,12 +1,6 @@
 ﻿using Kingmaker.Blueprints.Classes.Selection;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TabletopTweaks.Core.Utilities;
 using TheInfiniteCrusade.Backend.NewComponents.Prerequisites;
-using TheInfiniteCrusade.Utilities;
 
 namespace TheInfiniteCrusade.NewContent.Feats.MartialFeats
 {

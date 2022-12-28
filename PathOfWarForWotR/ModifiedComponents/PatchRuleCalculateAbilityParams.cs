@@ -2,14 +2,8 @@
 using Kingmaker.Blueprints;
 using Kingmaker.RuleSystem;
 using Kingmaker.RuleSystem.Rules.Abilities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TheInfiniteCrusade.Backend.NewUnitDataClasses;
+using TheInfiniteCrusade.Backend.NewComponents.ManeuverBookSystem;
 using TheInfiniteCrusade.Backend.NewUnitParts;
-using TheInfiniteCrusade.NewComponents.MartialAbilityInformation;
 
 namespace TheInfiniteCrusade.ModifiedComponents
 {
@@ -28,7 +22,7 @@ namespace TheInfiniteCrusade.ModifiedComponents
                     var disciple = __instance.Initiator.Ensure<UnitPartMartialDisciple>();
                     if (comp != null)
                     {
-                       
+                       //TODO figure out what this was?
                     }
 
                 }

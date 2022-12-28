@@ -1,24 +1,16 @@
 ﻿using BlueprintCore.Actions.Builder;
 using BlueprintCore.Actions.Builder.ContextEx;
-using BlueprintCore.Conditions.Builder;
-using BlueprintCore.Conditions.Builder.ContextEx;
-using BlueprintCore.Conditions.Builder.BasicEx;
 using BlueprintCore.Utils.Types;
 using Kingmaker.UnitLogic.Abilities.Blueprints;
 using Kingmaker.UnitLogic.Buffs.Blueprints;
 using Kingmaker.UnitLogic.FactLogic;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TabletopTweaks.Core.Utilities;
-using TheInfiniteCrusade.NewComponents.AbilityRestrictions;
-using TheInfiniteCrusade.NewComponents.ManeuverProperties;
 using TheInfiniteCrusade.Utilities;
 using UnityEngine;
 using Kingmaker.UnitLogic.Mechanics;
 using TheInfiniteCrusade.Backend.NewActions;
+using TheInfiniteCrusade.Backend.NewComponents.AbilityRestrictions;
+using TheInfiniteCrusade.Backend.NewComponents.MartialAttackComponents;
 
 namespace TheInfiniteCrusade.NewContent.Disciplines
 {

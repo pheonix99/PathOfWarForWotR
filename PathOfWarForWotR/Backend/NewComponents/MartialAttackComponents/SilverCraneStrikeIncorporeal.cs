@@ -1,12 +1,4 @@
-﻿using Kingmaker.Blueprints.Classes;
-using Kingmaker.RuleSystem.Rules.Damage;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TabletopTweaks.Core.Utilities;
-using TheInfiniteCrusade.NewComponents.ManeuverProperties;
+﻿using Kingmaker.RuleSystem.Rules.Damage;
 using TheInfiniteCrusade.Utilities;
 
 namespace TheInfiniteCrusade.Backend.NewComponents.MartialAttackComponents

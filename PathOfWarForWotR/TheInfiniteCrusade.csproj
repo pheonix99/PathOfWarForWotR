@@ -118,6 +118,9 @@
     
       <EmbedInteropTypes>false</EmbedInteropTypes>
     </Reference>
+    <Reference Include="UnityEngine.ImageConversionModule">
+      <HintPath>..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\Pathfinder Second Adventure\Wrath_Data\Managed\UnityEngine.ImageConversionModule.dll</HintPath>
+    </Reference>
     <Reference Include="UnityEngine.IMGUIModule">
       <HintPath>$(WrathPath)\Wrath_Data\Managed\UnityEngine.IMGUIModule.dll</HintPath>
    
@@ -207,8 +210,11 @@
 
   <ItemGroup>
     <Folder Include="Assets\" />
-    <Folder Include="NewComponents\Actions\" />
+    <Folder Include="ModifyExistingContent\" />
     <Folder Include="NewComponents\Controllers\" />
+    <Folder Include="NewComponents\ManeuverProperties\" />
+    <Folder Include="NewComponents\MartialAbilityInformation\" />
+    <Folder Include="NewComponents\UnitParts\ManeuverBookSystem\" />
   </ItemGroup>
 
 

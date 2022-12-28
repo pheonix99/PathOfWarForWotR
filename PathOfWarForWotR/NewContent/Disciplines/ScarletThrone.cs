@@ -8,14 +8,10 @@ using Kingmaker.Enums;
 using Kingmaker.RuleSystem.Rules;
 using Kingmaker.UnitLogic.Abilities.Blueprints;
 using Kingmaker.UnitLogic.FactLogic;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TabletopTweaks.Core.Utilities;
-using TheInfiniteCrusade.NewComponents;
-using TheInfiniteCrusade.NewComponents.AbilityRestrictions;
+using TheInfiniteCrusade.Backend.NewComponents;
+using TheInfiniteCrusade.Backend.NewComponents.AbilityRestrictions;
 using TheInfiniteCrusade.Utilities;
 
 namespace TheInfiniteCrusade.NewContent.Disciplines

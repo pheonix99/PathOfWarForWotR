@@ -1,12 +1,13 @@
-﻿using Kingmaker.Blueprints;
+﻿using BlueprintCore.Blueprints.Configurators.Classes;
+using BlueprintCore.Utils;
+using Kingmaker.Blueprints;
 using Kingmaker.Blueprints.Classes;
 using Kingmaker.Blueprints.Classes.Selection;
-using System;
-using System.Collections.Generic;
+using Kingmaker.Localization;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TheInfiniteCrusade.NewComponents;
+using TabletopTweaks.Core.ModLogic;
+using TheInfiniteCrusade.Backend.NewComponents;
+using UnityEngine;
 
 namespace TheInfiniteCrusade.Utilities
 {
@@ -18,6 +19,28 @@ namespace TheInfiniteCrusade.Utilities
             result.Feature = fact;
             result.Parameter = param;
             return result;
+        }
+        public static FeatureConfigurator MakeFeature(ModContextBase contextBase, string systemName, string displayName, string description, bool classFeature, bool hide = false, Sprite icon = null)
+        {
+
+            var guid = contextBase.Blueprints.GetGUID(systemName);
+
+            LocalizedString name = LocalizationTool.CreateString(systemName + ".Name", displayName, false);
+            LocalizedString desc = LocalizationTool.CreateString(systemName + ".Desc", description);
+
+            var res = FeatureConfigurator.New(systemName, guid.ToString()).SetDisplayName(name).SetDescription(desc);
+            if (icon != null)
+            {
+                res.SetIcon(icon);
+            }
+            res.SetIsClassFeature(classFeature);
+            if (hide)
+            {
+                res.SetHideInCharacterSheetAndLevelUp(true);
+                res.SetHideInUI(true);
+            }
+            return res;
+
         }
 
         public static void AddToProgressionLevels(this BlueprintProgression progression, int level, params BlueprintFeatureBaseReference[] refs)

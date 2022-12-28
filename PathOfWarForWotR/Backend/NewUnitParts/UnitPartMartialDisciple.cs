@@ -1,31 +1,20 @@
 ﻿using Kingmaker.Blueprints;
 using Kingmaker.Blueprints.Classes;
-using Kingmaker.Blueprints.Classes.Spells;
-using Kingmaker.Blueprints.Facts;
 using Kingmaker.EntitySystem.Entities;
 using Kingmaker.PubSubSystem;
 using Kingmaker.RuleSystem.Rules;
 using Kingmaker.UnitLogic;
-using Kingmaker.UnitLogic.Abilities;
-using Kingmaker.UnitLogic.Abilities.Blueprints;
 using Kingmaker.UnitLogic.Buffs.Blueprints;
 using Kingmaker.Utility;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TabletopTweaks.Core.Utilities;
 using TheInfiniteCrusade.Backend.NewBlueprints;
+using TheInfiniteCrusade.Backend.NewComponents.ManeuverBookSystem;
+using TheInfiniteCrusade.Backend.NewComponents.MartialAttackComponents;
 using TheInfiniteCrusade.Backend.NewEvents;
 using TheInfiniteCrusade.Backend.NewUnitDataClasses;
 using TheInfiniteCrusade.Extensions;
-using TheInfiniteCrusade.NewComponents.ManeuverBookSystem;
-using TheInfiniteCrusade.NewComponents.ManeuverProperties;
-using TheInfiniteCrusade.NewComponents.MartialAbilityInformation;
-using TheInfiniteCrusade.NewComponents.UnitParts;
-using TheInfiniteCrusade.NewComponents.UnitParts.ManeuverBookSystem;
-using TheInfiniteCrusade.Serialization;
 
 namespace TheInfiniteCrusade.Backend.NewUnitParts
 {
@@ -227,7 +216,7 @@ namespace TheInfiniteCrusade.Backend.NewUnitParts
             var list = Owner.ManeuverBooks().SelectMany(x => x.GetKnownMartialTechniques());
             foreach (var move in list)
             {
-                Main.Context.Logger.Log($"Evaluating {key} against {move.Name}");
+                //Main.Context.Logger.Log($"Evaluating {key} against {move.Name}");
                 var moveData = move.Components.OfType<ManeuverInformation>().FirstOrDefault();
                 if (moveData != null)
                 {

@@ -2,18 +2,14 @@
 using BlueprintCore.Actions.Builder.ContextEx;
 using BlueprintCore.Blueprints.CustomConfigurators.UnitLogic.Abilities;
 using BlueprintCore.Utils.Types;
-using Kingmaker.Blueprints.Classes;
 using Kingmaker.Designers.Mechanics.Facts;
 using Kingmaker.UnitLogic.Abilities.Blueprints;
 using Kingmaker.UnitLogic.Abilities.Components;
 using Kingmaker.UnitLogic.Buffs.Blueprints;
 using Kingmaker.UnitLogic.FactLogic;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TabletopTweaks.Core.Utilities;
+using TheInfiniteCrusade.Backend.NewComponents.ManeuverBookSystem;
 using TheInfiniteCrusade.Utilities;
 using UnityEngine;
 
@@ -262,7 +258,7 @@ namespace TheInfiniteCrusade.NewContent.Disciplines
 
             BlueprintAbility MakeGoldenLionRoar(string sysname, string displayName, string desc, int level, int radius, Action<BlueprintBuff> action, out BlueprintBuff buff, Sprite icon = null)
             {
-                var ability = ManeuverTools.MakeManeuverStub(Main.Context, sysname, displayName, desc, NewComponents.MartialAbilityInformation.ManeuverType.Boost, level, goldenLion, icon);
+                var ability = ManeuverTools.MakeManeuverStub(Main.Context, sysname, displayName, desc, ManeuverType.Boost, level, goldenLion, icon);
                 ability.ActionType = Kingmaker.UnitLogic.Commands.Base.UnitCommand.CommandType.Swift;
                 ability.AddComponent<AbilityTargetsAround>(x => {
                     x.m_Radius = new Kingmaker.Utility.Feet(radius);

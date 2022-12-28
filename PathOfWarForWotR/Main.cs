@@ -1,11 +1,10 @@
-﻿using UnityEngine;
-using UnityModManagerNet;
-using UnityEngine.UI;
+﻿using UnityModManagerNet;
 using HarmonyLib;
 using TheInfiniteCrusade.ModLogic;
 using TabletopTweaks.Core.Utilities;
 using System;
 using Kingmaker.Blueprints.JsonSystem;
+using TheInfiniteCrusade.CustomUI.ManeuverBook;
 
 namespace TheInfiniteCrusade
 {
@@ -21,6 +20,9 @@ namespace TheInfiniteCrusade
             Context.ModEntry.OnGUI = UMMSettingsUI.OnGUI;
             harmony.PatchAll();
             PostPatchInitializer.Initialize(Context);
+            Context.Logger.Log("About To Run GlobalUIHandler.Install");
+            GlobalUIHandler.Install();
+            Context.Logger.Log("Ran GlobalUIHandler.Install");
             return true;
         }
         public static void Safely(Action act)

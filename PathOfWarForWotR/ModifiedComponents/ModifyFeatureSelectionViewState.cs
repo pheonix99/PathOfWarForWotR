@@ -3,14 +3,8 @@ using Kingmaker;
 using Kingmaker.Blueprints;
 using Kingmaker.Blueprints.Classes.Selection;
 using Kingmaker.UnitLogic.Class.LevelUp;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TheInfiniteCrusade.Backend.NewComponents;
 using TheInfiniteCrusade.Backend.NewUnitParts;
-using TheInfiniteCrusade.NewComponents.MartialAbilityInformation;
 
 namespace TheInfiniteCrusade.ModifiedComponents
 {

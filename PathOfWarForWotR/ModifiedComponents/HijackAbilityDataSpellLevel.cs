@@ -1,12 +1,7 @@
 ﻿using HarmonyLib;
 using Kingmaker.Blueprints;
 using Kingmaker.UnitLogic.Abilities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TheInfiniteCrusade.NewComponents.MartialAbilityInformation;
+using TheInfiniteCrusade.Backend.NewComponents.ManeuverBookSystem;
 
 namespace TheInfiniteCrusade.ModifiedComponents
 {

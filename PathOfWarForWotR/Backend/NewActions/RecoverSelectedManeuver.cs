@@ -1,17 +1,10 @@
-﻿using Kingmaker;
-using Kingmaker.Blueprints;
+﻿using Kingmaker.Blueprints;
 using Kingmaker.UnitLogic.Abilities;
 using Kingmaker.UnitLogic.Abilities.Components.Base;
 using Kingmaker.Utility;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TheInfiniteCrusade.Backend.NewBlueprints;
 using TheInfiniteCrusade.Backend.NewUnitParts;
 using TheInfiniteCrusade.Extensions;
-using TheInfiniteCrusade.NewComponents.ManeuverBookSystem;
 
 namespace TheInfiniteCrusade.Backend.NewActions
 {

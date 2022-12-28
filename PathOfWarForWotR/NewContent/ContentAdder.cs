@@ -1,11 +1,6 @@
 ﻿using HarmonyLib;
 using Kingmaker.Blueprints.JsonSystem;
 using TheInfiniteCrusade.NewContent.MartialSystem;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TheInfiniteCrusade.Utilities;
 
 namespace TheInfiniteCrusade.NewContent
@@ -34,6 +29,7 @@ namespace TheInfiniteCrusade.NewContent
                 Disciplines.IronTortoise.Build();
                 Disciplines.SilverCrane.Build();
                 MartialArchetypes.Myrmidon.BuildMyrmidon();
+                MartialArchetypes.Polymath.MakePolymath();
                 MartialArchetypes.PrimalDisciple.Make();
                 Feats.MartialFeats.ExtraReadiedManeuver.MakeSelector();
             }

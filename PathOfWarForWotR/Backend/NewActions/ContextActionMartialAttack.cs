@@ -1,7 +1,5 @@
-﻿using BlueprintCore.Actions.Builder;
-using Kingmaker;
+﻿using Kingmaker;
 using Kingmaker.Blueprints;
-using Kingmaker.ElementsSystem;
 using Kingmaker.EntitySystem.Entities;
 using Kingmaker.Enums;
 using Kingmaker.Items;
@@ -19,11 +17,8 @@ using Owlcat.Runtime.Core.Utils;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TabletopTweaks.Core.Utilities;
-using TheInfiniteCrusade.NewComponents.AbilityRestrictions;
-using TheInfiniteCrusade.NewComponents.ManeuverProperties;
+using TheInfiniteCrusade.Backend.NewComponents.AbilityRestrictions;
+using TheInfiniteCrusade.Backend.NewComponents.MartialAttackComponents;
 
 namespace TheInfiniteCrusade.Backend.NewActions
 {
@@ -50,8 +45,8 @@ namespace TheInfiniteCrusade.Backend.NewActions
             }
             var source = Context.SourceAbilityContext.Ability;
             
-            bool isRanged = ability.Blueprint.GetComponent<ManeuverRangeRestriction>()?.Range == true;
-            bool isMelee = ability.Blueprint.GetComponent<ManeuverRangeRestriction>()?.Range == false;
+            bool isRangedOnly = ability.Blueprint.GetComponent<ManeuverRangeRestriction>()?.Range == true;
+            bool isMeleeOnly = ability.Blueprint.GetComponent<ManeuverRangeRestriction>()?.Range == false;
             if (forceShield && (!maybeCaster.Body.SecondaryHand.HasShield || maybeCaster.Body.SecondaryHand.Shield.WeaponComponent == null))
             {
                 PFLog.Default.Error("Forced shield bash triggered, but no shield", Array.Empty<object>());
@@ -151,11 +146,11 @@ namespace TheInfiniteCrusade.Backend.NewActions
                     int attacksCount2 = list.Count + list2.Count;
                     foreach (UnitAttack.AttackInfo attackInfo in list)
                     {
-                        if (isRanged && attackInfo.Hand.Weapon.Blueprint.IsMelee)
+                        if (isRangedOnly && attackInfo.Hand.Weapon.Blueprint.IsMelee)
                         {
                             continue;
                         }
-                        if (isMelee && attackInfo.Hand.Weapon.Blueprint.IsRanged)
+                        if (isMeleeOnly && attackInfo.Hand.Weapon.Blueprint.IsRanged)
                             continue;
 
                         this.RunAttackRule(maybeCaster, targetData, attackInfo.Hand.Weapon, eventHandlers, attackInfo.AttackBonusPenalty +ToHitShift, num, attacksCount2);
@@ -172,11 +167,11 @@ namespace TheInfiniteCrusade.Backend.NewActions
                         while (enumerator2.MoveNext())
                         {
                             WeaponSlot hand = enumerator2.Current;
-                            if (isRanged && hand.Weapon.Blueprint.IsMelee)
+                            if (isRangedOnly && hand.Weapon.Blueprint.IsMelee)
                             {
                                 continue;
                             }
-                            if (isMelee && hand.Weapon.Blueprint.IsRanged)
+                            if (isMeleeOnly && hand.Weapon.Blueprint.IsRanged)
                                 continue;
                             this.RunAttackRule(maybeCaster, targetData, hand.Weapon, eventHandlers, ToHitShift, num, attacksCount2);
 

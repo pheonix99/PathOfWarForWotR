@@ -1,15 +1,8 @@
 ﻿using Kingmaker.Blueprints;
-using Kingmaker.Blueprints.Classes;
 using Kingmaker.EntitySystem.Stats;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TabletopTweaks.Core.ModLogic;
 using TheInfiniteCrusade.Backend.NewBlueprints;
-using TheInfiniteCrusade.Backend.NewUnitDataClasses;
-using TheInfiniteCrusade.NewComponents.ManeuverBookSystem;
 using UnityEngine;
 
 namespace TheInfiniteCrusade.Defines
@@ -54,6 +47,7 @@ namespace TheInfiniteCrusade.Defines
         public string FullRoundRestoreDesc;
         public Sprite CustomFullRoundRestoreSprite;
 
+        public bool HasStandardActionRestore = true;
         public string StandardActionRestoreName;
         public string StandardActionRestoreDesc;
         public Sprite CustomStandardActionRestoreSprite;

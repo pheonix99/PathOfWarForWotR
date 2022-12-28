@@ -22,8 +22,6 @@ using Kingmaker.UnitLogic.Mechanics.Components;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TabletopTweaks.Core.ModLogic;
 using TabletopTweaks.Core.NewComponents;
 using TabletopTweaks.Core.Utilities;
@@ -32,13 +30,10 @@ using TheInfiniteCrusade.Backend.NewComponents;
 using TheInfiniteCrusade.Backend.NewComponents.Prerequisites;
 using TheInfiniteCrusade.Backend.NewComponents.MartialAttackComponents;
 using TheInfiniteCrusade.Defines;
-using TheInfiniteCrusade.Extensions;
-using TheInfiniteCrusade.NewComponents;
-using TheInfiniteCrusade.NewComponents.Abilities;
-using TheInfiniteCrusade.NewComponents.AbilityRestrictions;
-using TheInfiniteCrusade.NewComponents.ManeuverProperties;
-using TheInfiniteCrusade.NewComponents.MartialAbilityInformation;
+
 using UnityEngine;
+using TheInfiniteCrusade.Backend.NewComponents.AbilityRestrictions;
+using TheInfiniteCrusade.Backend.NewComponents.ManeuverBookSystem;
 
 namespace TheInfiniteCrusade.Utilities
 {
