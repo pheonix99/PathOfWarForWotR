@@ -10,13 +10,13 @@ namespace TheInfiniteCrusade.Backend.NewComponents.MartialAttackComponents
     [AllowedOn(typeof(BlueprintAbility), false)]
     public abstract class AbstractMartialStrikeProc : BlueprintComponent
     {
-        public abstract void DoProc(RuleAttackWithWeapon evt);
+        public abstract void OnRuleAttackWithWeaponTrigger(RuleAttackWithWeapon evt);
 
     }
 
     public class MartialStrikeProcActionsOnHit : AbstractMartialStrikeProc
     {
-        public override void DoProc(RuleAttackWithWeapon evt)
+        public override void OnRuleAttackWithWeaponTrigger(RuleAttackWithWeapon evt)
         {
             using (ContextData<ContextAttackData>.Request().Setup(evt.AttackRoll, null))
             {

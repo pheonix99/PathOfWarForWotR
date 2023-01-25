@@ -7,11 +7,9 @@ using TheInfiniteCrusade.Backend.NewUnitParts;
 
 namespace TheInfiniteCrusade.Backend.NewComponents.ManeuverBookSystem
 {
-    public class DisciplineUnlockForInitiatorProgression : UnitFactComponentDelegate, IGlobalSubscriber, ISubscriber
+    public class DisciplineUnlockForManeuverBookComponent : UnitFactComponentDelegate, IGlobalSubscriber, ISubscriber
     {
-        public BlueprintProgression Progression => m_Progression.Get();
-
-        public BlueprintProgressionReference m_Progression => bookRef.Get().GrantingProgression;
+        
 
         public BlueprintManeuverBookReference bookRef;
 
@@ -32,14 +30,14 @@ namespace TheInfiniteCrusade.Backend.NewComponents.ManeuverBookSystem
            
             base.OnTurnOn();
             var part = base.Owner.Ensure<UnitPartMartialDisciple>();
-            part.RegisterClassUnlock(base.Fact, bookRef, disciplineType);
+            part.RegisterBookUnlock(base.Fact, bookRef, disciplineType);
 
         }
 
         public override void OnTurnOff()
         {
             var part = base.Owner.Get<UnitPartMartialDisciple>();
-            part.UnregisterClassUnlock(base.Fact, bookRef, disciplineType);
+            part.UnregisterBookUnlock(base.Fact, bookRef, disciplineType);
 
         }
     }

@@ -1,24 +1,28 @@
-﻿using Kingmaker.Blueprints;
-using Kingmaker.UnitLogic;
+﻿using Kingmaker.UnitLogic;
 using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace TheInfiniteCrusade.Backend.NewUnitParts
 {
     class UnitPartMartialTraining : OldStyleUnitPart
     {
-        internal bool CanLearnManeuver(BlueprintAbilityReference manuever)
+        public List<UnitFact> RankUpFacts = new();
+
+        public int Rank => RankUpFacts.Count();
+
+        public void RegisterFact(UnitFact fact)
         {
-            return false;
+            if (!RankUpFacts.Contains(fact))
+                RankUpFacts.Add(fact); 
         }
 
-        internal bool IsThisDiscipline(string v)
+        public void UnregisterFact(UnitFact fact)
         {
-            return false;
-        }
-
-        internal int GetMaxLevel()
-        {
-            throw new NotImplementedException();
+            
+                RankUpFacts.Remove(fact);
         }
     }
 }

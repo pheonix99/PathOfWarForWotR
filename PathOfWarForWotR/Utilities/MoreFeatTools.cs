@@ -1,4 +1,7 @@
 ﻿using BlueprintCore.Blueprints.Configurators.Classes;
+using BlueprintCore.Blueprints.Configurators.Classes.Selection;
+using BlueprintCore.Blueprints.CustomConfigurators.Classes;
+using BlueprintCore.Blueprints.CustomConfigurators.Classes.Selection;
 using BlueprintCore.Utils;
 using Kingmaker.Blueprints;
 using Kingmaker.Blueprints.Classes;
@@ -20,7 +23,7 @@ namespace TheInfiniteCrusade.Utilities
             result.Parameter = param;
             return result;
         }
-        public static FeatureConfigurator MakeFeature(ModContextBase contextBase, string systemName, string displayName, string description, bool classFeature, bool hide = false, Sprite icon = null)
+        public static FeatureConfigurator MakeFeature(ModContextBase contextBase, string systemName, string displayName, string description, bool classFeature, bool hide = false, Sprite icon = null, params FeatureGroup[] featureGroups)
         {
 
             var guid = contextBase.Blueprints.GetGUID(systemName);
@@ -28,7 +31,7 @@ namespace TheInfiniteCrusade.Utilities
             LocalizedString name = LocalizationTool.CreateString(systemName + ".Name", displayName, false);
             LocalizedString desc = LocalizationTool.CreateString(systemName + ".Desc", description);
 
-            var res = FeatureConfigurator.New(systemName, guid.ToString()).SetDisplayName(name).SetDescription(desc);
+            var res = FeatureConfigurator.New(systemName, guid.ToString(), featureGroups).SetDisplayName(name).SetDescription(desc);
             if (icon != null)
             {
                 res.SetIcon(icon);
@@ -39,6 +42,24 @@ namespace TheInfiniteCrusade.Utilities
                 res.SetHideInCharacterSheetAndLevelUp(true);
                 res.SetHideInUI(true);
             }
+            return res;
+
+        }
+
+        public static FeatureSelectionConfigurator MakeFeatureSelector(ModContextBase context, string systemName, string displayName, string description, bool hide = false, Sprite icon = null, params FeatureGroup[] featureGroups)
+        {
+
+            var guid = context.Blueprints.GetGUID(systemName);
+
+            LocalizedString name = LocalizationTool.CreateString(systemName + ".Name", displayName);
+            LocalizedString desc = LocalizationTool.CreateString(systemName + ".Desc", description);
+
+            var res = FeatureSelectionConfigurator.New(systemName, guid.ToString(), featureGroups).SetDisplayName(name).SetDescription(desc);
+            if (icon != null)
+            {
+                res.SetIcon(icon);
+            }
+
             return res;
 
         }

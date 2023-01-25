@@ -34,6 +34,9 @@ using TheInfiniteCrusade.Defines;
 using UnityEngine;
 using TheInfiniteCrusade.Backend.NewComponents.AbilityRestrictions;
 using TheInfiniteCrusade.Backend.NewComponents.ManeuverBookSystem;
+using Kingmaker.UnitLogic.Commands.Base;
+using Kingmaker.Visual.Animation.Kingmaker.Actions;
+using BlueprintCore.Blueprints.CustomConfigurators.UnitLogic.Buffs;
 
 namespace TheInfiniteCrusade.Utilities
 {
@@ -431,6 +434,54 @@ namespace TheInfiniteCrusade.Utilities
             ability.SetLocalizedSavingThrow(Main.Context, "");
             buff = localbuff;
             return ability;
+        }
+
+
+        public static AbilityConfigurator MakeStance(ModContextBase source, string sysname, string displayName, string desc, DisciplineDefine disciplineDefine, int level, Action<BuffConfigurator> makeBuff, Sprite icon = null, AbilityType? abilityType = null)
+        {
+            var buffConfig = BuffTools.MakeBuff(source, sysname + "Buff", displayName, desc, icon ?? disciplineDefine.defaultSprite);
+            buffConfig.AddComponent<ManeuverInformation>(x =>
+            {
+                x.ManeuverLevel = level;
+                x.ManeuverType = ManeuverType.Stance;
+                x.isPrcAbility = false;
+                x.DisciplineKeys = new string[] { disciplineDefine.SysName };
+            });
+            makeBuff.Invoke(buffConfig);
+
+            var buff = buffConfig.Configure();
+
+            var config = MakeManeuverConfigurator(source, sysname, displayName, desc, UnitCommand.CommandType.Swift, UnitAnimationActionCastSpell.CastAnimationStyle.Self, disciplineDefine, level, ManeuverType.Stance, icon, abilityType);
+            config.SetRange(AbilityRange.Personal);
+            config.AddComponent<PseudoActivatable>(x =>
+            {
+                x.m_Type = PseudoActivatable.PseudoActivatableType.BuffToggle;
+                x.m_GroupName = "MartialStance";
+
+                x.m_Buff = buff.ToReference<BlueprintBuffReference>();
+            });
+            config.AddComponent<AbilityEffectToggleBuff>(x => { x.m_Buff = buff.ToReference<BlueprintBuffReference>(); });
+            return config;
+        }
+
+        public static AbilityConfigurator MakeManeuverConfigurator(ModContextBase source, string sysname, string displayName, string desc, UnitCommand.CommandType commandType, UnitAnimationActionCastSpell.CastAnimationStyle animationStyle, DisciplineDefine disciplineDefine, int level, ManeuverType maneuverType, Sprite icon = null, AbilityType? abilityType = null, bool fullRound = false, Duration? duration = null)
+        {
+
+           var config = AbilityTools.MakeAbility(source, sysname, displayName, desc, commandType, abilityType ?? (disciplineDefine.alwaysSupernatural ? AbilityType.Supernatural : AbilityType.Extraordinary), animationStyle, fullRound, duration);
+            config.AddComponent<ManeuverInformation>(x =>
+            {
+                x.ManeuverLevel = level;
+                x.ManeuverType = maneuverType;
+                x.isPrcAbility = false;
+                x.DisciplineKeys = new string[] { disciplineDefine.SysName };
+            });
+            config.SetIcon(icon ?? disciplineDefine.defaultSprite);
+            if (disciplineDefine.descriptor != SpellDescriptor.None)
+            {
+                config.SetSpellDescriptor(disciplineDefine.descriptor);
+                
+            }
+            return config;
         }
 
         public static BlueprintAbility MakeManeuverStub(ModContextBase source, string sysName, string displayName, string description, ManeuverType type, int level, DisciplineDefine discipline, Sprite icon = null)

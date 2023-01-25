@@ -1,5 +1,7 @@
 ﻿using HarmonyLib;
 using Kingmaker.Blueprints.JsonSystem;
+using System;
+using TheInfiniteCrusade.NewContent.MartialClasses;
 using TheInfiniteCrusade.NewContent.MartialSystem;
 using TheInfiniteCrusade.Utilities;
 
@@ -15,23 +17,32 @@ namespace TheInfiniteCrusade.NewContent
             [HarmonyPriority(Priority.First)]
             static void Postfix()
             {
-                ConstructionAssets.LoadGUIDS();
-                SystemLists.BuildSystemSpellLists();
-                SystemLists.BuildSystemSpellTables();
+                try
+                {
+                    ConstructionAssets.LoadGUIDS();
+                    SystemLists.BuildSystemSpellLists();
+                    SystemLists.BuildSystemSpellTables();
 
-                CommonBuffs.Build();
+                    CommonBuffs.Build();
 
-                Disciplines.BrokenBlade.BuildBrokenBlade();
-                Disciplines.ElementalFlux.BuildElementalFlux();
-                Disciplines.GoldenLion.BuildGoldenLion();
-                Disciplines.PrimalFury.BuildPrimalFury();
-                Disciplines.ScarletThrone.BuildScarletThrone();
-                Disciplines.IronTortoise.Build();
-                Disciplines.SilverCrane.Build();
-                MartialArchetypes.Myrmidon.BuildMyrmidon();
-                MartialArchetypes.Polymath.MakePolymath();
-                MartialArchetypes.PrimalDisciple.Make();
-                Feats.MartialFeats.ExtraReadiedManeuver.MakeSelector();
+                    //Disciplines.BrokenBlade.BuildBrokenBlade();
+                    //Disciplines.ElementalFlux.BuildElementalFlux();
+                    //Disciplines.GoldenLion.BuildGoldenLion();
+                    //Disciplines.PrimalFury.BuildPrimalFury();
+                   // Disciplines.ScarletThrone.BuildScarletThrone();
+                   // Disciplines.IronTortoise.Build();
+                    Disciplines.SilverCrane.Build();
+                    // MartialArchetypes.Myrmidon.BuildMyrmidon();
+                    // MartialArchetypes.Polymath.MakePolymath();
+                    // MartialArchetypes.PrimalDisciple.Make();
+                    // Feats.MartialFeats.ExtraReadiedManeuver.MakeSelector();
+                    Feats.MartialFeats.MartialTraining.Build();
+                   // Mystic.Make();
+                }
+                catch (Exception ex)
+                {
+                    Main.Context.Logger.LogError(ex, "Error in early patch");
+                }
             }
         }
 
@@ -43,9 +54,17 @@ namespace TheInfiniteCrusade.NewContent
             [HarmonyPriority(Priority.Last)]
             static void Postfix()
             {
-                
-                ProcessProgressionDefinition.FinalRun();
-                
+                try
+                {
+                    ProcessProgressionDefinition.FinalRun();
+                    Feats.MartialFeats.MartialTraining.Finish();
+                    //Mystic.Finish();
+                }
+                catch (Exception ex)
+                {
+                    Main.Context.Logger.LogError(ex, "Error in final patch");
+                }
+
             }
         }
     }

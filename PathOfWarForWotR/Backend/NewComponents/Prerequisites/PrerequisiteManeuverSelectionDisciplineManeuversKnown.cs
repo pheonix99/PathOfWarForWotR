@@ -1,4 +1,5 @@
-﻿using JetBrains.Annotations;
+﻿using System;
+using JetBrains.Annotations;
 using Kingmaker.Blueprints;
 using Kingmaker.Blueprints.Classes.Prerequisites;
 using Kingmaker.Blueprints.Classes.Selection;
@@ -20,6 +21,7 @@ namespace TheInfiniteCrusade.Backend.NewComponents.Prerequisites
             displayName = "BAD INPUT";
             if (selectionState.Selection is BlueprintFeatureSelection selection)
             {
+                
                 var selectionData = selection.GetComponent<ManeuverSelectorMenuComponent>();
                 var abilityData = OwnerBlueprint.GetComponent<ManeuverSelectorPickComponent>()?.Maneuver;
                 var classData = state.SelectedClass;

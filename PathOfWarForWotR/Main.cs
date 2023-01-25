@@ -14,6 +14,7 @@ namespace TheInfiniteCrusade
         public static TICModContext Context;
         static bool Load(UnityModManager.ModEntry modEntry)
         {
+            Enabled = true;
             var harmony = new Harmony(modEntry.Info.Id);
             Context = new (modEntry);
             Context.ModEntry.OnSaveGUI = OnSaveGUI;

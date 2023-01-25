@@ -35,8 +35,7 @@ namespace TheInfiniteCrusade.Utilities
             {
                 buff.AddToFlags(BlueprintBuff.Flags.HiddenInUi);
             }
-            buff.SetFxOnStart(new());
-            buff.SetFxOnRemove(new());
+            
             //buff.ModifyFxOnStart(x => { });
             //buff.ModifyFxOnRemove(x => { });
             return buff;

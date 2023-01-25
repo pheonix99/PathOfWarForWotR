@@ -1,28 +1,39 @@
-﻿using BlueprintCore.Utils;
+﻿using BlueprintCore.Actions.Builder;
+using BlueprintCore.Actions.Builder.ContextEx;
+using BlueprintCore.Actions.Builder.BasicEx;
+using BlueprintCore.Blueprints.CustomConfigurators.UnitLogic.Abilities;
+using BlueprintCore.Blueprints.CustomConfigurators.UnitLogic.Buffs;
+using BlueprintCore.Utils;
 using Kingmaker.Blueprints;
 using Kingmaker.Blueprints.Classes;
+using System.Collections.Generic;
 using System.Linq;
 using TheInfiniteCrusade.Defines;
 using TheInfiniteCrusade.Utilities;
+using Kingmaker.UnitLogic.Mechanics;
+using BlueprintCore.Utils.Types;
 
 namespace TheInfiniteCrusade.NewContent.MartialArchetypes
 {
     class Polymath
     {
 
-        //static DisciplineType[] disciplines = new DisciplineType[] { DisciplineType.PrimalFury, DisciplineType.SolarWind, DisciplineType.SteelSerpent,};
+        
         public static void MakePolymath()
         {
             var prog = new InitiatorProgressionDefine(Main.Context, "Polymath", maneuverBookType: Backend.NewBlueprints.BlueprintManeuverBook.ManeuverBookType.Level6Archetype);
             prog.LoadDefaultArchetypeProgression();
 
             var alchemist = BlueprintTool.Get<BlueprintCharacterClass>("0937bec61c0dabc468428f496580c721");
+            prog.MakeStandardRecovery("Collect Thoughts", "The polymath may take a brief moment to collect his thoughts to recover a single maneuver as a standard action. ");
+            prog.MakeFullRecovery("Reevaluate Opponents", "In order for the polymath to recover maneuvers, he must re-evaluate his opponents and their abilities as a full-round action. When he does, he replaces a number of expended maneuvers equal to his polymath initiation modifier (minimum 2) with new readied polymath maneuvers he knows. If he wishes, he may replace these maneuvers with themselves, effectively recovering them. In addition, whenever the polymath recovers maneuvers in this way, he may drink one extract he has prepared as a swift action.");
             
             prog.DefaultInitiatingStat = Kingmaker.EntitySystem.Stats.StatType.Intelligence;
             prog.FixedUnlocks = new string[] { "PrimalFury", "SolarWind", "SteelSerpent" };
-
-            //TODO finish filling this out - needs 
-
+            prog.IsTemplateArchetype = true;
+            
+            List<Blueprint<BlueprintCharacterClassReference>> classes = new();
+            classes.Add(alchemist);
             var alchemistPolymath = MakeAlchemist();
 
             BlueprintArchetype investigatorPolymath = null;
@@ -33,24 +44,34 @@ namespace TheInfiniteCrusade.NewContent.MartialArchetypes
             var investigator = BlueprintTool.Get<BlueprintCharacterClass>("adb9e138bee9ecc4db246b64d563f900");
             if (investigator != null)
             {
+                classes.Add(investigator);
                 investigatorPolymath = MakeInvestigator();
                 prog.ClassesForClassTemplate.Add(investigator.ToReference<BlueprintCharacterClassReference>());
                 prog.ArchetypesForArchetypeTemplate.Add(investigatorPolymath.ToReference<BlueprintArchetypeReference>());
             }
 
             var polymathProgressoin = ProcessProgressionDefinition.BuildInitiatorProgress(prog);
+            
 
             alchemist.m_Archetypes = alchemist.m_Archetypes.Append(alchemistPolymath.ToReference<BlueprintArchetypeReference>()).ToArray();
             alchemistPolymath.AddToAddFeatures(1, polymathProgressoin.ToReference<BlueprintFeatureBaseReference>());
             if (investigator != null)
             {
-                investigator.m_Archetypes = investigator.m_Archetypes.Append(alchemistPolymath.ToReference<BlueprintArchetypeReference>()).ToArray();
+                investigator.m_Archetypes = investigator.m_Archetypes.Append(investigatorPolymath.ToReference<BlueprintArchetypeReference>()).ToArray();
                 investigatorPolymath.AddToAddFeatures(1, polymathProgressoin.ToReference<BlueprintFeatureBaseReference>());
             }
+            var quickenBuffConfig = BuffTools.MakeBuff(Main.Context, "PolymathFullRoundRecoveryQuickExtractsBuff", "Polymath Quicken Extracts", "After a full round recovery, a polymath may drink one extract he has prepared as a swift action.");
+            quickenBuffConfig.AddAutoMetamagic(allowedAbilities: Kingmaker.Designers.Mechanics.Facts.AutoMetamagic.AllowedType.SpellOnly, includeClasses: classes, once: true, metamagic: Kingmaker.UnitLogic.Abilities.Metamagic.Quicken);
+            var quickenBuff = quickenBuffConfig.Configure();
+
+            AbilityConfigurator.For(prog.FullRoundRecovery.m_RestoreAction).AddAbilityEffectRunAction(ActionsBuilder.New().ApplyBuff(quickenBuff, ContextDuration.Fixed(1))).Configure();
 
             
+            
+            
+            //TODO add quicken extract effect
 
-
+            //TODO add hotswap effect - or let poly hotswap whenever - check book loging
 
 
             BlueprintArchetype MakeAlchemist()
@@ -64,6 +85,7 @@ namespace TheInfiniteCrusade.NewContent.MartialArchetypes
                 AlchemistPolyConfigTemp.RemoveFeatureFromAllLevels(BlueprintTool.GetRef<BlueprintFeatureBaseReference>("202af59b918143a4ab7c33d72c8eb6d5"));
                 var reducedCasting = ArchetypeTools.MakeSpellsPerDayChangeFeature(Main.Context, AlchemistPolyConfigTemp.ToReference<BlueprintArchetypeReference>(), "Polymath", "Alchemist", "A polymath alchemist prepares one fewer extract per day of each level of extract he knows. If this would reduce his extracts prepared to 0, he may only prepare bonus extracts that he received of that level due to a high Intelligence score.");
                 AlchemistPolyConfigTemp.AddToAddFeatures(1, reducedCasting.ToReference<BlueprintFeatureBaseReference>());
+                AlchemistPolyConfigTemp.AddToAddFeatures(1, BlueprintTool.GetRef<BlueprintFeatureBaseReference>("203992ef5b35c864390b4e4a1e200629"));
                 return AlchemistPolyConfigTemp;
             }
 
@@ -88,7 +110,7 @@ namespace TheInfiniteCrusade.NewContent.MartialArchetypes
 
 
                     InvestigatorPolyConfigTemp.AddToAddFeatures(1, investreducedCasting.ToReference<BlueprintFeatureBaseReference>());
-
+                    InvestigatorPolyConfigTemp.AddToAddFeatures(1, BlueprintTool.GetRef<BlueprintFeatureBaseReference>("203992ef5b35c864390b4e4a1e200629"));
 
                     return InvestigatorPolyConfigTemp;
                 }

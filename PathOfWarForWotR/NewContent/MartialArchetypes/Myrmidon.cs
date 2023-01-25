@@ -19,6 +19,12 @@ using BlueprintCore.Actions.Builder.ContextEx;
 using BlueprintCore.Utils.Types;
 using BlueprintCore.Conditions.Builder;
 using BlueprintCore.Conditions.Builder.BasicEx;
+using BlueprintCore.Conditions.Builder.ContextEx;
+using BlueprintCore.Blueprints.CustomConfigurators.UnitLogic.Abilities;
+using BlueprintCore.Blueprints.Configurators.Classes;
+using BlueprintCore.Blueprints.CustomConfigurators.Classes;
+using Kingmaker.ElementsSystem;
+using Kingmaker.Designers.EventConditionActionSystem.Evaluators;
 
 namespace TheInfiniteCrusade.NewContent.MartialArchetypes
 {
@@ -87,7 +93,7 @@ namespace TheInfiniteCrusade.NewContent.MartialArchetypes
                     x.RequiresFocusedWeapon = true;
                     x.ActionsOnInitiator = true;
                     x.Action = ActionsBuilder.New().RestoreResource(GritResource.ToReference<BlueprintAbilityResourceReference>(), ContextValues.Constant(1)).ApplyBuff(BlueprintTool.GetRef<BlueprintBuffReference>("GritCritGainCooldown"), ContextDuration.Fixed(1, Kingmaker.UnitLogic.Mechanics.DurationRate.Rounds), isNotDispelable: true).Build();
-                    x.attackerConditions = ConditionsBuilder.New().HasBuff(BlueprintTool.GetRef<BlueprintBuffReference>("GritCritGainCooldown"), true).Build();
+                    x.attackerConditions = ConditionsBuilder.New().HasBuff(BlueprintTool.GetRef<BlueprintBuffReference>("GritCritGainCooldown"), true, new CasterUnit()).Build();
                 });
                 x.AddComponent<ActionOnKill>(x =>
                 {
@@ -95,7 +101,7 @@ namespace TheInfiniteCrusade.NewContent.MartialArchetypes
                     x.RequiresWorthy = true;
                     x.RequiresWeaponFocus = true;
                     x.Action = ActionsBuilder.New().RestoreResource(GritResource.ToReference<BlueprintAbilityResourceReference>(), ContextValues.Constant(1)).ApplyBuff(BlueprintTool.GetRef<BlueprintBuffReference>("GritKillGainCooldown"), ContextDuration.Fixed(1, Kingmaker.UnitLogic.Mechanics.DurationRate.Rounds), isNotDispelable: true).Build();
-                    x.attackerConditions = ConditionsBuilder.New().HasBuff(BlueprintTool.GetRef<BlueprintBuffReference>("GritKillGainCooldown"), true).Build();
+                    x.attackerConditions = ConditionsBuilder.New().HasBuff(BlueprintTool.GetRef<BlueprintBuffReference>("GritKillGainCooldown"), true, new CasterUnit()).Build();
                 });
                 x.AddComponent<ActionOnKill>(x =>
                 {
@@ -103,7 +109,7 @@ namespace TheInfiniteCrusade.NewContent.MartialArchetypes
                     x.RequiresWorthy = true;
                     x.RequiresStrike = true;
                     x.Action = ActionsBuilder.New().RestoreResource(GritResource.ToReference<BlueprintAbilityResourceReference>(), ContextValues.Constant(1)).ApplyBuff(BlueprintTool.GetRef<BlueprintBuffReference>("GritKillGainCooldown"), ContextDuration.Fixed(1, Kingmaker.UnitLogic.Mechanics.DurationRate.Rounds), isNotDispelable: true).Build();
-                    x.attackerConditions = ConditionsBuilder.New().HasBuff(BlueprintTool.GetRef<BlueprintBuffReference>("GritKillGainCooldown"), true).Build();
+                    x.attackerConditions = ConditionsBuilder.New().HasBuff(BlueprintTool.GetRef<BlueprintBuffReference>("GritKillGainCooldown"), true, new CasterUnit()).Build();
                 });
             });
             Main.LogPatch(GritFeature);
@@ -117,7 +123,7 @@ namespace TheInfiniteCrusade.NewContent.MartialArchetypes
             Main.LogPatch(unbreakableDeed);
             var HeroicRecoveryAbility = Helpers.CreateBlueprint<BlueprintAbility>(Main.Context, "MyrmidonHeroicRecoveryDeedAbility", x => {
                 x.SetName(Main.Context, "Heroic Recovery");
-                x.SetDescription(Main.Context, " Starting at 1st level, a myrmidon can spend 1 grit point as a swift action to recover a single expended maneuver.");
+                x.SetDescription(Main.Context, "Starting at 1st level, a myrmidon can spend 1 grit point as a swift action to recover a single expended maneuver.");
                 x.AddComponent<AbilityResourceLogic>(x =>
                 {
                     x.Amount = 1;
@@ -131,18 +137,7 @@ namespace TheInfiniteCrusade.NewContent.MartialArchetypes
             Main.LogPatch(HeroicRecoveryAbility);
 
 
-            var heroicRecoveryDeed = Helpers.CreateBlueprint<BlueprintFeature>(Main.Context, "MyrmidonHeroicRecoveryDeedFeature", x =>
-            {
-                x.SetName(Main.Context, "Heroic Recovery");
-                x.SetDescription(Main.Context, " Starting at 1st level, a myrmidon spend 1 grit point as a swift action to recover a single expended maneuver.");
-                x.IsClassFeature = true;
-                x.AddComponent<AddFacts>(x =>
-                {
-                    x.m_Facts = new BlueprintUnitFactReference[] { HeroicRecoveryAbility.ToReference<BlueprintUnitFactReference>() };
-                    
-                });
-            });
-            Main.LogPatch(heroicRecoveryDeed);
+            
             var ManofActionDeed = Helpers.CreateBlueprint<BlueprintFeature>(Main.Context, "MyrmidonManofActionDeedFeature", x =>
             {
                 x.SetName(Main.Context, "Man of Action");
@@ -239,7 +234,7 @@ namespace TheInfiniteCrusade.NewContent.MartialArchetypes
                 x.AddToAddFeatures(1, GritFeature.ToReference<BlueprintFeatureBaseReference>());
                 x.AddToAddFeatures(1, unbreakableDeed.ToReference<BlueprintFeatureBaseReference>());
                 
-                x.AddToAddFeatures(1, heroicRecoveryDeed.ToReference<BlueprintFeatureBaseReference>());
+               
                 x.AddToAddFeatures(1, ManofActionDeed.ToReference<BlueprintFeatureBaseReference>());
                 x.AddToAddFeatures(3, ReadyForTroubleDeed.ToReference<BlueprintFeatureBaseReference>());
                 x.AddToAddFeatures(3, UtilityTrickeDeed.ToReference<BlueprintFeatureBaseReference>());
@@ -254,21 +249,28 @@ namespace TheInfiniteCrusade.NewContent.MartialArchetypes
             myrmidonDefine.LoadDefaultArchetypeProgression();
             myrmidonDefine.SelectionCount = 4;
             myrmidonDefine.SelectionUnlocks = new string[] { "BrokenBlade", "GoldenLion", "IronTortoise", "MithrilCurrent", "PiercingThunder", "PrimalFury", "ScarletThrone", "TempestGale", "ThrashingDragon" };
-            myrmidonDefine.FullRoundRestoreName = "Assume Defensive Form";
-            myrmidonDefine.FullRoundRestoreDesc = "In order for the myrmidon to recover maneuvers, he must take on a defensive form as a full-round action, resetting his rhythm to continue the battle. When he does so, he recovers a number of maneuvers equal to his myrmidon initiation modifier (minimum 2) and until the start of his next turn, attacks made against the myrmidon provoke an attack of opportunity from him. In addition, he gains the benefit of the Combat Reflexes feat, and can use his myrmidon initiation modifier instead of his Dexterity modifier for determining how many additional attacks of opportunity he can make.";
-            myrmidonDefine.StandardActionRestoreName = "Recover Myrmidon Maneuver";
-            myrmidonDefine.StandardActionRestoreDesc = "The myrmidon may take a moment to focus, recovering a single maneuver as a standard action.";
+            myrmidonDefine.MakeFullRecovery("Assume Defensive Form", "In order for the myrmidon to recover maneuvers, he must take on a defensive form as a full-round action, resetting his rhythm to continue the battle. When he does so, he recovers a number of maneuvers equal to his myrmidon initiation modifier (minimum 2) and until the start of his next turn, attacks made against the myrmidon provoke an attack of opportunity from him. In addition, he gains the benefit of the Combat Reflexes feat, and can use his myrmidon initiation modifier instead of his Dexterity modifier for determining how many additional attacks of opportunity he can make.");
+            myrmidonDefine.MakeStandardRecovery("Recover Myrmidon Maneuver", "The myrmidon may take a moment to focus, recovering a single maneuver as a standard action.");
+            myrmidonDefine.MakeSwiftRecovery("Heroic Recovery", "Starting at 1st level, a myrmidon can spend 1 grit point as a swift action to recover a single expended maneuver.");
 
+
+            var fighterProg = ProgressionConfigurator.For(fighter.Progression).AddToUIGroups(new UIGroup()
+            {
+                m_Features = new System.Collections.Generic.List<BlueprintFeatureBaseReference>() { ManofActionDeed.ToReference<BlueprintFeatureBaseReference>(), ReadyForTroubleDeed.ToReference<BlueprintFeatureBaseReference>(), WarriorsDetermination.ToReference<BlueprintFeatureBaseReference>(), WarriorsDetermination2.ToReference<BlueprintFeatureBaseReference>(), WarriorsDetermination3.ToReference<BlueprintFeatureBaseReference>() }
+            });
+                
+
+            fighterProg.Configure();
 
             HeroicRecoveryAbility.AddComponent<RecoverSelectedManeuver>(x =>
             {
 
-                x.m_maneuverBook = myrmidonDefine.m_spellbook;
+                x.m_maneuverBook = myrmidonDefine.m_ManueverBook;
             });
 
             var prog = ProcessProgressionDefinition.BuildInitiatorProgress(myrmidonDefine);
             myrm.AddToAddFeatures(1, prog.ToReference<BlueprintFeatureBaseReference>());
-
+            AbilityConfigurator.For(myrmidonDefine.SwiftRecovery.m_RestoreAction).AddAbilityResourceLogic(amount: 1, requiredResource: GritResource).Configure();
             Main.LogPatch(myrm);
 
             var list = myrm.AddFeatures.Select(x => x).ToList();

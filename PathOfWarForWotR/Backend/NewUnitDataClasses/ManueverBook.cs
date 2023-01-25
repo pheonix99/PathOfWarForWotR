@@ -1,4 +1,5 @@
 ﻿using Kingmaker.Blueprints;
+using Kingmaker.Blueprints.Classes;
 using Kingmaker.EntitySystem.Stats;
 using Kingmaker.UnitLogic;
 using Kingmaker.UnitLogic.Abilities;
@@ -9,8 +10,10 @@ using System.Collections.Generic;
 using System.Linq;
 using TabletopTweaks.Core.Utilities;
 using TheInfiniteCrusade.Backend.NewBlueprints;
+using TheInfiniteCrusade.Backend.NewComponents;
 using TheInfiniteCrusade.Backend.NewComponents.ManeuverBookSystem;
 using TheInfiniteCrusade.Backend.NewUnitParts;
+using TheInfiniteCrusade.Extensions;
 using TheInfiniteCrusade.Serialization;
 
 namespace TheInfiniteCrusade.Backend.NewUnitDataClasses
@@ -21,10 +24,9 @@ namespace TheInfiniteCrusade.Backend.NewUnitDataClasses
         {
             Owner = owner;
             Blueprint = blueprint;
+            
         }
-
-        public BlueprintProgressionReference GrantingProgression => Blueprint.GrantingProgression;
-
+        #region properties
         public BlueprintManeuverBook.ManeuverBookType BookType => Blueprint.BookType;
 
         public UnitDescriptor Owner { get; private set; }
@@ -32,9 +34,157 @@ namespace TheInfiniteCrusade.Backend.NewUnitDataClasses
 
         public readonly BlueprintManeuverBook Blueprint;
 
+        private bool HalfLevel = false;
+
+        private int AdjustedBaseLevel
+        {
+            get
+            {
+                
+                if (this.BookType == BlueprintManeuverBook.ManeuverBookType.MartialTraining)
+                {
+                    return Math.Min(Owner.Progression.CharacterLevel, BaseLevel + Owner.Stats.GetStat<ModifiableValueAttributeStat>(InitiatingStat).PermanentBonus);
+                }
+                return this.BaseLevel;
+            }
+        }
+        public int BaseLevel
+        {
+            get
+            {
+                
+
+                return Math.Max(0, this.AdjustedBaseLevel);
+            }
+        }
+        public int RawBaseLevel
+        {
+            get
+            {
+                return this.AdjustedBaseLevel;
+            }
+        }
+
+        private int m_BaseLevelInternal;
+
+        public int InitiatorLevel
+        {
+            get
+            {
+                //TODO ADD HAX
+                return AdjustedBaseLevel;
+            }
+        }
+
+        public int EffectiveInitiatorLevel
+        {
+            get
+            {
+                int result;
+                
+                    int casterLevel = this.InitiatorLevel;
+                result = casterLevel;
+                   //TODO add cals
+                return result;
+            }
+        }
+
+        public void AddLevelFromClass(ClassData characterClass)
+        {
+
+
+            if (characterClass.CharacterClass.IsMythic)
+            {
+               
+                return;
+            }
+            else if (BookType == BlueprintManeuverBook.ManeuverBookType.MartialTraining)
+            {
+                if (HalfLevel)
+                {
+                    AddBaseLevel();
+                    HalfLevel = false;
+                }
+                else
+                {
+                    HalfLevel = true;
+                }
+            }
+            else
+            {
+                if (characterClass.CharacterClass.PrestigeClass && characterClass.CharacterClass.HasComponent<MartialPrestigeClass>())
+                { 
+                    AddBaseLevel();
+                    return;
+                }
+                else if (Blueprint.ClassReference.Any(x=>x.Equals(characterClass.CharacterClass.ToReference<BlueprintCharacterClassReference>())))
+                {
+                    if (!Blueprint.ArchetypeReference.Any())
+                    {
+                        AddBaseLevel();
+                        return;
+                    }
+                    else if (Blueprint.ArchetypeReference.Any(x=>characterClass.Archetypes.Select(y=>y.ToReference<BlueprintArchetypeReference>()).Contains(x)))
+                    {
+                        AddBaseLevel();
+                        return;
+                    }
+                }
+                else
+                {
+                    if (HalfLevel)
+                    {
+                        AddBaseLevel();
+                        HalfLevel = false;
+                    }
+                    else
+                    {
+                        HalfLevel = true;
+                    }
+                }
+            }
+        }
+
+        public void AddBaseLevel()
+        {
+            
+            
+            this.m_BaseLevelInternal++;
+            
+        }
+
+
         private List<BlueprintAbilityReference> knownManeuvers = new();
 
         public int KnownManeuversCount => knownManeuvers.Count;
+
+        
+
+        private List<BlueprintAbilityReference> knownStances = new();
+
+        public readonly UnitFact source;
+
+        public List<ManeuverSlot> ManeuverSlots = new();
+
+
+        private StatType overrideMainStat;
+        public bool HasStatOverride => overrideMainStat != StatType.Unknown;
+
+
+        public StatType InitiatingStat => overrideMainStat.IsAttribute() ? overrideMainStat : Blueprint.DefaultMainStat;
+
+        public bool IsGranted => Blueprint.IsGranted;
+
+        public BlueprintUnitPropertyReference ManeuverSlotsPropertyReference => Blueprint.m_ManeuverSlotsReference;
+        public BlueprintUnitPropertyReference InitiatorLevelReference => Blueprint.m_InitiatorLevelReference;
+
+        public string Name { get; internal set; }
+
+
+        #endregion
+
+
+
 
         internal void OnCombatStartWhileCooledDown()
         {
@@ -63,9 +213,6 @@ namespace TheInfiniteCrusade.Backend.NewUnitDataClasses
             }
         }
 
-        private List<BlueprintAbilityReference> knownStances = new();
-
-        public readonly UnitFact source;
 
         
 
@@ -154,19 +301,6 @@ namespace TheInfiniteCrusade.Backend.NewUnitDataClasses
              
         }
 
-        public List<ManeuverSlot> ManeuverSlots = new();
-
-
-        private StatType overrideMainStat;
-
-        public StatType InitiatingStat => overrideMainStat.IsAttribute() ? overrideMainStat : Blueprint.DefaultMainStat;
-
-        public bool IsGranted => Blueprint.IsGranted;
-
-        public BlueprintUnitPropertyReference ManeuverSlotsPropertyReference => Blueprint.m_ManeuverSlotsReference;
-        public BlueprintUnitPropertyReference InitiatorLevelReference => Blueprint.m_InitiatorLevelReference;
-        
-        public string Name { get; internal set; }
 
         
         internal void DemandSlotsUpdate()
@@ -225,6 +359,13 @@ namespace TheInfiniteCrusade.Backend.NewUnitDataClasses
                 return false;
 
 
+        }
+
+       
+
+        public void SetStatOverride(StatType stat)
+        {
+            overrideMainStat = stat;
         }
 
         internal bool Knows(BlueprintAbilityReference maneuver)
@@ -299,19 +440,9 @@ namespace TheInfiniteCrusade.Backend.NewUnitDataClasses
 
         }
 
-        internal int GetRawInitiatorLevel()
-        {
-            return InitiatorLevelReference.Get().GetInt(source.Owner);
-        }
+        
 
-        public int GetRealInitiatorLevel()
-        {
-            int raw = GetRawInitiatorLevel();
-
-            //TODO ADD EVENT!
-
-            return raw;
-        }
+        
 
         public void Dispose()
         {
@@ -322,9 +453,11 @@ namespace TheInfiniteCrusade.Backend.NewUnitDataClasses
 
         public void SaveBook()
         {
-            var record = ManeuverBookStorage.Instance.ForCharacter(Owner).ForSpellbook(this.Blueprint);
+            var record = ManeuverBookStorage.Instance.ForCharacter(Owner).ForManeuverBook(this.Blueprint);
+            record.HalfLevel = HalfLevel;
             record.ManeuverGuids.Clear();
             record.SlotRecords.Clear();
+            record.BaseLevel = m_BaseLevelInternal;
             foreach (var move in knownManeuvers)
             {
                 record.ManeuverGuids.Add(move.guid);
@@ -345,10 +478,12 @@ namespace TheInfiniteCrusade.Backend.NewUnitDataClasses
         public void LoadBook()
         {
             Main.Context.Logger.Log($"Loading {Name} Book Info - stage : in Unit Part");
-            var record = ManeuverBookStorage.Instance.ForCharacter(Owner).ForSpellbook(this.Blueprint);
+            var record = ManeuverBookStorage.Instance.ForCharacter(Owner).ForManeuverBook(this.Blueprint);
             ManeuverSlots.Clear();
             knownManeuvers.Clear();
             knownStances.Clear();
+            HalfLevel = record.HalfLevel;
+            m_BaseLevelInternal = record.BaseLevel;
             foreach (var move in record.ManeuverGuids)
             {
                 LearnManeuver(BlueprintTools.GetBlueprintReference<BlueprintAbilityReference>(move));

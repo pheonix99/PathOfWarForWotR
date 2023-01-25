@@ -6,7 +6,7 @@ namespace TheInfiniteCrusade.Backend.NewComponents.MartialAttackComponents
     class SilverCraneStrikeIncorporeal : AbstractMartialAttackWeaponModifier
     {
 
-        public override void ModifyWeaponStats(RulePrepareDamage evt)
+        public override void OnEventAboutToTrigger_RulePrepareDamage(RulePrepareDamage evt)
         {
             var condition = ManeuverTools.SilverCraneSpecialTarget().Build();
 

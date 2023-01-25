@@ -17,7 +17,7 @@ namespace TheInfiniteCrusade.Backend.NewComponents.MartialAttackComponents
         public DiceType m_DiceType = DiceType.D6;
         public bool IsPrecision;
         public abstract DamageDescription GetDamage(RuleCalculateWeaponStats weapon);
-        public override void ModifyWeaponStats(RuleCalculateWeaponStats evt)
+        public override void OnEventDidTrigger_RuleCalculateWeaponStats(RuleCalculateWeaponStats evt)
         {
             if (userCondition != null)
             {

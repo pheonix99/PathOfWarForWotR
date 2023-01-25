@@ -51,14 +51,7 @@ namespace TheInfiniteCrusade.Backend.NewBlueprints
 
         public LocalizedString Name;
 
-        public int BaseManeuversReadied = 3;
-        public int[] SlotsGainedAtLevels = new int[0];
         
-
-
-        public int BaseManeuversKnown = 3;
-        public int[] ManeuversLearnedAtLevels = new int[0];
-        public int[] StancesLearnedAtLevels = new int[0];
 
         public bool IsMartialTraining => BookType == ManeuverBookType.MartialTraining;
 
@@ -68,7 +61,14 @@ namespace TheInfiniteCrusade.Backend.NewBlueprints
         public bool IsGranted = false;
         public BlueprintUnitPropertyReference m_ManeuverSlotsReference;
         public BlueprintUnitPropertyReference m_InitiatorLevelReference;
+
+        /// <summary>
+        /// Remember that anytime you check this you have to make sure it's not martial training, because martial training doesn't have one
+        /// </summary>
         public BlueprintProgressionReference GrantingProgression;
+
+        
+
 
 
         public StatType DefaultMainStat { get; set; }

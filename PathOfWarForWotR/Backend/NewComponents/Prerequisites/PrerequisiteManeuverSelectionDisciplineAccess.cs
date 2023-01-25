@@ -30,18 +30,17 @@ namespace TheInfiniteCrusade.Backend.NewComponents.Prerequisites
                 {
                     case ManeuverSelectionMode.Standard:
                        
-                        return part.DisciplineIsValidForClass(abilityData2.DisciplineKeys[0], classData, false);
-                        
+                        if (classData.PrestigeClass)
+                            return part.CanLearnDisciplineAsPrestigeClass(abilityData2.DisciplineKeys[0], classData.ToReference<BlueprintCharacterClassReference>());
+                        else
+                            return part.CanLearnDisciplineAsBaseClass(abilityData2.DisciplineKeys[0], classData.ToReference<BlueprintCharacterClassReference>());
                     case ManeuverSelectionMode.MartialTraining:
-                        var part2 = unit.Get<UnitPartMartialTraining>();
-                        if (part2 == null)
-                            return false;
-                        return part2.IsThisDiscipline(abilityData2.DisciplineKeys[0]);
+                        return part.CanLearnDisciplineWithNonClassBook(abilityData2.DisciplineKeys[0], selectionData.targetBook);
 
                         
                     case ManeuverSelectionMode.AdvancedStudy:
                         
-                        return selectionData.targetBook.Get().ClassReference.Any(x=> part.DisciplineIsValidForClass(abilityData2.DisciplineKeys[0], x, true));
+                        return selectionData.targetBook.Get().ClassReference.Any(x=> part.CanLearnDisciplineAsFreeStudy(abilityData2.DisciplineKeys[0], selectionData.targetBook));
 
                        
                     case ManeuverSelectionMode.AdvancedStudySpecial:

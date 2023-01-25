@@ -133,7 +133,7 @@ namespace TheInfiniteCrusade.Backend.NewActions
                 if (Mode == MartialAttackMode.FullAttack)
                 {
                     RuleCalculateAttacksCount attacksCount = Rulebook.Trigger<RuleCalculateAttacksCount>(new RuleCalculateAttacksCount(maybeCaster));
-                    attacksCount.AddExtraAttacks(ExtraHits, false);
+                    attacksCount.AddExtraAttacks(ExtraHits, false, false);//TO
                     int num = 0;
 
                     
@@ -243,6 +243,7 @@ namespace TheInfiniteCrusade.Backend.NewActions
         {
             RuleAttackWithWeapon ruleAttackWithWeapon = new RuleAttackWithWeapon(caster, target, weapon, attackBonusPenalty)
             {
+                
                 Reason = base.Context,
                 AutoHit = this.AutoHit,
                 AutoCriticalThreat = this.AutoCritThreat,
@@ -252,6 +253,7 @@ namespace TheInfiniteCrusade.Backend.NewActions
                 AttackNumber = attackNumber,
                 AttacksCount = attacksCount
             };
+            
             if (ForceFlatfoot)
                 ruleAttackWithWeapon.ForceFlatFooted = true;
             if (IgnoreDR)
@@ -368,7 +370,7 @@ namespace TheInfiniteCrusade.Backend.NewActions
 
             public void OnEventDidTrigger(RuleAttackWithWeapon evt)
             {
-                m_Modifer.DoProc(evt);
+                m_Modifer.OnRuleAttackWithWeaponTrigger(evt);
             }
 
             public void OnEventDidTrigger(RulePrepareDamage evt)
@@ -396,17 +398,17 @@ namespace TheInfiniteCrusade.Backend.NewActions
 
             public void OnEventAboutToTrigger(RuleCalculateWeaponStats evt)
             {
-                
+                m_Modifer.OnEventAboutToTrigger_RuleCalculateWeaponStats(evt);
             }
 
             public void OnEventAboutToTrigger(RulePrepareDamage evt)
             {
-                m_Modifer.ModifyWeaponStats(evt);
+                m_Modifer.OnEventAboutToTrigger_RulePrepareDamage(evt);
             }
 
             public void OnEventDidTrigger(RuleCalculateWeaponStats evt)
             {
-                m_Modifer.ModifyWeaponStats(evt);
+                m_Modifer.OnEventDidTrigger_RuleCalculateWeaponStats(evt);
             }
 
             public void OnEventDidTrigger(RulePrepareDamage evt)

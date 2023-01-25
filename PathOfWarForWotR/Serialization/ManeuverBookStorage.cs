@@ -45,7 +45,7 @@ namespace TheInfiniteCrusade.Serialization
 
 
 
-        public ManeuverBookRecord ForSpellbook(BlueprintManeuverBook book)
+        public ManeuverBookRecord ForManeuverBook(BlueprintManeuverBook book)
         {
             var key = book.AssetGuidThreadSafe;
 
@@ -150,8 +150,10 @@ namespace TheInfiniteCrusade.Serialization
         [JsonProperty]
         public List<string> ManeuverGuids = new();
 
-
-       
+        [JsonProperty]
+        public int BaseLevel = 0;
+        [JsonProperty]
+        public bool HalfLevel = false;
     }
 
     public class SlotRecord

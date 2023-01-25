@@ -12,9 +12,28 @@ namespace TheInfiniteCrusade.Extensions
     {
         private static Dictionary<UnitDescriptor, Dictionary<BlueprintManeuverBook, ManeuverBook>> AllManeuverBooks = new();
 
+        public static int CurrentHP(this UnitEntityData unit)
+        {
+            return unit.Stats.HitPoints.ModifiedValue - unit.Damage;
+        }
+        public static ManeuverBook DemandManeuverBook(this UnitEntityData data, BlueprintManeuverBookReference book)
+        {
+            return data.Descriptor.DemandManeuverBook(book);
+        }
+
         public static ManeuverBook DemandManeuverBook(this UnitEntityData data, BlueprintManeuverBook book)
         {
             return data.Descriptor.DemandManeuverBook(book);
+        }
+
+        public static ManeuverBook GetManeuverBook(this UnitEntityData data, BlueprintManeuverBookReference book)
+        {
+            return data.Descriptor.GetManeuverBook(book);
+        }
+
+        public static ManeuverBook GetManeuverBook(this UnitEntityData data, BlueprintManeuverBook book)
+        {
+            return data.Descriptor.GetManeuverBook(book);
         }
 
         public static ManeuverBook GetManeuverBook(this UnitDescriptor data, [NotNull] BlueprintManeuverBook blueprintManeuverBook)
@@ -31,6 +50,7 @@ namespace TheInfiniteCrusade.Extensions
             return null;
         }
 
+        
 
         public static ManeuverBook DemandManeuverBook(this UnitDescriptor data, BlueprintManeuverBook blueprintManeuverBook)
         {

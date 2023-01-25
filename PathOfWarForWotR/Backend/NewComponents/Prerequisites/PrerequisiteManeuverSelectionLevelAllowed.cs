@@ -33,7 +33,7 @@ namespace TheInfiniteCrusade.Backend.NewComponents.Prerequisites
                     var part2 = unit.Get<UnitPartMartialTraining>();
                     if (part2 != null)
                     {
-                        return abilityData2.ManeuverLevel <= part2.GetMaxLevel();
+                        return abilityData2.ManeuverLevel <= part2.Rank;
                     }
                     else
                         return false;

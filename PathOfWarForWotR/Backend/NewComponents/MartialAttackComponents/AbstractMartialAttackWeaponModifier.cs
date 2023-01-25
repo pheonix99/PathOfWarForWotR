@@ -9,16 +9,20 @@ namespace TheInfiniteCrusade.Backend.NewComponents.MartialAttackComponents
     [AllowedOn(typeof(BlueprintAbility), false)]
     public abstract class AbstractMartialAttackWeaponModifier : BlueprintComponent
     {
-        public virtual void ModifyWeaponStats(RuleCalculateWeaponStats evt)
+        public virtual void OnEventDidTrigger_RuleCalculateWeaponStats(RuleCalculateWeaponStats evt)
         {
 
         }
 
-        public virtual void ModifyWeaponStats(RulePrepareDamage evt)
+        public virtual void OnEventAboutToTrigger_RulePrepareDamage(RulePrepareDamage evt)
         {
 
         }
-        
+
+        public virtual void OnEventAboutToTrigger_RuleCalculateWeaponStats(RuleCalculateWeaponStats evt)
+        {
+
+        }
 
     }
 }

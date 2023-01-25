@@ -1,11 +1,14 @@
 ﻿using Kingmaker.Blueprints;
 using Kingmaker.Blueprints.Classes;
 using Kingmaker.EntitySystem.Entities;
+using Kingmaker.EntitySystem.Stats;
 using Kingmaker.PubSubSystem;
 using Kingmaker.RuleSystem.Rules;
 using Kingmaker.UnitLogic;
 using Kingmaker.UnitLogic.Buffs.Blueprints;
+using Kingmaker.UnitLogic.Class.LevelUp;
 using Kingmaker.Utility;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using TabletopTweaks.Core.Utilities;
@@ -25,18 +28,132 @@ namespace TheInfiniteCrusade.Backend.NewUnitParts
 
         private List<ManeuverBook> ManeuverBooks => Owner.ManeuverBooks().ToList();
 
-        
+        public bool KnowsManeuver(BlueprintAbilityReference maneuver)
+        {
+            return ManeuverBooks.Any(x => x.Knows(maneuver));
+        }
 
-        
+        internal void UnregisterNonClassManeuverBook(BlueprintManeuverBookReference m_ManeuverBook)
+        {
+           
+        }
 
-      
+        internal void RegisterNonClassManeuverBook(BlueprintManeuverBookReference reference)
+        {
+            if (!UnlocksForBooks.ContainsKey(reference))
+                UnlocksForBooks.Add(reference, new());
+        }
 
-        
-        
+        internal void RegisterClassManueverBook(BlueprintCharacterClass blueprintCharacterClass, BlueprintManeuverBookReference blueprintManeuverBookReference)
+        {
+            if (!ClassToBookLinkage.ContainsKey(blueprintCharacterClass.ToReference<BlueprintCharacterClassReference>()))
+                ClassToBookLinkage.Add(blueprintCharacterClass.ToReference<BlueprintCharacterClassReference>(), blueprintManeuverBookReference);
+            if (!UnlocksForBooks.ContainsKey(blueprintManeuverBookReference))
+                UnlocksForBooks.Add(blueprintManeuverBookReference, new());
+        }
 
-       
-        
+        internal void UnregisterClassManueverBook(BlueprintCharacterClass blueprintCharacterClass, BlueprintManeuverBookReference blueprintManeuverBookReference)
+        {
+            if (ClassToBookLinkage.ContainsKey(blueprintCharacterClass.ToReference<BlueprintCharacterClassReference>()))
+                ClassToBookLinkage.Remove(blueprintCharacterClass.ToReference<BlueprintCharacterClassReference>());
+            
+        }
+        #endregion
 
+        #region handle unlocks
+        internal void RegisterBookUnlock(UnitFact fact, BlueprintManeuverBookReference bookRef, string disciplineType)
+        {
+            
+            if (UnlocksForBooks.TryGetValue(bookRef, out var list))
+            {
+
+                list.Add(new DisciplineUnlock() { sourceFeature = fact, discipline = disciplineType });
+            }
+            else
+            {
+                UnlocksForBooks.Add(bookRef, new());
+                list.Add(new DisciplineUnlock() { sourceFeature = fact, discipline = disciplineType });
+            }
+            AllUnlocks.Add(new DisciplineUnlock() { sourceFeature = fact, discipline = disciplineType });
+        }
+
+        internal void UnregisterBookUnlock(UnitFact fact, BlueprintManeuverBookReference bookRef, string disciplineType)
+        {
+            if (UnlocksForBooks.TryGetValue(bookRef, out var list))
+            {
+                list.Remove(x => x.sourceFeature == fact && x.discipline.Equals(disciplineType));
+            }
+            AllUnlocks.Remove(x => x.sourceFeature == fact && x.discipline.Equals(disciplineType));
+        }
+
+
+        private class DisciplineUnlock
+        {
+            public UnitFact sourceFeature;
+            public string discipline;
+        }
+
+
+        private Dictionary<BlueprintManeuverBookReference, List<DisciplineUnlock>> UnlocksForBooks = new();
+
+        private Dictionary<BlueprintCharacterClassReference, BlueprintManeuverBookReference> ClassToBookLinkage = new();
+
+        private class PRCAccessData
+        {
+            public List<DisciplineUnlock> disciplineUnlocks = new();
+            public bool AllAvailable;
+        }
+
+        private Dictionary<BlueprintCharacterClassReference, PRCAccessData> PRCUnlockData = new();
+
+        private List<DisciplineUnlock> AllUnlocks = new();
+
+        public bool CanLearnDisciplineWithNonClassBook(string disciplineKey, BlueprintManeuverBookReference book)
+        {
+            if (UnlocksForBooks.TryGetValue(book, out var unlocks))
+            {
+                return unlocks.Any(x => x.discipline.Equals(disciplineKey));
+            }
+            return false;
+        }
+
+        public bool CanLearnDisciplineAsBaseClass(string disciplineKey, BlueprintCharacterClassReference currentClass)
+        {
+            if (ClassToBookLinkage.TryGetValue(currentClass, out var book))
+            {
+                if (UnlocksForBooks.TryGetValue(book, out var unlocks))
+                {
+                    return unlocks.Any(x => x.discipline.Equals(disciplineKey));
+                }
+            }
+            return false;
+
+        }
+
+        public bool CanLearnDisciplineAsFreeStudy(string disciplineKey, BlueprintManeuverBookReference reference)
+        {
+
+            throw new NotImplementedException();
+        }
+
+        public bool CanLearnDisciplineAsPrestigeClass(string disciplineKey, BlueprintCharacterClassReference currentClass)
+        {
+            if (PRCUnlockData.TryGetValue(currentClass, out var data))
+            {
+                if (data.AllAvailable)
+                    return AllUnlocks.Any(x => x.discipline.Equals(disciplineKey));
+                else
+                    return data.disciplineUnlocks.Any(x => x.discipline.Equals(disciplineKey));
+
+            }
+            return false;
+        }
+
+
+
+        #endregion
+
+        #region serialization 
         public override void OnPostLoad()
         {
             Main.Context.Logger.Log($"Loading Maneuver  Info: from Unit Part");
@@ -45,7 +162,21 @@ namespace TheInfiniteCrusade.Backend.NewUnitParts
                 book.LoadBook();
             }
         }
+        public override void OnPreSave()
+        {
+            Main.Context.Logger.Log($"Saving Maneuver  Info: from Unit Part");
 
+            foreach (var book in ManeuverBooks)
+            {
+                Main.Context.Logger.Log($"Saving {book.Name} Book Info - stage : in Unit Part");
+                book.SaveBook();
+            }
+
+        }
+
+        #endregion
+        
+       
         internal bool PlanIsValid()
         {
             List<BlueprintAbilityReference> prepped = new();
@@ -86,28 +217,6 @@ namespace TheInfiniteCrusade.Backend.NewUnitParts
             return true;
 
         }
-
-        
-
-        public override void OnPreSave()
-        {
-            Main.Context.Logger.Log($"Saving Maneuver  Info: from Unit Part");
-
-            foreach (var book in ManeuverBooks)
-            {
-                Main.Context.Logger.Log($"Saving {book.Name} Book Info - stage : in Unit Part");
-                book.SaveBook();
-            }
-            
-        }
-       
-
-       
-
-        
-
-
-        
 
         public bool InCombatMode()
         {
@@ -191,14 +300,9 @@ namespace TheInfiniteCrusade.Backend.NewUnitParts
 
 
 
-        #endregion
-
-        public bool KnowsManeuver(BlueprintAbilityReference maneuver)
-        {
-            return ManeuverBooks.Any(x => x.Knows(maneuver));
+       
 
 
-        }
 
 
 
@@ -231,8 +335,6 @@ namespace TheInfiniteCrusade.Backend.NewUnitParts
             return found;
         }
 
-        
-
         public int ArchetypeAllowedLevel(BlueprintProgressionReference grantingProgression)
         {
             int level = Owner.Progression.GetProgression(grantingProgression.Get()).Level;
@@ -253,109 +355,30 @@ namespace TheInfiniteCrusade.Backend.NewUnitParts
 
         private int InitiatorLevelPermittedManeuverLevel(ManeuverBook book)
         {
-            int initLevel = book.GetRawInitiatorLevel();
+            int initLevel = book.BaseLevel;
 
             return (initLevel - 1) / 2 + 1;
 
         }
 
-        public bool DisciplineIsValidForClass(string disciplineKey, BlueprintCharacterClass currentClass, bool includePRCaccess)
-        {
-            if (GlobalUnlocks.Any(x => x.disciplineKey.Equals(disciplineKey)))
-                return true;
-            ClassData data = Owner.Progression.GetClassData(currentClass);
 
-            foreach (var unlock in classSpecificUnlocks)
-            {
-                
-                if (unlock.m_ClassRefs.Contains(currentClass.ToReference<BlueprintCharacterClassReference>()))
-                {
-                    //Main.Context.Logger.Log($"Assessing unlock for {currentClass.Name}");
-
-                    if (unlock.m_ArchRefs.Length == 0 || unlock.m_ArchRefs.Any(x => data.Archetypes.Contains(x.Get())))
-                    {
-                        if (unlock.discipline.Equals(disciplineKey))
-                            return true;
-                    }
-                    
-                }
-                if (includePRCaccess && unlock.m_ClassRefs.Length == 1 && unlock.m_ClassRefs[0].Get().PrestigeClass)
-                {
-                    if (unlock.discipline.Equals(disciplineKey))
-                        return true;
-                }
-            }
-            return false;
-        }
-
+        
         #endregion
 
         #region maneuver unlocks
 
-        private class GlobalUnlock
-        {
-
-            public UnitFact sourceFeature;
-            public string disciplineKey;
-
-        }
-
-        private List<GlobalUnlock> GlobalUnlocks = new();
-
-        private class ProgressionSpecificUnlock
-        {
-            public BlueprintProgressionReference m_Reference => ManeuverBook.GrantingProgression;
-
-            public BlueprintManeuverBook ManeuverBook => blueprintManeuverBookReference.Get();
-            public readonly BlueprintManeuverBookReference blueprintManeuverBookReference;
-
-            public BlueprintCharacterClassReference[] m_ClassRefs => ManeuverBook.ClassReference;
-            public BlueprintArchetypeReference[] m_ArchRefs => ManeuverBook.ArchetypeReference;
-
-            public UnitFact sourceFeature;
-            public string discipline;
-
-            public ProgressionSpecificUnlock(BlueprintManeuverBookReference blueprintManeuverBookReference, UnitFact sourceFeature, string discipline)
-            {
-                this.blueprintManeuverBookReference = blueprintManeuverBookReference;
-                this.sourceFeature = sourceFeature;
-                this.discipline = discipline;
-            }
-
-            public string Display()
-            {
-                return "Progression: " + m_Reference.Get().Name + ", Discipline: " + discipline + ", Source: " + sourceFeature.Name;
-            }
-
-        }
-        private List<ProgressionSpecificUnlock> classSpecificUnlocks = new();
+     
 
         
-        internal void RegisterClassUnlock(UnitFact fact, BlueprintManeuverBookReference bookReference, string disciplineType)
-        {
-            //Main.Context.Logger.Log($"Registered Discipline {disciplineType} on {Owner.CharacterName} for {progresionRef.NameSafe()}");
-            ProgressionSpecificUnlock classSpecificUnlock = new ProgressionSpecificUnlock(bookReference, fact, disciplineType);
-            if (!classSpecificUnlocks.Any(x => x.sourceFeature.Equals(fact) && x.blueprintManeuverBookReference.Equals(bookReference) && x.discipline == disciplineType))
-            {
-                classSpecificUnlocks.Add(classSpecificUnlock);
-            }
-            
 
-        }
-
-        internal void UnregisterClassUnlock(UnitFact fact, BlueprintManeuverBookReference bookReference, string disciplineType)
-        {
-            //Main.Context.Logger.Log($"Unregisted Discipline {disciplineType} on {Owner.CharacterName} for {progresionRef.NameSafe()}");
-            var rem = classSpecificUnlocks.RemoveAll(x => x.sourceFeature == fact && x.blueprintManeuverBookReference == bookReference && x.discipline.Equals(disciplineType));
-            //Main.Context.Logger.Log($"Removed {rem}");
-
-        }
-
+        
+        
+        
 
 
         #endregion
         
-
+        //TODO MOVE THIS ELSEWHERE
         public void OnEventAboutToTrigger(RuleCombatManeuver evt)
         {
             var ability = evt.Reason?.Ability;
@@ -449,5 +472,15 @@ namespace TheInfiniteCrusade.Backend.NewUnitParts
                 book.OnPostCombatCooldown ();
             }
         }
+
+        
+
+        Dictionary<BlueprintManeuverBookReference, StatType> InitiatorStatOverrides = new();
+
+
+
+      
+
+        
     }
 }

@@ -6,6 +6,8 @@ using Kingmaker.Enums;
 using TheInfiniteCrusade.Defines;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
+using System.Linq;
 
 namespace TheInfiniteCrusade.Utilities
 {
@@ -61,6 +63,11 @@ namespace TheInfiniteCrusade.Utilities
             }    
 
             return disciplineDefines;
+        }
+
+        internal static List<DisciplineDefine> GetAll()
+        {
+            return Disciplines.Values.ToList();
         }
     }
 }

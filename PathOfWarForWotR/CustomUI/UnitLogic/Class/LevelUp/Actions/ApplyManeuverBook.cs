@@ -1,9 +1,13 @@
 ﻿using HarmonyLib;
 using JetBrains.Annotations;
+using Kingmaker.Blueprints;
 using Kingmaker.UnitLogic;
 using Kingmaker.UnitLogic.Class.LevelUp;
 using Kingmaker.UnitLogic.Class.LevelUp.Actions;
+using Kingmaker.Utility;
 using System;
+using TheInfiniteCrusade.Backend.NewComponents;
+using TheInfiniteCrusade.Backend.NewUnitParts;
 using TheInfiniteCrusade.Extensions;
 
 namespace TheInfiniteCrusade.CustomUI.UnitLogic.Class.LevelUp.Actions
@@ -32,12 +36,23 @@ namespace TheInfiniteCrusade.CustomUI.UnitLogic.Class.LevelUp.Actions
             {
                 return;
             }
+            if (classData.CharacterClass.IsMythic || classData.CharacterClass.IsHigherMythic)
+                return;
             if (classData.ManeuverBook() != null)
             {
-                var maneuverBook = unit.DemandManeuverBook(classData.ManeuverBook());
-
-                //We don't actually need to do anything else because we handle level up spell gainz in ManeuverSelectionFeature, level up slot gains in ManeuverBook and casterLevel is a unitproperty
+                unit.Ensure<UnitPartMartialDisciple>();
+                unit.DemandManeuverBook(classData.ManeuverBook());
             }
+            unit.ManeuverBooks().ForEach(x =>
+            {
+                if (!x.Blueprint.IsMartialTraining)
+                {
+                    x.AddLevelFromClass(classData);
+                }
+            });
+            
+            
+            
         }
 
         public bool Check([NotNull] LevelUpState state, [NotNull] UnitDescriptor unit)

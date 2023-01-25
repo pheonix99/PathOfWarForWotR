@@ -15,7 +15,7 @@ namespace TheInfiniteCrusade.Utilities
         {
             var guid = Main.Context.Blueprints.GetGUID(sysname);
             var resource = AbilityResourceConfigurator.New(sysname, guid.ToString());
-            resource.SetLocalizedName(LocalizationTool.CreateString(sysname + ".Name", displayName, false);
+            resource.SetLocalizedName(LocalizationTool.CreateString(sysname + ".Name", displayName, false));
 
             return resource;
         }

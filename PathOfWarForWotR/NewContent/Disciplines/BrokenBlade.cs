@@ -16,6 +16,7 @@ using Kingmaker.RuleSystem.Rules;
 using TheInfiniteCrusade.Backend.NewActions;
 using TheInfiniteCrusade.Backend.NewComponents.AbilityRestrictions;
 using TheInfiniteCrusade.Backend.NewComponents.MartialAttackComponents;
+using TheInfiniteCrusade.Backend.NewComponents.AbilitySpecific;
 
 namespace TheInfiniteCrusade.NewContent.Disciplines
 {
@@ -174,7 +175,12 @@ namespace TheInfiniteCrusade.NewContent.Disciplines
             BronzeKnuckle();
             void BronzeKnuckle()
             {
+                var bk = ManeuverTools.MakeBoostStub(Main.Context, "BronzeKnucke", "Bronze Knuckle", "With a spectacular crack of his knuckles, the disciple delivers an extra-potent blow to his foe in the form of a bone-crushing strike. As part of a unarmed attack or a strike from this discipline, the initiator’s attacks for the duration of his turn inflict an additional 2d6 points of damage and these attacks ignore a target’s damage reduction. ", 2, brokenBlade, out var buff, x =>
+                {
+                    x.AddComponent<BronzeKnuckleComponent>();
+                }, icon: ius.Icon);
 
+                ManeuverTools.FinishManeuver(bk, Main.Context);
             }
 
             LegSweepingHilt();
@@ -332,7 +338,7 @@ namespace TheInfiniteCrusade.NewContent.Disciplines
             ShardsOfAdamantiteStrike();
             void ShardsOfAdamantiteStrike()
             {
-                var shards3 = BrokenBladeStandardStrikeStrike(Main.Context, "ShardsOfAdamantine Strike", "Shards of Adamantine Strike", "It is said that masters of the discipline are capable of using their hand in the manner of striking serpent to punch through solid stone as if it were straw, and disciples with this maneuver are those who can. Taking this training to the theater of war, a punch so potent that it can leave the foe sickened with pain is what this art form can deliver. The initiator makes an attack against the target creature and if successful, this attack inflicts an additional 12d6 points of damage that ignores the target’s damage reduction or an object’s hardness. If striking a living creature, the target must make a Fortitude save (DC 17 + initiation modifier) or be nauseated with the pain of the strike for 1d4 rounds.", 7, unarmedOnly: false, extraDice: 12, strikeDamageIgnoresDr: true, payload: ManeuverTools.ApplyBuffIfNotSaved("956331dba5125ef48afe41875a00ca0e", new ContextDurationValue()
+                var shards3 = BrokenBladeStandardStrikeStrike(Main.Context, "ShardsOfAdamantineStrike", "Shards of Adamantine Strike", "It is said that masters of the discipline are capable of using their hand in the manner of striking serpent to punch through solid stone as if it were straw, and disciples with this maneuver are those who can. Taking this training to the theater of war, a punch so potent that it can leave the foe sickened with pain is what this art form can deliver. The initiator makes an attack against the target creature and if successful, this attack inflicts an additional 12d6 points of damage that ignores the target’s damage reduction or an object’s hardness. If striking a living creature, the target must make a Fortitude save (DC 17 + initiation modifier) or be nauseated with the pain of the strike for 1d4 rounds.", 7, unarmedOnly: false, extraDice: 12, strikeDamageIgnoresDr: true, payload: ManeuverTools.ApplyBuffIfNotSaved("956331dba5125ef48afe41875a00ca0e", new ContextDurationValue()
                 {
                     DiceType = Kingmaker.RuleSystem.DiceType.D3,
                     BonusValue = 0,

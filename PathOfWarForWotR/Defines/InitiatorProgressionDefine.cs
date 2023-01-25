@@ -1,5 +1,6 @@
 ﻿using Kingmaker.Blueprints;
 using Kingmaker.EntitySystem.Stats;
+using Kingmaker.UnitLogic.Abilities.Blueprints;
 using System.Collections.Generic;
 using TabletopTweaks.Core.ModLogic;
 using TheInfiniteCrusade.Backend.NewBlueprints;
@@ -42,35 +43,27 @@ namespace TheInfiniteCrusade.Defines
         public List<BlueprintArchetypeReference> ArchetypesForArchetypeTemplate = new();
         public bool ManuallyBuildSelectors;
         public bool DisallowExchanges;
-        public bool HasFullRoundRestore = true;
-        public string FullRoundRestoreName;
-        public string FullRoundRestoreDesc;
-        public Sprite CustomFullRoundRestoreSprite;
+        public ClassRecoveryDefine SwiftRecovery { get; private set; }
+        public ClassRecoveryDefine StandardRecovery { get; private set; }
+        public ClassRecoveryDefine FullRoundRecovery { get; private set; }
 
-        public bool HasStandardActionRestore = true;
-        public string StandardActionRestoreName;
-        public string StandardActionRestoreDesc;
-        public Sprite CustomStandardActionRestoreSprite;
-
+        public bool IsTemplateArchetype;
 
 
         #endregion
         #region builtComponents
-        public BlueprintManeuverBookReference m_spellbook;
+        public BlueprintManeuverBookReference m_ManueverBook;
         public BlueprintFeatureSelectionReference m_exchanger;
         public BlueprintFeatureSelectionReference m_disciplineSelector;
         public BlueprintProgressionReference m_Progression;
 
-
-        public BlueprintFeatureReference m_StandardActionRestoreFeature;
-        public BlueprintFeatureReference m_FullRoundRestoreFeature;
-        public BlueprintAbilityReference m_FullRoundRestore;
-        public BlueprintAbilityReference m_StandardActionRestore;
+        
         internal BlueprintFeatureSelectionReference maneuverSelector;
         internal BlueprintFeatureSelectionReference stanceSelector;
 
         public BlueprintFeatureReference AddSlotComponent { get; internal set; }
         public BlueprintUnitPropertyReference SlotsProperty { get; internal set; }
+        public BlueprintFeatureReference ManeuverSlotsAtLevel1Feature { get; internal set; }
 
         #endregion
 
@@ -83,7 +76,22 @@ namespace TheInfiniteCrusade.Defines
             this.maneuverBookType = maneuverBookType;
         }
 
-       public void LoadDefaultArchetypeProgression()
+        public void MakeStandardRecovery(string name, string desc, Sprite sprite = null)
+        {
+            StandardRecovery = new ClassRecoveryDefine(RecoveryAction.Standard, name, desc, sprite);
+
+        }
+        public void MakeSwiftRecovery(string name, string desc, Sprite sprite = null)
+        {
+            SwiftRecovery = new ClassRecoveryDefine(RecoveryAction.Swift, name, desc, sprite);
+
+        }
+        public void MakeFullRecovery(string name, string desc, Sprite sprite = null)
+        {
+            FullRoundRecovery = new ClassRecoveryDefine(RecoveryAction.FullRound, name, desc, sprite);
+
+        }
+        public void LoadDefaultArchetypeProgression()
         {
             if (GrantedType)
             {
@@ -102,7 +110,51 @@ namespace TheInfiniteCrusade.Defines
            
         }
 
+        public class ClassRecoveryDefine
+        {
+            public readonly RecoveryAction recoveryAction;
+            public Sprite Sprite;
+            public string Name;
+            public string Desc;
+            public readonly bool AddToProgression;
+            public readonly bool NeedsBuff;
+            public AbilityType AbilityType;
 
+            public BlueprintFeatureReference m_RestoreFeature;
+            public BlueprintAbilityReference m_RestoreAction;
+            public BlueprintBuffReference m_RestoreBuff;
+            public ClassRecoveryDefine(RecoveryAction r, string name, string desc, bool? manuallySetBuff = null, AbilityType type = AbilityType.Extraordinary, Sprite sprite = null)
+            {
+                recoveryAction = r;
+                Name = name;
+                Desc = desc;
+                Sprite = sprite;
+                AbilityType = type;
+                if (recoveryAction == RecoveryAction.Swift)
+                {
+                    NeedsBuff = true;//COOLDOWN IS MANDATORY
+                }
+                if (manuallySetBuff.HasValue)
+                    NeedsBuff = manuallySetBuff.Value;
+                else if (recoveryAction == RecoveryAction.FullRound)
+                {
+                    NeedsBuff = true;
+                }
+                else
+                {
+                    NeedsBuff = false;
+                }
+            }
+
+        }
+        public enum RecoveryAction
+        {
+            Swift,
+            Standard,
+            FullRound
+                
+        }
+        
       
 
     }
