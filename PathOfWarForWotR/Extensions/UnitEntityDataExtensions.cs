@@ -3,10 +3,10 @@ using JetBrains.Annotations;
 using Kingmaker.EntitySystem.Entities;
 using Kingmaker.UnitLogic;
 using System.Collections.Generic;
-using TheInfiniteCrusade.Backend.NewBlueprints;
-using TheInfiniteCrusade.Backend.NewUnitDataClasses;
+using PathOfWarForWotR.Backend.NewBlueprints;
+using PathOfWarForWotR.Backend.NewUnitDataClasses;
 
-namespace TheInfiniteCrusade.Extensions
+namespace PathOfWarForWotR.Extensions
 {
     public static class UnitEntityDataExtensions
     {

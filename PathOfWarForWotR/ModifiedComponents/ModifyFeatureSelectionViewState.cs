@@ -3,10 +3,10 @@ using Kingmaker;
 using Kingmaker.Blueprints;
 using Kingmaker.Blueprints.Classes.Selection;
 using Kingmaker.UnitLogic.Class.LevelUp;
-using TheInfiniteCrusade.Backend.NewComponents;
-using TheInfiniteCrusade.Backend.NewUnitParts;
+using PathOfWarForWotR.Backend.NewComponents;
+using PathOfWarForWotR.Backend.NewUnitParts;
 
-namespace TheInfiniteCrusade.ModifiedComponents
+namespace PathOfWarForWotR.ModifiedComponents
 {
     class ModifyFeatureSelectionViewState
     {

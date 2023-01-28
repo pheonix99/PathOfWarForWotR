@@ -7,7 +7,7 @@ using Kingmaker.UnitLogic;
 using Kingmaker.UnitLogic.Class.LevelUp;
 using System.Linq;
 
-namespace TheInfiniteCrusade.Backend.NewComponents
+namespace PathOfWarForWotR.Backend.NewComponents
 {
     public class AddFactOnlyParty : UnitFactComponentDelegate, IUnitLevelUpHandler
     {

@@ -2,10 +2,10 @@
 using Kingmaker.Blueprints;
 using Kingmaker.RuleSystem;
 using Kingmaker.RuleSystem.Rules.Abilities;
-using TheInfiniteCrusade.Backend.NewComponents.ManeuverBookSystem;
-using TheInfiniteCrusade.Backend.NewUnitParts;
+using PathOfWarForWotR.Backend.NewComponents.ManeuverBookSystem;
+using PathOfWarForWotR.Backend.NewUnitParts;
 
-namespace TheInfiniteCrusade.ModifiedComponents
+namespace PathOfWarForWotR.ModifiedComponents
 {
     class PatchRuleCalculateAbilityParams
     {

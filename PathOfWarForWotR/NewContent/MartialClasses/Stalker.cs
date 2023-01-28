@@ -1,4 +1,4 @@
-﻿namespace TheInfiniteCrusade.NewContent.MartialClassses
+﻿namespace PathOfWarForWotR.NewContent.MartialClassses
 {
     class Stalker
     {

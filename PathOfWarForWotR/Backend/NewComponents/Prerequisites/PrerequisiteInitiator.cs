@@ -3,9 +3,9 @@ using Kingmaker.Blueprints.Classes.Prerequisites;
 using Kingmaker.UnitLogic;
 using Kingmaker.UnitLogic.Class.LevelUp;
 using System.Linq;
-using TheInfiniteCrusade.Extensions;
+using PathOfWarForWotR.Extensions;
 
-namespace TheInfiniteCrusade.Backend.NewComponents.Prerequisites
+namespace PathOfWarForWotR.Backend.NewComponents.Prerequisites
 {
     class PrerequisiteInitiator : Prerequisite
     {

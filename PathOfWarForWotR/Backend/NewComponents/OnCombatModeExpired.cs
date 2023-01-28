@@ -1,9 +1,9 @@
 ﻿using Kingmaker.PubSubSystem;
 using Kingmaker.UnitLogic.Buffs.Components;
-using TheInfiniteCrusade.Backend.NewEvents;
+using PathOfWarForWotR.Backend.NewEvents;
 
 
-namespace TheInfiniteCrusade.Backend.NewComponents
+namespace PathOfWarForWotR.Backend.NewComponents
 {
     class OnCombatModeExpired : UnitBuffComponentDelegate
     {

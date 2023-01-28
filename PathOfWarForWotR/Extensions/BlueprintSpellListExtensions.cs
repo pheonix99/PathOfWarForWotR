@@ -3,7 +3,7 @@ using Kingmaker.UnitLogic.Abilities.Blueprints;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace TheInfiniteCrusade.Extensions
+namespace PathOfWarForWotR.Extensions
 {
     public static class BlueprintSpellListExtensions
     {

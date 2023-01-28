@@ -8,7 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace TheInfiniteCrusade.Backend.NewActions
+namespace PathOfWarForWotR.Backend.NewActions
 {
     class ContextActionWhirlwind : ContextAction
     {

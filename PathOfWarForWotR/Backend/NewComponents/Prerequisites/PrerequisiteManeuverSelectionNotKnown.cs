@@ -4,9 +4,9 @@ using Kingmaker.Blueprints.Classes.Prerequisites;
 using Kingmaker.Blueprints.Classes.Selection;
 using Kingmaker.UnitLogic;
 using Kingmaker.UnitLogic.Class.LevelUp;
-using TheInfiniteCrusade.Backend.NewUnitParts;
+using PathOfWarForWotR.Backend.NewUnitParts;
 
-namespace TheInfiniteCrusade.Backend.NewComponents.Prerequisites
+namespace PathOfWarForWotR.Backend.NewComponents.Prerequisites
 {
     class PrerequisiteManeuverSelectionNotKnown : Prerequisite
     {

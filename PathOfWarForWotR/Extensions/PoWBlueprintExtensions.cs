@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace TheInfiniteCrusade.Extensions
+namespace PathOfWarForWotR.Extensions
 {
     public static class PoWBlueprintExtensions
     {

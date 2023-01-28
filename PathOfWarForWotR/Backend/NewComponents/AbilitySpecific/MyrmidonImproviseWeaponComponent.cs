@@ -5,7 +5,7 @@ using Kingmaker.UnitLogic;
 using System.Linq;
 using TabletopTweaks.Core.Utilities;
 
-namespace TheInfiniteCrusade.Backend.NewComponents.AbilitySpecific
+namespace PathOfWarForWotR.Backend.NewComponents.AbilitySpecific
 {
     class MyrmidonImproviseWeaponComponent : UnitFactComponentDelegate, IInitiatorRulebookHandler<RuleCalculateAttackBonusWithoutTarget>, IRulebookHandler<RuleCalculateAttackBonusWithoutTarget>, ISubscriber, IInitiatorRulebookSubscriber
     {

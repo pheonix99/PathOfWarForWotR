@@ -8,10 +8,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using TheInfiniteCrusade.Backend.NewComponents.ManeuverBookSystem;
+using PathOfWarForWotR.Backend.NewComponents.ManeuverBookSystem;
 using static Kingmaker.UI.Context.MenuItem;
 
-namespace TheInfiniteCrusade.Backend.NewComponents.AbilitySpecific
+namespace PathOfWarForWotR.Backend.NewComponents.AbilitySpecific
 {
     [AllowedOn(typeof(BlueprintBuff), false)]
     class BronzeKnuckleComponent : UnitBuffComponentDelegate, ITargetRulebookHandler<RuleCalculateDamage>, IRulebookHandler<RuleCalculateDamage>, IInitiatorRulebookHandler<RulePrepareDamage>, IRulebookHandler<RulePrepareDamage>, ISubscriber, ITargetRulebookSubscriber

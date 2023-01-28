@@ -9,13 +9,13 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\TheInfiniteCrusade</OutputPath>
+    <OutputPath>bin\Debug\PathOfWarForWotR</OutputPath>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\TheInfiniteCrusade</OutputPath>
+    <OutputPath>bin\Debug\PathOfWarForWotR</OutputPath>
   </PropertyGroup>
 
 
@@ -60,12 +60,14 @@
   <ItemGroup>
     <None Remove="Config\Blueprints.json" />
     <None Remove="Localization\LocalizationPack.json" />
+    <None Remove="Localization\SilverCrane.json" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Config\Blueprints.json" />
     <EmbeddedResource Include="Localization\LocalizationPack.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </EmbeddedResource>
+    <EmbeddedResource Include="Localization\SilverCrane.json" />
   </ItemGroup>
 
 
@@ -82,6 +84,9 @@
       <HintPath>$(WrathPath)\Wrath_Data\Managed\Assembly-CSharp-firstpass.dll</HintPath>
     
       <EmbedInteropTypes>false</EmbedInteropTypes>
+    </Reference>
+    <Reference Include="AstarPathfindingProject">
+      <HintPath>..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\Pathfinder Second Adventure\Wrath_Data\Managed\AstarPathfindingProject.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json">
       <HintPath>$(WrathPath)\Wrath_Data\Managed\Newtonsoft.Json.dll</HintPath>
@@ -220,7 +225,7 @@
 
   <Target Name="Deploy" AfterTargets="Build">
     <ItemGroup>
-      <Assembly Include="$(OutputPath)\TheInfiniteCrusade.dll" />
+      <Assembly Include="$(OutputPath)\PathOfWarForWotR.dll" />
       <ModConfig Include="$(OutputPath)\Info.json" />
       <Localization Include="$(OutputPath)\Localization\LocalizationPack.json"></Localization>
       <Assets Include="$(OutputPath)\Assets\Fly.png" />

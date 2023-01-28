@@ -1,7 +1,7 @@
 ﻿using Kingmaker.EntitySystem.Entities;
 using Kingmaker.Items;
 
-namespace TheInfiniteCrusade.Backend.NewComponents.AbilityRestrictions
+namespace PathOfWarForWotR.Backend.NewComponents.AbilityRestrictions
 {
     class BrokenBladeDisciplineWeaponsOnlyRestriction : WeaponLimitingRestriction
     {

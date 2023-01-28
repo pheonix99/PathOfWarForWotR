@@ -1,9 +1,9 @@
 ﻿using HarmonyLib;
 using Kingmaker.Blueprints;
 using Kingmaker.UnitLogic.Abilities;
-using TheInfiniteCrusade.Backend.NewComponents.ManeuverBookSystem;
+using PathOfWarForWotR.Backend.NewComponents.ManeuverBookSystem;
 
-namespace TheInfiniteCrusade.ModifiedComponents
+namespace PathOfWarForWotR.ModifiedComponents
 {
     class HijackAbilityDataSpellLevel
     {

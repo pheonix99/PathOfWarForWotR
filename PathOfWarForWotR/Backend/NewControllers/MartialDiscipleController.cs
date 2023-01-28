@@ -7,10 +7,10 @@ using Kingmaker.UnitLogic;
 using Kingmaker.UnitLogic.Buffs.Blueprints;
 using Kingmaker.Utility;
 using TabletopTweaks.Core.Utilities;
-using TheInfiniteCrusade.Backend.NewEvents;
-using TheInfiniteCrusade.Extensions;
+using PathOfWarForWotR.Backend.NewEvents;
+using PathOfWarForWotR.Extensions;
 
-namespace TheInfiniteCrusade.Backend.NewControllers
+namespace PathOfWarForWotR.Backend.NewControllers
 {
     class MartialDiscipleController : IController, IUnitNewCombatRoundHandler, IUnitCombatHandler, IUnitRestHandler
     {

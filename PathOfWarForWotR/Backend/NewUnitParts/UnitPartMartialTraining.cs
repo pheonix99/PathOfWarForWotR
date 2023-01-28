@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace TheInfiniteCrusade.Backend.NewUnitParts
+namespace PathOfWarForWotR.Backend.NewUnitParts
 {
     class UnitPartMartialTraining : OldStyleUnitPart
     {

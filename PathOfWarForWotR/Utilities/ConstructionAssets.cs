@@ -3,7 +3,7 @@ using Kingmaker.Blueprints.Classes;
 using Kingmaker.Blueprints.Root;
 using UnityEngine;
 
-namespace TheInfiniteCrusade.Utilities
+namespace PathOfWarForWotR.Utilities
 {
     public static class ConstructionAssets
     {

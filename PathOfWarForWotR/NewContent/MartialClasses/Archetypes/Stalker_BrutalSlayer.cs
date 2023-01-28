@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace TheInfiniteCrusade.NewContent.MartialClasses.Archetypes
+namespace PathOfWarForWotR.NewContent.MartialClasses.Archetypes
 {
     class Stalker_BrutalSlayer
     {

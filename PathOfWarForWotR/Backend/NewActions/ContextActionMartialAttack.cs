@@ -17,12 +17,12 @@ using Owlcat.Runtime.Core.Utils;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using TheInfiniteCrusade.Backend.NewComponents.AbilityRestrictions;
-using TheInfiniteCrusade.Backend.NewComponents.MartialAttackComponents;
+using PathOfWarForWotR.Backend.NewComponents.AbilityRestrictions;
+using PathOfWarForWotR.Backend.NewComponents.MartialAttackComponents;
 
-namespace TheInfiniteCrusade.Backend.NewActions
+namespace PathOfWarForWotR.Backend.NewActions
 {
-    class ContextActionMartialAttack : ContextAction
+    public class ContextActionMartialAttack : ContextAction
     {
         public override string GetCaption()
         {

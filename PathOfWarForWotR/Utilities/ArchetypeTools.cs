@@ -7,10 +7,10 @@ using Kingmaker.Localization;
 using System.Collections.Generic;
 using System.Linq;
 using TabletopTweaks.Core.ModLogic;
-using TheInfiniteCrusade.Backend.NewComponents.ModifyArchetypesSmartly;
+using PathOfWarForWotR.Backend.NewComponents.ModifyArchetypesSmartly;
 using UnityEngine;
 
-namespace TheInfiniteCrusade.Utilities
+namespace PathOfWarForWotR.Utilities
 {
     public static class ArchetypeTools
     {

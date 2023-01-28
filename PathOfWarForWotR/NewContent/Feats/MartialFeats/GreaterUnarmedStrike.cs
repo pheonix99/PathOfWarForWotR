@@ -1,4 +1,4 @@
-﻿namespace TheInfiniteCrusade.NewContent.Feats.MartialFeats
+﻿namespace PathOfWarForWotR.NewContent.Feats.MartialFeats
 {
     class GreaterUnarmedStrike
     {

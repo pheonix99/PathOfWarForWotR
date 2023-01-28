@@ -5,11 +5,11 @@ using Kingmaker.Blueprints.Classes.Selection;
 using Kingmaker.UnitLogic;
 using Kingmaker.UnitLogic.Class.LevelUp;
 using System.Linq;
-using TheInfiniteCrusade.Backend.NewComponents.ManeuverBookSystem;
-using TheInfiniteCrusade.Backend.NewUnitParts;
-using TheInfiniteCrusade.Utilities;
+using PathOfWarForWotR.Backend.NewComponents.ManeuverBookSystem;
+using PathOfWarForWotR.Backend.NewUnitParts;
+using PathOfWarForWotR.Utilities;
 
-namespace TheInfiniteCrusade.Backend.NewComponents.Prerequisites
+namespace PathOfWarForWotR.Backend.NewComponents.Prerequisites
 {
     public class PrerequisiteManeuverSelectionDisciplineAccess : Prerequisite
     {

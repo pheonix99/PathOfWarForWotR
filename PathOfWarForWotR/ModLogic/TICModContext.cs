@@ -1,7 +1,7 @@
 ﻿using TabletopTweaks.Core.ModLogic;
 using UnityModManagerNet;
 
-namespace TheInfiniteCrusade.ModLogic
+namespace PathOfWarForWotR.ModLogic
 {
     class TICModContext : ModContextBase
     {
@@ -15,8 +15,8 @@ namespace TheInfiniteCrusade.ModLogic
 
         public override void LoadAllSettings()
         {
-            LoadBlueprints("TheInfiniteCrusade.Config", this);
-            LoadLocalization("TheInfiniteCrusade.Localization");
+            LoadBlueprints("PathOfWarForWotR.Config", this);
+            LoadLocalization("PathOfWarForWotR.Localization");
 
         }
 

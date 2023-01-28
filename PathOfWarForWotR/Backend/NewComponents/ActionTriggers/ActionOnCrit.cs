@@ -11,7 +11,7 @@ using Kingmaker.UnitLogic.Mechanics;
 using Kingmaker.UnitLogic.Mechanics.ContextData;
 using System.Linq;
 
-namespace TheInfiniteCrusade.Backend.NewComponents.ActionTriggers
+namespace PathOfWarForWotR.Backend.NewComponents.ActionTriggers
 {
     [AllowMultipleComponents]
     [AllowedOn(typeof(BlueprintUnitFact), false)]

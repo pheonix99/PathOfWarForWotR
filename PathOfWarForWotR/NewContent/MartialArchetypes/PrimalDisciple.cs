@@ -4,11 +4,11 @@ using Kingmaker.Blueprints;
 using Kingmaker.Blueprints.Classes;
 using Kingmaker.Blueprints.Classes.Selection;
 using TabletopTweaks.Core.Utilities;
-using TheInfiniteCrusade.Backend.NewBlueprints;
-using TheInfiniteCrusade.Defines;
-using TheInfiniteCrusade.Utilities;
+using PathOfWarForWotR.Backend.NewBlueprints;
+using PathOfWarForWotR.Defines;
+using PathOfWarForWotR.Utilities;
 
-namespace TheInfiniteCrusade.NewContent.MartialArchetypes
+namespace PathOfWarForWotR.NewContent.MartialArchetypes
 {
     class PrimalDisciple
     {

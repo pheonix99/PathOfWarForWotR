@@ -11,14 +11,14 @@ using Kingmaker.UnitLogic.FactLogic;
 using Kingmaker.UnitLogic.Mechanics.Properties;
 using TabletopTweaks.Core.NewComponents.Properties;
 using TabletopTweaks.Core.Utilities;
-using TheInfiniteCrusade.Backend.NewActions;
-using TheInfiniteCrusade.Backend.NewBlueprints;
-using TheInfiniteCrusade.Backend.NewComponents;
-using TheInfiniteCrusade.Backend.NewComponents.ManeuverBookSystem;
-using TheInfiniteCrusade.Defines;
-using TheInfiniteCrusade.Utilities;
+using PathOfWarForWotR.Backend.NewActions;
+using PathOfWarForWotR.Backend.NewBlueprints;
+using PathOfWarForWotR.Backend.NewComponents;
+using PathOfWarForWotR.Backend.NewComponents.ManeuverBookSystem;
+using PathOfWarForWotR.Defines;
+using PathOfWarForWotR.Utilities;
 
-namespace TheInfiniteCrusade.NewContent.Feats.MartialFeats
+namespace PathOfWarForWotR.NewContent.Feats.MartialFeats
 {
     class MartialTraining
     {
@@ -295,6 +295,8 @@ namespace TheInfiniteCrusade.NewContent.Feats.MartialFeats
             var level5 = MartialTraining5();
             BlueprintFeature MartialTraining5()
             {
+                
+
                 var featureConfig = MoreFeatTools.MakeFeature(Main.Context, "MartialTraining5Feature", "Martial Training V", "You may select two new maneuvers or one new maneuver and one new stance from your chosen discipline of up to 5th level, and you may ready an additional maneuver. You must meet the minimum initiator level to select any maneuver.", true, featureGroups: new FeatureGroup[] { FeatureGroup.CombatFeat, FeatureGroup.Feat });
                 featureConfig.AddPrerequisiteCharacterLevel(11);
                 featureConfig.AddComponent<AddMartialTrainingRankComponent>();

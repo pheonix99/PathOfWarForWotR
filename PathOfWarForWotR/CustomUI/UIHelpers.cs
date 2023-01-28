@@ -3,7 +3,7 @@ using Kingmaker.Utility;
 using System.Linq;
 using UnityEngine;
 
-namespace TheInfiniteCrusade.CustomUI
+namespace PathOfWarForWotR.CustomUI
 {
     public static class UIHelpers
     {

@@ -1,20 +1,27 @@
-﻿using Kingmaker.RuleSystem.Rules.Damage;
-using TheInfiniteCrusade.Utilities;
+﻿using Kingmaker.ElementsSystem;
+using Kingmaker.RuleSystem.Rules.Damage;
+using PathOfWarForWotR.Utilities;
 
-namespace TheInfiniteCrusade.Backend.NewComponents.MartialAttackComponents
+namespace PathOfWarForWotR.Backend.NewComponents.MartialAttackComponents
 {
-    class SilverCraneStrikeIncorporeal : AbstractMartialAttackWeaponModifier
+    class SilverCraneAntiFiendEffect : AbstractMartialAttackWeaponModifier
     {
+
+        private ConditionsChecker conditionChecker;
+        public SilverCraneAntiFiendEffect()
+        {
+            conditionChecker = ManeuverConfigurator.SilverCraneSpecialTarget().Build();
+        }
 
         public override void OnEventAboutToTrigger_RulePrepareDamage(RulePrepareDamage evt)
         {
-            var condition = ManeuverTools.SilverCraneSpecialTarget().Build();
+            
 
             if (evt.Target != null)
             {
                 using (evt.Reason.Context.GetDataScope(evt.Target))
                 {
-                    if (condition.Check())
+                    if (conditionChecker.Check())
                     {
                         evt.DamageBundle.WeaponDamage.Reality |= Kingmaker.Enums.Damage.DamageRealityType.Ghost;
                        

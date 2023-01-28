@@ -1,4 +1,4 @@
-﻿namespace TheInfiniteCrusade.NewContent.MartialArchetypes
+﻿namespace PathOfWarForWotR.NewContent.MartialArchetypes
 {
     class Rubato
     {

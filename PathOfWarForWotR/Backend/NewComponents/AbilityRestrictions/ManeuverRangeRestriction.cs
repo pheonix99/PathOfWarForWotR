@@ -2,7 +2,7 @@
 using Kingmaker.EntitySystem.Entities;
 using Kingmaker.UnitLogic.Abilities.Components.Base;
 
-namespace TheInfiniteCrusade.Backend.NewComponents.AbilityRestrictions
+namespace PathOfWarForWotR.Backend.NewComponents.AbilityRestrictions
 {
     public class ManeuverRangeRestriction : BlueprintComponent, IAbilityCasterRestriction
     {

@@ -2,9 +2,9 @@
 using Kingmaker.Blueprints;
 using Kingmaker.EntitySystem.Entities;
 using Kingmaker.UnitLogic;
-using TheInfiniteCrusade.Backend.NewUnitDataClasses;
+using PathOfWarForWotR.Backend.NewUnitDataClasses;
 
-namespace TheInfiniteCrusade.Extensions
+namespace PathOfWarForWotR.Extensions
 {
     public static class UnitHelperExtensions
     {

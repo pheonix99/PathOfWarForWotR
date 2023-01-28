@@ -9,10 +9,10 @@ using Kingmaker.Blueprints.Classes.Selection;
 using Kingmaker.Localization;
 using System.Linq;
 using TabletopTweaks.Core.ModLogic;
-using TheInfiniteCrusade.Backend.NewComponents;
+using PathOfWarForWotR.Backend.NewComponents;
 using UnityEngine;
 
-namespace TheInfiniteCrusade.Utilities
+namespace PathOfWarForWotR.Utilities
 {
     public static class MoreFeatTools
     {

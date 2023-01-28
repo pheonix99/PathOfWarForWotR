@@ -6,9 +6,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using TheInfiniteCrusade.Backend.NewUnitParts;
+using PathOfWarForWotR.Backend.NewUnitParts;
 
-namespace TheInfiniteCrusade.Backend.NewComponents.Properties
+namespace PathOfWarForWotR.Backend.NewComponents.Properties
 {
     class MartialTrainingInitiatorLevelPropertyGetter : PropertyValueGetter
     {

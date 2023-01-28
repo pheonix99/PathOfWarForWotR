@@ -6,11 +6,11 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using TheInfiniteCrusade.Backend.NewBlueprints;
-using TheInfiniteCrusade.Backend.NewUnitParts;
+using PathOfWarForWotR.Backend.NewBlueprints;
+using PathOfWarForWotR.Backend.NewUnitParts;
 
 
-namespace TheInfiniteCrusade.Serialization
+namespace PathOfWarForWotR.Serialization
 {
     class ManeuverBookStorage
     {

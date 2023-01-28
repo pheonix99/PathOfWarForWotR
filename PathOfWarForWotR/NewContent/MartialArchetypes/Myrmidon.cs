@@ -3,17 +3,17 @@ using Kingmaker.Blueprints;
 using Kingmaker.Blueprints.Classes;
 using Kingmaker.Designers.Mechanics.Facts;
 using Kingmaker.UnitLogic.FactLogic;
-using TheInfiniteCrusade.Utilities;
+using PathOfWarForWotR.Utilities;
 using System.Linq;
 using TabletopTweaks.Core.Utilities;
 using Kingmaker.UnitLogic.Buffs.Blueprints;
 using Kingmaker.UnitLogic.Abilities.Blueprints;
 using Kingmaker.UnitLogic.Abilities.Components;
-using TheInfiniteCrusade.Defines;
-using TheInfiniteCrusade.Backend.NewComponents.AbilitySpecific;
-using TheInfiniteCrusade.Backend.NewActions;
-using TheInfiniteCrusade.Backend.NewBlueprints;
-using TheInfiniteCrusade.Backend.NewComponents.ActionTriggers;
+using PathOfWarForWotR.Defines;
+using PathOfWarForWotR.Backend.NewComponents.AbilitySpecific;
+using PathOfWarForWotR.Backend.NewActions;
+using PathOfWarForWotR.Backend.NewBlueprints;
+using PathOfWarForWotR.Backend.NewComponents.ActionTriggers;
 using BlueprintCore.Actions.Builder;
 using BlueprintCore.Actions.Builder.ContextEx;
 using BlueprintCore.Utils.Types;
@@ -26,7 +26,7 @@ using BlueprintCore.Blueprints.CustomConfigurators.Classes;
 using Kingmaker.ElementsSystem;
 using Kingmaker.Designers.EventConditionActionSystem.Evaluators;
 
-namespace TheInfiniteCrusade.NewContent.MartialArchetypes
+namespace PathOfWarForWotR.NewContent.MartialArchetypes
 {
     class Myrmidon
     {

@@ -16,14 +16,14 @@ using System.Collections.Generic;
 using System.Linq;
 using TabletopTweaks.Core.NewComponents.Properties;
 using TabletopTweaks.Core.Utilities;
-using TheInfiniteCrusade.Backend.NewActions;
-using TheInfiniteCrusade.Backend.NewBlueprints;
-using TheInfiniteCrusade.Backend.NewComponents;
-using TheInfiniteCrusade.Backend.NewComponents.ManeuverBookSystem;
-using TheInfiniteCrusade.Backend.NewComponents.Properties;
-using TheInfiniteCrusade.Defines;
+using PathOfWarForWotR.Backend.NewActions;
+using PathOfWarForWotR.Backend.NewBlueprints;
+using PathOfWarForWotR.Backend.NewComponents;
+using PathOfWarForWotR.Backend.NewComponents.ManeuverBookSystem;
+using PathOfWarForWotR.Backend.NewComponents.Properties;
+using PathOfWarForWotR.Defines;
 
-namespace TheInfiniteCrusade.Utilities
+namespace PathOfWarForWotR.Utilities
 {
     public static class ProcessProgressionDefinition
     {

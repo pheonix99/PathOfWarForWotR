@@ -5,9 +5,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using TheInfiniteCrusade.Utilities;
+using PathOfWarForWotR.Utilities;
 
-namespace TheInfiniteCrusade.NewContent.Resources
+namespace PathOfWarForWotR.NewContent.Resources
 {
     class Animus
     {

@@ -4,7 +4,7 @@ using Kingmaker.Localization;
 using Kingmaker.UI;
 using UnityEngine;
 
-namespace TheInfiniteCrusade.Backend.NewBlueprints
+namespace PathOfWarForWotR.Backend.NewBlueprints
 {
     public class BlueprintManeuverBook : BlueprintScriptableObject, IUIDataProvider
     {

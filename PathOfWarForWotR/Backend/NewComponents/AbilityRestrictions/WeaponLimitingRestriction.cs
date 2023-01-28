@@ -1,7 +1,7 @@
 ﻿using Kingmaker.EntitySystem.Entities;
 
 
-namespace TheInfiniteCrusade.Backend.NewComponents.AbilityRestrictions
+namespace PathOfWarForWotR.Backend.NewComponents.AbilityRestrictions
 {
     public abstract class WeaponLimitingRestriction : AbstractMartialAbilityRestriction
     {

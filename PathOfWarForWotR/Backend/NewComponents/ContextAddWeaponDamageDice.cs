@@ -7,9 +7,9 @@ using Kingmaker.UnitLogic;
 using Kingmaker.UnitLogic.Buffs.Blueprints;
 using Kingmaker.UnitLogic.Mechanics;
 using System.Linq;
-using TheInfiniteCrusade.Backend.NewUnitParts;
+using PathOfWarForWotR.Backend.NewUnitParts;
 
-namespace TheInfiniteCrusade.Backend.NewComponents
+namespace PathOfWarForWotR.Backend.NewComponents
 {
     [AllowedOn(typeof(BlueprintBuff))]
     class ContextAddWeaponDamageDice : UnitFactComponentDelegate, IInitiatorRulebookHandler<RuleCalculateWeaponStats>, IRulebookHandler<RuleCalculateWeaponStats>, ISubscriber, IInitiatorRulebookSubscriber

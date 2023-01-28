@@ -5,9 +5,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using TheInfiniteCrusade.Backend.NewUnitParts;
+using PathOfWarForWotR.Backend.NewUnitParts;
 
-namespace TheInfiniteCrusade.Backend.NewComponents.ManeuverBookSystem
+namespace PathOfWarForWotR.Backend.NewComponents.ManeuverBookSystem
 {
     class AddMartialTrainingRankComponent : UnitFactComponentDelegate, IGlobalSubscriber, ISubscriber
     {

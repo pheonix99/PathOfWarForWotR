@@ -1,6 +1,6 @@
 ﻿using Kingmaker.Blueprints;
 
-namespace TheInfiniteCrusade.Backend.NewBlueprints
+namespace PathOfWarForWotR.Backend.NewBlueprints
 {
     public class BlueprintManeuverBookReference : BlueprintReference<BlueprintManeuverBook>
     {

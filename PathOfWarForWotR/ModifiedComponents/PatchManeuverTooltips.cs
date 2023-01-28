@@ -1,4 +1,4 @@
-﻿namespace TheInfiniteCrusade.ModifiedComponents
+﻿namespace PathOfWarForWotR.ModifiedComponents
 {
     class PatchManeuverTooltips
     {

@@ -5,7 +5,7 @@ using Kingmaker.EntitySystem.Stats;
 using Kingmaker.Enums;
 using UnityEngine;
 
-namespace TheInfiniteCrusade.Defines
+namespace PathOfWarForWotR.Defines
 {
     public class DisciplineDefine
     {

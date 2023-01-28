@@ -1,11 +1,11 @@
 ﻿{
-  "Id": "TheInfiniteCrusade",
-  "DisplayName": "The Infinite Crusade",
-  "Author": "username",
-  "Version": "1.0.0",
+  "Id": "PathOfWarForWotR",
+  "DisplayName": "Path Of War",
+  "Author": "pheonix99",
+  "Version": "0.0.1",
   "ManagerVersion": "0.21.3",
-  "AssemblyName": "TheInfiniteCrusade.dll",
-  "EntryMethod": "TheInfiniteCrusade.Main.Load",
+  "AssemblyName": "PathOfWarForWotR.dll",
+  "EntryMethod": "PathOfWarForWotR.Main.Load",
   "Requirements": [ "TabletopTweaks-Core", "ResourceUnification" ],
   "LoadAfter": [ "TabletopTweaks-Core", "ResourceUnification" ]
 }

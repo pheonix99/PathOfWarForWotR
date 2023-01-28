@@ -1,9 +1,9 @@
 ﻿using Kingmaker.Blueprints;
 using TabletopTweaks.Core.NewComponents;
-using TheInfiniteCrusade.Backend.NewComponents;
-using TheInfiniteCrusade.Utilities;
+using PathOfWarForWotR.Backend.NewComponents;
+using PathOfWarForWotR.Utilities;
 
-namespace TheInfiniteCrusade.NewContent
+namespace PathOfWarForWotR.NewContent
 {
     class CommonBuffs
     {

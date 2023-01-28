@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.32602.291
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TheInfiniteCrusade", "PathOfWarForWotR\TheInfiniteCrusade.csproj", "{23EDC062-8F53-49B3-AF19-25FB5B61552F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PathOfWarForWotR", "PathOfWarForWotR\PathOfWarForWotR.csproj", "{23EDC062-8F53-49B3-AF19-25FB5B61552F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

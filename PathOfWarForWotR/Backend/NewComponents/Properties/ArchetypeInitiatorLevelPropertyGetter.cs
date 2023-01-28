@@ -3,7 +3,7 @@ using Kingmaker.EntitySystem.Entities;
 using Kingmaker.UnitLogic.Mechanics.Properties;
 using System.Linq;
 
-namespace TheInfiniteCrusade.Backend.NewComponents.Properties
+namespace PathOfWarForWotR.Backend.NewComponents.Properties
 {
     class ArchetypeInitiatorLevelPropertyGetter : PropertyValueGetter
     {

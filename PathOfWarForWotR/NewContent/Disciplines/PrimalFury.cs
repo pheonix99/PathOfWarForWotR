@@ -5,14 +5,14 @@ using Kingmaker.UnitLogic.Abilities.Blueprints;
 using Kingmaker.UnitLogic.Buffs.Blueprints;
 using Kingmaker.UnitLogic.FactLogic;
 using TabletopTweaks.Core.Utilities;
-using TheInfiniteCrusade.Utilities;
+using PathOfWarForWotR.Utilities;
 using UnityEngine;
 using Kingmaker.UnitLogic.Mechanics;
-using TheInfiniteCrusade.Backend.NewActions;
-using TheInfiniteCrusade.Backend.NewComponents.AbilityRestrictions;
-using TheInfiniteCrusade.Backend.NewComponents.MartialAttackComponents;
+using PathOfWarForWotR.Backend.NewActions;
+using PathOfWarForWotR.Backend.NewComponents.AbilityRestrictions;
+using PathOfWarForWotR.Backend.NewComponents.MartialAttackComponents;
 
-namespace TheInfiniteCrusade.NewContent.Disciplines
+namespace PathOfWarForWotR.NewContent.Disciplines
 {
     class PrimalFury
     {

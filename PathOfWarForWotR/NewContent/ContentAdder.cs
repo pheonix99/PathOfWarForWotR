@@ -1,11 +1,11 @@
 ﻿using HarmonyLib;
 using Kingmaker.Blueprints.JsonSystem;
 using System;
-using TheInfiniteCrusade.NewContent.MartialClasses;
-using TheInfiniteCrusade.NewContent.MartialSystem;
-using TheInfiniteCrusade.Utilities;
+using PathOfWarForWotR.NewContent.MartialClasses;
+using PathOfWarForWotR.NewContent.MartialSystem;
+using PathOfWarForWotR.Utilities;
 
-namespace TheInfiniteCrusade.NewContent
+namespace PathOfWarForWotR.NewContent
 {
     class ContentAdder
     {

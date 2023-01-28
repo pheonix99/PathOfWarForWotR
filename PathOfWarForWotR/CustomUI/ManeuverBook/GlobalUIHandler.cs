@@ -1,7 +1,7 @@
 ﻿using Kingmaker.PubSubSystem;
 using System;
 
-namespace TheInfiniteCrusade.CustomUI.ManeuverBook
+namespace PathOfWarForWotR.CustomUI.ManeuverBook
 {
     class GlobalUIHandler
     {

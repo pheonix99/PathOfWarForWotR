@@ -1,4 +1,4 @@
-﻿namespace TheInfiniteCrusade.Utilities
+﻿namespace PathOfWarForWotR.Utilities
 {
     class Makers
     {

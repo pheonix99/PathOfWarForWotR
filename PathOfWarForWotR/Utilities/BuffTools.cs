@@ -5,7 +5,7 @@ using Kingmaker.UnitLogic.Buffs.Blueprints;
 using TabletopTweaks.Core.ModLogic;
 using UnityEngine;
 
-namespace TheInfiniteCrusade.Utilities
+namespace PathOfWarForWotR.Utilities
 {
     public static class BuffTools
     {

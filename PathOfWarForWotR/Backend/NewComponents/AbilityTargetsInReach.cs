@@ -5,7 +5,7 @@ using Kingmaker.UnitLogic.Abilities.Blueprints;
 using Kingmaker.UnitLogic.Abilities.Components;
 using Kingmaker.Utility;
 
-namespace TheInfiniteCrusade.Backend.NewComponents
+namespace PathOfWarForWotR.Backend.NewComponents
 {
     [AllowedOn(typeof(BlueprintAbility))]
     class AbilityTargetsInReach : UnitFactComponentDelegate

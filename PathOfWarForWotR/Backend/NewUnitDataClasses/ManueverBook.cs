@@ -9,14 +9,14 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using TabletopTweaks.Core.Utilities;
-using TheInfiniteCrusade.Backend.NewBlueprints;
-using TheInfiniteCrusade.Backend.NewComponents;
-using TheInfiniteCrusade.Backend.NewComponents.ManeuverBookSystem;
-using TheInfiniteCrusade.Backend.NewUnitParts;
-using TheInfiniteCrusade.Extensions;
-using TheInfiniteCrusade.Serialization;
+using PathOfWarForWotR.Backend.NewBlueprints;
+using PathOfWarForWotR.Backend.NewComponents;
+using PathOfWarForWotR.Backend.NewComponents.ManeuverBookSystem;
+using PathOfWarForWotR.Backend.NewUnitParts;
+using PathOfWarForWotR.Extensions;
+using PathOfWarForWotR.Serialization;
 
-namespace TheInfiniteCrusade.Backend.NewUnitDataClasses
+namespace PathOfWarForWotR.Backend.NewUnitDataClasses
 {
     public class ManeuverBook : IDisposable
     {

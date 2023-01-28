@@ -3,7 +3,7 @@ using Kingmaker.UnitLogic;
 using Newtonsoft.Json;
 using System.Collections.Generic;
 
-namespace TheInfiniteCrusade.Backend.NewUnitParts
+namespace PathOfWarForWotR.Backend.NewUnitParts
 {
     class AllLevelsSpellSlotShiftPart : OldStyleUnitPart
     {

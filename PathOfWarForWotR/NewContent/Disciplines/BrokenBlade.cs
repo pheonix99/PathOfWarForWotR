@@ -1,5 +1,5 @@
 ﻿using Kingmaker.Blueprints.Classes;
-using TheInfiniteCrusade.Utilities;
+using PathOfWarForWotR.Utilities;
 using TabletopTweaks.Core.Utilities;
 using TabletopTweaks.Core.ModLogic;
 using UnityEngine;
@@ -13,12 +13,12 @@ using Kingmaker.Designers.Mechanics.Buffs;
 using Kingmaker.UnitLogic.Buffs.Blueprints;
 using Kingmaker.UnitLogic.Mechanics;
 using Kingmaker.RuleSystem.Rules;
-using TheInfiniteCrusade.Backend.NewActions;
-using TheInfiniteCrusade.Backend.NewComponents.AbilityRestrictions;
-using TheInfiniteCrusade.Backend.NewComponents.MartialAttackComponents;
-using TheInfiniteCrusade.Backend.NewComponents.AbilitySpecific;
+using PathOfWarForWotR.Backend.NewActions;
+using PathOfWarForWotR.Backend.NewComponents.AbilityRestrictions;
+using PathOfWarForWotR.Backend.NewComponents.MartialAttackComponents;
+using PathOfWarForWotR.Backend.NewComponents.AbilitySpecific;
 
-namespace TheInfiniteCrusade.NewContent.Disciplines
+namespace PathOfWarForWotR.NewContent.Disciplines
 {
     public static class BrokenBlade
     {
@@ -33,6 +33,8 @@ namespace TheInfiniteCrusade.NewContent.Disciplines
             IronHandStance();
             void IronHandStance()
             {
+                
+
                 var IronHandStance = ManeuverTools.MakeSimpleStatUpStance(Main.Context, "IronHandStance", "Iron Hand Stance", "By keeping his hands stiff and his arms loose and ready, the disciple uses his bare palms as shields to protect himself from the weapons of his foes. While in this stance, the initiator gains a +2 shield bonus to his AC while he has at least one free hand. At the initiator’s 6th initiator level, this bonus increases by +1, again at 12th level, and a final time at 18th level.", 1, brokenBlade, Kingmaker.EntitySystem.Stats.StatType.AC, Kingmaker.Enums.ModifierDescriptor.Shield, 2, 6, out var IHSbuff);
                 IronHandStance.SetLocalizedDuration(Main.Context, "");
                 IronHandStance.SetLocalizedSavingThrow(Main.Context, "");

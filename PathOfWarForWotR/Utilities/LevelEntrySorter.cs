@@ -1,6 +1,6 @@
 ﻿using Kingmaker.Blueprints.Classes;
 
-namespace TheInfiniteCrusade.Utilities
+namespace PathOfWarForWotR.Utilities
 {
     public static class LevelEntrySorter 
     {

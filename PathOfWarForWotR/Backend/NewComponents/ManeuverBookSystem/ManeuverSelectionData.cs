@@ -1,4 +1,4 @@
-﻿namespace TheInfiniteCrusade.Backend.NewComponents.ManeuverBookSystem
+﻿namespace PathOfWarForWotR.Backend.NewComponents.ManeuverBookSystem
 {
     internal class ManeuverSelectionData
     {

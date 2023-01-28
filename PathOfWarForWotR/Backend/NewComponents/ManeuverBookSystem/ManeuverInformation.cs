@@ -3,9 +3,9 @@ using Kingmaker.UnitLogic;
 using Kingmaker.UnitLogic.Abilities.Blueprints;
 using Kingmaker.UnitLogic.Buffs.Blueprints;
 using System.Text;
-using TheInfiniteCrusade.Utilities;
+using PathOfWarForWotR.Utilities;
 
-namespace TheInfiniteCrusade.Backend.NewComponents.ManeuverBookSystem
+namespace PathOfWarForWotR.Backend.NewComponents.ManeuverBookSystem
 {
     [AllowedOn(typeof(BlueprintBuff))]
     [AllowedOn(typeof(BlueprintAbility))]

@@ -2,11 +2,11 @@
 using Kingmaker.UnitLogic.Abilities;
 using Kingmaker.UnitLogic.Abilities.Components.Base;
 using Kingmaker.Utility;
-using TheInfiniteCrusade.Backend.NewBlueprints;
-using TheInfiniteCrusade.Backend.NewUnitParts;
-using TheInfiniteCrusade.Extensions;
+using PathOfWarForWotR.Backend.NewBlueprints;
+using PathOfWarForWotR.Backend.NewUnitParts;
+using PathOfWarForWotR.Extensions;
 
-namespace TheInfiniteCrusade.Backend.NewActions
+namespace PathOfWarForWotR.Backend.NewActions
 {
     class RecoverSelectedManeuver : AbilityApplyEffect, IAbilityRestriction, IAbilityRequiredParameters
     {

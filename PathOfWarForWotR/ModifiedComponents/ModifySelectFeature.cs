@@ -4,10 +4,10 @@ using Kingmaker.Blueprints.Classes.Selection;
 using Kingmaker.UnitLogic;
 using Kingmaker.UnitLogic.Class.LevelUp;
 using Kingmaker.UnitLogic.Class.LevelUp.Actions;
-using TheInfiniteCrusade.Backend.NewComponents;
-using TheInfiniteCrusade.Extensions;
+using PathOfWarForWotR.Backend.NewComponents;
+using PathOfWarForWotR.Extensions;
 
-namespace TheInfiniteCrusade.ModifiedComponents
+namespace PathOfWarForWotR.ModifiedComponents
 {
     class ModifySelectFeature
     {

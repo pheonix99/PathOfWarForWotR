@@ -5,9 +5,9 @@ using Kingmaker.UnitLogic;
 using Kingmaker.UnitLogic.Abilities.Blueprints;
 using System.Collections.Generic;
 using System.Linq;
-using TheInfiniteCrusade.Backend.NewComponents.ManeuverBookSystem;
+using PathOfWarForWotR.Backend.NewComponents.ManeuverBookSystem;
 
-namespace TheInfiniteCrusade.Backend.NewUnitParts
+namespace PathOfWarForWotR.Backend.NewUnitParts
 {
     public class UnitPartManeuverVariableTypeDamage : OldStyleUnitPart
     {

@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 using TabletopTweaks.Core.ModLogic;
 using static Kingmaker.UnitLogic.Commands.Base.UnitCommand;
 
-namespace TheInfiniteCrusade.Utilities
+namespace PathOfWarForWotR.Utilities
 {
     class AbilityTools
     {

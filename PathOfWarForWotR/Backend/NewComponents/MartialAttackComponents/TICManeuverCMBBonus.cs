@@ -4,7 +4,7 @@ using Kingmaker.RuleSystem.Rules;
 using Kingmaker.UnitLogic.Abilities.Blueprints;
 using System.Collections.Generic;
 
-namespace TheInfiniteCrusade.Backend.NewComponents.MartialAttackComponents
+namespace PathOfWarForWotR.Backend.NewComponents.MartialAttackComponents
 {
     [AllowedOn(typeof(BlueprintAbility))]
     class TICManeuverCMBBonus : BlueprintComponent

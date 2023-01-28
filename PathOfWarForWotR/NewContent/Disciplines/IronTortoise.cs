@@ -4,11 +4,11 @@ using Kingmaker.UnitLogic.Abilities.Blueprints;
 using Kingmaker.UnitLogic.ActivatableAbilities;
 using System.Collections.Generic;
 using TabletopTweaks.Core.Utilities;
-using TheInfiniteCrusade.Backend.NewComponents.AbilityRestrictions;
-using TheInfiniteCrusade.Utilities;
+using PathOfWarForWotR.Backend.NewComponents.AbilityRestrictions;
+using PathOfWarForWotR.Utilities;
 using UnityEngine;
 
-namespace TheInfiniteCrusade.NewContent.Disciplines
+namespace PathOfWarForWotR.NewContent.Disciplines
 {
     class IronTortoise
     {

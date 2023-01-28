@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace TheInfiniteCrusade.Backend.NewComponents.MartialAttackComponents
+namespace PathOfWarForWotR.Backend.NewComponents.MartialAttackComponents
 {
     class AttackWithAdvantage : AbstractMartialAttackWeaponModifier
     {

@@ -1,10 +1,10 @@
 ﻿using Kingmaker.Blueprints;
 using Kingmaker.UnitLogic;
 using System.Linq;
-using TheInfiniteCrusade.Backend.NewBlueprints;
-using TheInfiniteCrusade.Backend.NewComponents;
+using PathOfWarForWotR.Backend.NewBlueprints;
+using PathOfWarForWotR.Backend.NewComponents;
 
-namespace TheInfiniteCrusade.Extensions
+namespace PathOfWarForWotR.Extensions
 {
     public static class ClassDataExtensions
     {

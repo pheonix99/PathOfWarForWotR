@@ -2,9 +2,9 @@
 using Kingmaker.Blueprints.Classes;
 using Kingmaker.UnitLogic;
 using System.Collections.Generic;
-using TheInfiniteCrusade.Backend.NewUnitParts;
+using PathOfWarForWotR.Backend.NewUnitParts;
 
-namespace TheInfiniteCrusade.Backend.NewComponents.ModifyArchetypesSmartly
+namespace PathOfWarForWotR.Backend.NewComponents.ModifyArchetypesSmartly
 {
     [AllowedOn(typeof(BlueprintFeature), false)]
 	public class AllLevelsSpellSlotShift : UnitFactComponentDelegate

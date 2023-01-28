@@ -16,9 +16,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using TheInfiniteCrusade.Extensions;
+using PathOfWarForWotR.Extensions;
 
-namespace TheInfiniteCrusade.Backend.NewActions
+namespace PathOfWarForWotR.Backend.NewActions
 {
     class SilverCraneSingleTargetHeal : ContextAction
     {

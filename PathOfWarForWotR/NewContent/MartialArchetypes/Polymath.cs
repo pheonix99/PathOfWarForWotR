@@ -8,12 +8,12 @@ using Kingmaker.Blueprints;
 using Kingmaker.Blueprints.Classes;
 using System.Collections.Generic;
 using System.Linq;
-using TheInfiniteCrusade.Defines;
-using TheInfiniteCrusade.Utilities;
+using PathOfWarForWotR.Defines;
+using PathOfWarForWotR.Utilities;
 using Kingmaker.UnitLogic.Mechanics;
 using BlueprintCore.Utils.Types;
 
-namespace TheInfiniteCrusade.NewContent.MartialArchetypes
+namespace PathOfWarForWotR.NewContent.MartialArchetypes
 {
     class Polymath
     {

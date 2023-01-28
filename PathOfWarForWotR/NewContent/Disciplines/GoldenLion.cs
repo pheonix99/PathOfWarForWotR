@@ -9,11 +9,11 @@ using Kingmaker.UnitLogic.Buffs.Blueprints;
 using Kingmaker.UnitLogic.FactLogic;
 using System;
 using TabletopTweaks.Core.Utilities;
-using TheInfiniteCrusade.Backend.NewComponents.ManeuverBookSystem;
-using TheInfiniteCrusade.Utilities;
+using PathOfWarForWotR.Backend.NewComponents.ManeuverBookSystem;
+using PathOfWarForWotR.Utilities;
 using UnityEngine;
 
-namespace TheInfiniteCrusade.NewContent.Disciplines
+namespace PathOfWarForWotR.NewContent.Disciplines
 {
     class GoldenLion
     {

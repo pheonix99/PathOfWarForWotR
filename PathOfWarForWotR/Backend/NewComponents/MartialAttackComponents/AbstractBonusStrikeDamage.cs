@@ -4,9 +4,9 @@ using Kingmaker.RuleSystem.Rules;
 using Kingmaker.RuleSystem.Rules.Damage;
 using Kingmaker.Utility;
 using System.Linq;
-using TheInfiniteCrusade.Backend.NewUnitParts;
+using PathOfWarForWotR.Backend.NewUnitParts;
 
-namespace TheInfiniteCrusade.Backend.NewComponents.MartialAttackComponents
+namespace PathOfWarForWotR.Backend.NewComponents.MartialAttackComponents
 {
     public abstract class AbstractBonusStrikeDamage : AbstractMartialAttackWeaponModifier
     {

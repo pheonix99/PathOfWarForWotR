@@ -3,7 +3,7 @@ using Kingmaker.RuleSystem.Rules;
 using Kingmaker.RuleSystem.Rules.Damage;
 using Kingmaker.UnitLogic.Abilities.Blueprints;
 
-namespace TheInfiniteCrusade.Backend.NewComponents.MartialAttackComponents
+namespace PathOfWarForWotR.Backend.NewComponents.MartialAttackComponents
 {
     [AllowMultipleComponents]
     [AllowedOn(typeof(BlueprintAbility), false)]

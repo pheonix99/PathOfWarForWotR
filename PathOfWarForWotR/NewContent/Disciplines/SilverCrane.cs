@@ -1,4 +1,5 @@
 ﻿using BlueprintCore.Actions.Builder;
+using BlueprintCore.Actions.Builder.ContextEx;
 using BlueprintCore.Utils.Types;
 using Kingmaker.Blueprints;
 using Kingmaker.Enums;
@@ -8,18 +9,29 @@ using Kingmaker.UnitLogic.Mechanics.Components;
 using Kingmaker.Utility;
 using System.Collections.Generic;
 using TabletopTweaks.Core.Utilities;
-using TheInfiniteCrusade.Backend.NewActions;
-using TheInfiniteCrusade.Backend.NewComponents.MartialAttackComponents;
-using TheInfiniteCrusade.Utilities;
+using PathOfWarForWotR.Backend.NewActions;
+using PathOfWarForWotR.Backend.NewComponents.MartialAttackComponents;
+using PathOfWarForWotR.Utilities;
+using BlueprintCore.Utils;
+using BlueprintCore.Blueprints.CustomConfigurators.UnitLogic.Buffs;
+using Kingmaker.UnitLogic.Buffs.Blueprints;
+using System.Linq;
+using Kingmaker.Designers.Mechanics.Facts;
+using Kingmaker.EntitySystem.Stats;
+using BlueprintCore.Conditions.Builder;
+using BlueprintCore.Conditions.Builder.ContextEx;
+using PathOfWarForWotR.Backend.NewComponents.ManeuverBookSystem;
+using PathOfWarForWotR.Backend.NewComponents.AbilityRestrictions;
+using PathOfWarForWotR.Backend.NewComponents.AbilitySpecific;
 
-namespace TheInfiniteCrusade.NewContent.Disciplines
+namespace PathOfWarForWotR.NewContent.Disciplines
 {
     class SilverCrane
     {
         public static void Build()
         {
             var wingsicon = AssetLoader.LoadInternal(Main.Context, "", "Fly.png");
-
+            LocalizationTool.LoadLocalizationPack("Mods\\PathOfWarForWotR\\Localization\\SilverCrane.json");
             DisciplineTools.AddDiscipline("SilverCrane", "Silver Crane", "Disciples of the Silver Crane are men and women for whom the power of the celestial and divine flow into the arts of their blade. The Silver Crane is a goodly discipline that is inspired by the teachings of celestials. It focuses on strong strikes designed to combat evil, celestial insights, and combat-predictions to defeat foes and enable the initiator and his allies to endure the hardships of battle against the forces of evil. Upon learning the art of Silver Crane, the disciple becomes in tune with the flows of the celestial realm, gaining heavenly insights into combat as if the angels themselves were granting insight to the warrior in battle. The Silver Crane discipline’s associated skill is Perception, and its associated weapon groups are bows, hammers, and spears.\n The discipline of Silver Crane is to be considered a supernatural discipline and all abilities within are considered supernatural abilities and follow the rules and restrictions of such. All abilities in this discipline carry the [good] descriptor. A character may always strike incorporeal foes as if they were corporea with strikes of this discipline.", new Kingmaker.Blueprints.Items.Weapons.WeaponFighterGroup[] { Kingmaker.Blueprints.Items.Weapons.WeaponFighterGroup.Bows, Kingmaker.Blueprints.Items.Weapons.WeaponFighterGroup.Spears, Kingmaker.Blueprints.Items.Weapons.WeaponFighterGroup.Hammers }, Kingmaker.EntitySystem.Stats.StatType.SkillPerception, wingsicon);
             DisciplineTools.Disciplines.TryGetValue("SilverCrane", out var silverCrane);
 
@@ -29,70 +41,85 @@ namespace TheInfiniteCrusade.NewContent.Disciplines
             FlashingWings();
             void FlashingWings()
             {
-                var strike = ManeuverTools.MakeStandardStrike(Main.Context, "FlashingWings", "Flashing Wings", "The flashing wings of the Silver Crane daze the foes of the martial disciple, burning their eyes with the light of Heaven. Make a melee attack and if successful, this attack inflicts an additional 1d4 points of damage and the target is dazzled for one round.", 1, silverCrane, extraDice: 1, diceSize: Kingmaker.RuleSystem.DiceType.D4, WeaponDamage: false, damageType: new Kingmaker.RuleSystem.Rules.Damage.DamageTypeDescription()
+                var strikeConfig = ManeuverConfigurator.NewStrike(Main.Context, "FlashingWings", silverCrane, 1, Kingmaker.UnitLogic.Commands.Base.UnitCommand.CommandType.Standard);
+                strikeConfig.AddStrikeComponent();
+                strikeConfig.ApplyWeaponStrikeBits();
+                strikeConfig.AddFixedEnergyDamageToStrike(1, damageTypeDescription: new Kingmaker.RuleSystem.Rules.Damage.DamageTypeDescription()
                 {
                     Type = Kingmaker.RuleSystem.Rules.Damage.DamageType.Energy,
                     Energy = Kingmaker.Enums.Damage.DamageEnergyType.Holy
-                }, payload: ManeuverTools.ApplyBuff("df6d1025da07524429afbae248845ecc", ContextDuration.Fixed(1)));
-
-                ManeuverTools.FinishManeuver(strike, Main.Context);
+                }, diceType: Kingmaker.RuleSystem.DiceType.D4);
+                strikeConfig.AddPayload(ManeuverConfigurator.ApplyBuff("df6d1025da07524429afbae248845ecc", ContextDuration.Fixed(1)));
+                strikeConfig.AddComponent<SilverCraneAntiFiendEffect>();
+                strikeConfig.SetLocalizedDuration(BlueprintCore.Blueprints.CustomConfigurators.UnitLogic.Abilities.Duration.OneRound);
+                strikeConfig.ConfigureManeuver(Main.Context);
+                
             }
+
+            
 
             SilverCraneWaltz();
             void SilverCraneWaltz()
             {
-                var StanceOfTheDefendingShell = ManeuverTools.MakeSimpleStatUpStance(Main.Context, "SilverCraneWaltz", "Silver Crane Waltz", "The divine vantage point of the celestial realms infuses the mind of the disciple, granting him momentary flickers of foresight. A faint, ghostly image of wings is visible around the disciple but vanishes when he is looked upon directly. The initiator gains a +4 insight bonus to initiative checks if he is in this stance before combat begins, and a +2 insight bonus to Reflex saves and to AC. These bonuses increase by an additional +1 every eight levels after 1st level.", 1, silverCrane, Kingmaker.EntitySystem.Stats.StatType.AC, Kingmaker.Enums.ModifierDescriptor.Insight, 2, 8, out var IHSbuff);
-                IHSbuff.AddComponent<AddContextStatBonus>(x =>
+
+
+
+
+                var stanceConfig = ManeuverConfigurator.NewStance(Main.Context, "SilverCraneWaltz", silverCrane, 1, x =>
                 {
-                    x.Stat = Kingmaker.EntitySystem.Stats.StatType.SaveReflex;
-                    x.Descriptor = Kingmaker.Enums.ModifierDescriptor.Insight;
-                    x.Value = new Kingmaker.UnitLogic.Mechanics.ContextValue
+                    x.AddContextStatBonus(stat: Kingmaker.EntitySystem.Stats.StatType.SaveReflex, value: new Kingmaker.UnitLogic.Mechanics.ContextValue()
+                    {
+                        ValueType = Kingmaker.UnitLogic.Mechanics.ContextValueType.Rank,
+                        ValueRank = AbilityRankType.Default
+                        
+                    }, descriptor: ModifierDescriptor.Insight);
+                    x.AddContextStatBonus(stat: Kingmaker.EntitySystem.Stats.StatType.AC, value: new Kingmaker.UnitLogic.Mechanics.ContextValue()
+                    {
+                        ValueType = Kingmaker.UnitLogic.Mechanics.ContextValueType.Rank,
+                        ValueRank = AbilityRankType.Default
+
+                    }, descriptor: ModifierDescriptor.Insight);
+                    x.AddComponent<ContextRankConfig>(x => { x.MakeScalingConfig(AbilityRankType.Default, 2, 8); });
+                    x.AddContextStatBonus(stat: Kingmaker.EntitySystem.Stats.StatType.Initiative, value: new Kingmaker.UnitLogic.Mechanics.ContextValue()
                     {
                         ValueType = Kingmaker.UnitLogic.Mechanics.ContextValueType.Rank,
                         ValueRank = AbilityRankType.DamageBonus
 
-                    };
-
+                    }, descriptor: ModifierDescriptor.Insight);
+                    x.AddComponent<ContextRankConfig>(x => { x.MakeScalingConfig(AbilityRankType.Default, 4, 8); });
                 });
-                IHSbuff.AddComponent<ContextRankConfig>(x =>
-                {
-                    x.m_Type = AbilityRankType.DamageDice;
-                    x.m_Progression = ContextRankProgression.StartPlusDivStep;
 
-                    x.m_StartLevel = -32;
-
-                    x.m_StepLevel = 8;
-
-                });
-                IHSbuff.AddComponent<AddContextStatBonus>(x =>
-                {
-                    x.Stat = Kingmaker.EntitySystem.Stats.StatType.Initiative;
-                    x.Descriptor = Kingmaker.Enums.ModifierDescriptor.Insight;
-                    x.Value = new Kingmaker.UnitLogic.Mechanics.ContextValue
-                    {
-                        ValueType = Kingmaker.UnitLogic.Mechanics.ContextValueType.Rank,
-                        ValueRank = AbilityRankType.DamageDice
-
-                    };
-
-                });
-                ManeuverTools.FinishManeuver(StanceOfTheDefendingShell, Main.Context);
+                stanceConfig.ConfigureManeuver(Main.Context);
             }
 
+           
             EnduringCraneStrike();
             void EnduringCraneStrike()
             {
-                var strike = ManeuverTools.MakeStandardStrike(Main.Context, "EnduringCraneStrike", "Enduring Crane Strike", "Making his soul a wellspring of holy power, the disciple strikes out at a foe to unleashed his holy power to restore health to himself or an ally. The initiator makes an attack against a target creature, inflicting damage as normal, and the strike restores 1d6 hit points plus his initiation modifier to the initiator or to an ally within 30-ft. ", 1, silverCrane, Backend.NewActions.MartialAttackMode.Normal, payload: ActionsBuilder.New().Add<SilverCraneSingleTargetHeal>(x =>
+                var strikeConfig = ManeuverConfigurator.NewStrike(Main.Context, "EnduringCraneStrike", silverCrane, 1, Kingmaker.UnitLogic.Commands.Base.UnitCommand.CommandType.Standard);
+                strikeConfig.AddStrikeComponent();
+                strikeConfig.ApplyWeaponStrikeBits();
+                
+                strikeConfig.AddPayload(ActionsBuilder.New().Add<SilverCraneSingleTargetHeal>(x =>
                 {
-
+                    
                 }));
-
-                ManeuverTools.FinishManeuver(strike, Main.Context);
+                strikeConfig.AddComponent<SilverCraneAntiFiendEffect>();
+                strikeConfig.ConfigureManeuver(Main.Context);
             }
+
+            
 
             EyesOfTheCrane();
             void EyesOfTheCrane()
             {
+                var stanceConfig = ManeuverConfigurator.NewStance(Main.Context, "EyesOfTheCrane", silverCrane, 1, x =>
+                {
+                    x.AddRerollConcealment();
+                    x.AddModifyD20(rule: Kingmaker.Designers.Mechanics.Facts.RuleType.SkillCheck, skill: new Kingmaker.EntitySystem.Stats.StatType[] { Kingmaker.EntitySystem.Stats.StatType.SkillPerception }, rollsAmount: 1, takeBest: true, specificSkill: true);
+                });
+
+                stanceConfig.ConfigureManeuver(Main.Context);
                 //TODO
                 //Using the perception of the disciple’s heavenly training to assist him, the Silver Crane practitioner may see many things which would remain hidden from the eyes of the impure. While in this stance, the initiator rolls twice on Perception checks or when attempting to pierce concealment, using the higher of the two rolls. Additionally, he may use detect evil as a spell-like ability at will with a caster level equal to his initiator level. 
             }
@@ -100,120 +127,392 @@ namespace TheInfiniteCrusade.NewContent.Disciplines
             SilverStrike();
             void SilverStrike()
             {
-                var strike = ManeuverTools.MakeStandardStrike(Main.Context, "SilverStrike", "Silver Strike", "Using the insight of the Heavens, the martial disciple learns to read the tangles of fate to direct their efforts in battle. The initiator makes two attack rolls and uses the better of the two rolls to determine result of the attack.", 1, silverCrane);
-                strike.AddComponent<AttackWithAdvantage>();
-
-                ManeuverTools.FinishManeuver(strike, Main.Context);
+                var strikeConfig = ManeuverConfigurator.NewStrike(Main.Context, "SilverStrike", silverCrane, 1, Kingmaker.UnitLogic.Commands.Base.UnitCommand.CommandType.Standard);
+                strikeConfig.AddStrikeComponent();
+                strikeConfig.ApplyWeaponStrikeBits();
+                strikeConfig.AddComponent<AttackWithAdvantage>();
+                strikeConfig.AddComponent<SilverCraneAntiFiendEffect>();
+                strikeConfig.ConfigureManeuver(Main.Context);
             }
+            
 
 
 
             #endregion
             #region level 2
             BlazingCranesWing();
-            void BlazingCranesWing(){
-
-                var boost = ManeuverTools.MakeBoostStub(Main.Context, "BlazingCranesWing", "Blazing Crane's Wing", "By filling the Silver Crane disciple’s weapon with the strength of his celestial patrons, the warrior funnels their righteous wrath against those that are abominations in the eyes of all that is good. The initiator’s attacks until his next turn inflict an additional 2d6 points of damage against undead or evil outsiders.", 2, silverCrane, out var buff, x =>
-                {
-                    x.AddComponent<AdditionalDiceOnAttack>(x =>
-                    {
-                        x.TargetConditions = ManeuverTools.SilverCraneSpecialTarget().Build();
-                        x.DamageType = new Kingmaker.RuleSystem.Rules.Damage.DamageTypeDescription()
-                        {
-                            Type = Kingmaker.RuleSystem.Rules.Damage.DamageType.Energy,
-                            Energy = Kingmaker.Enums.Damage.DamageEnergyType.Holy
-                        };
-                        x.Value = new Kingmaker.UnitLogic.Mechanics.ContextDiceValue()
-                        {
-                            DiceType = Kingmaker.RuleSystem.DiceType.D6,
-                            DiceCountValue = ContextValues.Constant(2)
-                        };
-                        x.m_RandomizeDamage = false;
-                        x.m_DamageEntries = new List<AdditionalDiceOnAttack.DamageEntry>();
-                    });
-                });
-
-                ManeuverTools.FinishManeuver(boost, Main.Context);
-            };
-
-            BlessedPinions();
-            void BlessedPinions()
+            void BlazingCranesWing()
             {
-                var strike = ManeuverTools.MakeStandardStrike(Main.Context, "BlessedPinions", "Blessed Pinions", "The pinion feathers of the Silver Crane’s wings gain an ethereal glimmer as if they were blessed steel. Heavenly agents guide their disciple’s attack so it may strike true as if it were blessed, even allowing it to strike the unseen. Make an attack against a foe that inflicts an additional 2d6 points of sacred damage and the attack is considered good aligned for the purposes of overcoming damage reduction. The disciple may also choose to strike incorporeal foes with this strike as if they were made manifest, including fiends who currently possess a creature. To strike a possessing fiend, the body they inhabit must be also struck, but all damage from the attack is inflicted upon the possessing fiend without harming the host.", 2, silverCrane, extraDice: 2, WeaponDamage: false, damageType: new Kingmaker.RuleSystem.Rules.Damage.DamageTypeDescription()
+                var config = ManeuverConfigurator.NewNormalBoost(Main.Context, "BlazingCranesWing", silverCrane, 2, x =>
                 {
-                    Type = Kingmaker.RuleSystem.Rules.Damage.DamageType.Energy,
-                    Energy = Kingmaker.Enums.Damage.DamageEnergyType.Holy
-                });
+                    x.AdditionalDiceOnAttack(targetConditions: ManeuverConfigurator.SilverCraneSpecialTarget(), damageType: new Kingmaker.RuleSystem.Rules.Damage.DamageTypeDescription()
+                    {
+                        Type = Kingmaker.RuleSystem.Rules.Damage.DamageType.Energy,
+                        Energy = Kingmaker.Enums.Damage.DamageEnergyType.Holy
+                    }, value: new Kingmaker.UnitLogic.Mechanics.ContextDiceValue()
+                    {
+                        DiceType = Kingmaker.RuleSystem.DiceType.D6,
+                        DiceCountValue = ContextValues.Constant(2),
+                        BonusValue = 0
+                    }, randomizeDamage: false);
 
-                ManeuverTools.FinishManeuver(strike, Main.Context);
+                });
+                config.ConfigureManeuver(Main.Context);
             }
 
             EmeraldDisplacementStrike();
             void EmeraldDisplacementStrike()
             {
-                //TODO
-                //Sight is imperative in arts of the hunting bird, and a warrior learns that this holds true for his enemy. An enemy that cannot see is an enemy who can be defeated with greater ease. Make an attack and the target must make a Fortitude save (DC 12 + initiation modifier) or suffer a -4 penalty to Perception checks and a 20% miss chance on all attack rolls for the character’s initiation modifier in rounds (minimum of one round). 
+                var buffGuid = Main.Context.Blueprints.GetGUID("EmeraldDisplacementStrikeDebuff");
+                var buff = BuffConfigurator.New("EmeraldDisplacementStrikeDebuff", buffGuid.ToString());
+                buff.SetDisplayName("EmeraldDisplacementStrike");
+                buff.SetDescription("EmeraldDisplacementStrikeDebuff");
+                buff.AddSetFactOwnerMissChance(type: SetFactOwnerMissChance.Type.All, value: ContextValues.Constant(20));
+                buff.AddStatBonus(ModifierDescriptor.None, stat: Kingmaker.EntitySystem.Stats.StatType.SkillPerception, value: -4);
+                var buffref = buff.Configure().ToReference<BlueprintBuffReference>();
+
+                var strikeConfig = ManeuverConfigurator.NewStrike(Main.Context, "EmeraldDisplacementStrike", silverCrane, 2, Kingmaker.UnitLogic.Commands.Base.UnitCommand.CommandType.Standard);
+                strikeConfig.ApplyWeaponStrikeBits();
+                strikeConfig.AddStrikeComponent();
+                strikeConfig.SetLocalizedSavingThrow(BlueprintCore.Blueprints.CustomConfigurators.UnitLogic.Abilities.SavingThrow.FortPartial);
+                strikeConfig.AddPayload(ManeuverConfigurator.ApplyBuffIfNotSaved(buffref, durationValue: ManeuverConfigurator.InitiatorModifierRounds(), savingThrowType: Kingmaker.EntitySystem.Stats.SavingThrowType.Fortitude));
+                strikeConfig.AddComponent<SilverCraneAntiFiendEffect>();
+                strikeConfig.ConfigureManeuver(Main.Context);
             }
 
-            SilverKnightsBlade();
-            void SilverKnightsBlade()
+            BlessedPinions();
+            void BlessedPinions()
             {
-                var strike = ManeuverTools.MakeStandardStrike(Main.Context, "SilverKnightsBlade", "Silver Knight's Blade", "Those graced with the blessings of the Silver Crane are both terrors to their foes and heroes to their fellows. This strike inflicts an additional 4d6 points of sacred damage and heals the same to either the initiator or to a single ally within 30-ft of the martial disciple/", 3, silverCrane, Backend.NewActions.MartialAttackMode.Normal, extraDice: 4, WeaponDamage: false, damageType: new Kingmaker.RuleSystem.Rules.Damage.DamageTypeDescription()
+                var strikeConfig = ManeuverConfigurator.NewStrike(Main.Context, "BlessedPinions", silverCrane, 2, Kingmaker.UnitLogic.Commands.Base.UnitCommand.CommandType.Standard);
+                strikeConfig.AddStrikeComponent();
+                strikeConfig.ApplyWeaponStrikeBits();
+                strikeConfig.AddFixedEnergyDamageToStrike(2, damageTypeDescription: new Kingmaker.RuleSystem.Rules.Damage.DamageTypeDescription()
                 {
                     Type = Kingmaker.RuleSystem.Rules.Damage.DamageType.Energy,
                     Energy = Kingmaker.Enums.Damage.DamageEnergyType.Holy
-                }, payload: ActionsBuilder.New().Add<SilverCraneSingleTargetHeal>(x =>
-                {
-                    x.dice = 4;
-                }));
-
-                ManeuverTools.FinishManeuver(strike, Main.Context);
+                }, diceType: Kingmaker.RuleSystem.DiceType.D6);
+                
+                strikeConfig.AddComponent<SilverCraneAntiFiendEffect>();
+                strikeConfig.ConfigureManeuver(Main.Context);
             }
+           
+
+            
+
+            
+
+            
 
             #endregion
             #region level 3
             ExorcismStrike();
             void ExorcismStrike()
             {
-                var strike = ManeuverTools.MakeStandardStrike(Main.Context, "ExorcismStrike", "Exorcism Strike", "The foes of the celestial realms tremble in fear at the wrath of the Heavens themselves, and a disciple of the Silver Crane wields that righteous anger in battle. This strike inflicts an additional 6d6 points of sacred damage to the foe if it is an undead creature or an outsider with the evil subtype, with a chance to daze the target for 1 round if it fails a Fortitude save (DC 13 + initiation modifier). Success negates the daze effect. If the target is a possessing entity within a host creature, the damage inflicted from this strike is solely inflicted upon the possessor, not the host. If the target is neither undead nor an evil outsider, this attack inflicts an additional 2d6 points of damage, and does not daze the target.", 3, silverCrane, extraDice: 4, WeaponDamage: false, damageType: new Kingmaker.RuleSystem.Rules.Damage.DamageTypeDescription()
+                var strikeConfig = ManeuverConfigurator.NewStrike(Main.Context, "ExorcismStrike", silverCrane, 3, Kingmaker.UnitLogic.Commands.Base.UnitCommand.CommandType.Standard);
+                strikeConfig.AddStrikeComponent();
+                strikeConfig.ApplyWeaponStrikeBits();
+                strikeConfig.AddFixedEnergyDamageToStrike(4, damageTypeDescription: new Kingmaker.RuleSystem.Rules.Damage.DamageTypeDescription()
                 {
                     Type = Kingmaker.RuleSystem.Rules.Damage.DamageType.Energy,
                     Energy = Kingmaker.Enums.Damage.DamageEnergyType.Holy
-                }, payload: ManeuverTools.ApplyBuffIfNotSaved("9934fedff1b14994ea90205d189c8759", ContextDuration.Fixed(1), Kingmaker.EntitySystem.Stats.SavingThrowType.Fortitude, ManeuverTools.SilverCraneSpecialTarget()));
-
-                strike.GetComponent<AbstractBonusStrikeDamage>().targetCondition = ManeuverTools.SilverCraneSpecialTarget().Build();
-
-                strike.AddComponent<FixedTypeBonusDamge>(x =>
+                }, target: ManeuverConfigurator.SilverCraneSpecialTarget());
+                strikeConfig.AddFixedEnergyDamageToStrike(2, damageTypeDescription: new Kingmaker.RuleSystem.Rules.Damage.DamageTypeDescription()
                 {
-                    x.m_DiceType = Kingmaker.RuleSystem.DiceType.D6;
-                    x.m_DiceCount = 2;
-                    x.DamageTypeDescription = new Kingmaker.RuleSystem.Rules.Damage.DamageTypeDescription()
-                    {
-                        Type = Kingmaker.RuleSystem.Rules.Damage.DamageType.Energy,
-                        Energy = Kingmaker.Enums.Damage.DamageEnergyType.Holy
-                    };
+                    Type = Kingmaker.RuleSystem.Rules.Damage.DamageType.Energy,
+                    Energy = Kingmaker.Enums.Damage.DamageEnergyType.Holy
+                });
+                strikeConfig.AddComponent<SilverCraneAntiFiendEffect>();
+                strikeConfig.AddPayload(ManeuverConfigurator.ApplyBuffIfNotSaved("9934fedff1b14994ea90205d189c8759", ContextDuration.Fixed(1), Kingmaker.EntitySystem.Stats.SavingThrowType.Fortitude, ManeuverConfigurator.SilverCraneSpecialTarget()));
+                strikeConfig.SetLocalizedSavingThrow(BlueprintCore.Blueprints.CustomConfigurators.UnitLogic.Abilities.SavingThrow.FortPartial);
+                strikeConfig.ConfigureManeuver(Main.Context);
+            }
+           
+            SilverKnightsBlade();
+            void SilverKnightsBlade()
+            {
+                var strikeConfig = ManeuverConfigurator.NewStrike(Main.Context, "SilverKnightsBlade", silverCrane, 3, Kingmaker.UnitLogic.Commands.Base.UnitCommand.CommandType.Standard);
+                strikeConfig.AddStrikeComponent();
+                strikeConfig.ApplyWeaponStrikeBits();
+                strikeConfig.AddFixedEnergyDamageToStrike(4, damageTypeDescription: new Kingmaker.RuleSystem.Rules.Damage.DamageTypeDescription()
+                {
+                    Type = Kingmaker.RuleSystem.Rules.Damage.DamageType.Energy,
+                    Energy = Kingmaker.Enums.Damage.DamageEnergyType.Holy
+                });
+                strikeConfig.AddPayload(ActionsBuilder.New().Add<SilverCraneSingleTargetHeal>(x =>
+                {
+                    x.dice = 4;
+                    x.useBonus = false;
+                }));
+                strikeConfig.ConfigureManeuver(Main.Context);
+            }
+            StanceOfTheSilverCrane();
+            void StanceOfTheSilverCrane()
+            {
+                
+
+
+                var stanceConfig = ManeuverConfigurator.NewStance(Main.Context, "StanceOfTheSilverCrane", silverCrane, 3, x =>
+                {
+
+                    x.AddBuffEnchantWornItem(allWeapons: true, enchantmentBlueprint: "28a9964d81fedae44bae3ca45710c140");
+                    x.AddSavingThrowBonusAgainstAlignment(AlignmentComponent.Evil, ContextValues.Constant(2), ModifierDescriptor.Deflection);
+                    x.AddArmorClassBonusAgainstAlignment(AlignmentComponent.Evil, ContextValues.Constant(2), ModifierDescriptor.Deflection);
+                    x.AddFormationACBonus(2, unitProperty: false);
+                    
                 });
 
-                ManeuverTools.FinishManeuver(strike, Main.Context);
+                stanceConfig.ConfigureManeuver(Main.Context);
+                //TODO
+                //Using the perception of the disciple’s heavenly training to assist him, the Silver Crane practitioner may see many things which would remain hidden from the eyes of the impure. While in this stance, the initiator rolls twice on Perception checks or when attempting to pierce concealment, using the higher of the two rolls. Additionally, he may use detect evil as a spell-like ability at will with a caster level equal to his initiator level. 
+
+                var protfromevil = BlueprintTool.Get<BlueprintBuff>("4a6911969911ce9499bf27dde9bfcedc");
+                var buff = BuffConfigurator.For("StanceOfTheSilverCraneBuff");
+                buff.AddSpecificBuffImmunity(AlignmentComponent.Evil, protfromevil.GetComponent<SpecificBuffImmunity>().m_Buff);
+                buff.AddSpellImmunity(AlignmentComponent.Evil, type: Kingmaker.UnitLogic.Parts.SpellImmunityType.Specific, exceptions: protfromevil.GetComponent<AddSpellImmunity>().m_Exceptions.Select(x=>(Blueprint<BlueprintAbilityReference>)x).ToList());
+                buff.Configure(delayed: true);
+            }
+
+            #endregion
+            #region level 4
+
+            SacredPinions();
+            void SacredPinions()
+            {
+                var strikeConfig = ManeuverConfigurator.NewStrike(Main.Context, "SacredPinions", silverCrane, 4, Kingmaker.UnitLogic.Commands.Base.UnitCommand.CommandType.Standard);
+                strikeConfig.AddStrikeComponent();
+                strikeConfig.ApplyWeaponStrikeBits();
+                strikeConfig.AddFixedEnergyDamageToStrike(5, damageTypeDescription: new Kingmaker.RuleSystem.Rules.Damage.DamageTypeDescription()
+                {
+                    Type = Kingmaker.RuleSystem.Rules.Damage.DamageType.Energy,
+                    Energy = Kingmaker.Enums.Damage.DamageEnergyType.Holy
+                });
+                //TODO balance pass? Stun incorporeal
+                strikeConfig.ConfigureManeuver(Main.Context);
+            }
+
+
+            SapphireDisplacementStrike();
+            void SapphireDisplacementStrike()
+            {
+            
+                var buffGuid = Main.Context.Blueprints.GetGUID("SapphireDisplacementStrikeDebuff");
+                var buff = BuffConfigurator.New("SapphireDisplacementStrikeDebuff", buffGuid.ToString());
+                buff.SetDisplayName("SapphireDisplacementStrike");
+                buff.SetDescription("SapphireDisplacementStrikeDebuff");
+                buff.AddSetFactOwnerMissChance(type: SetFactOwnerMissChance.Type.All, value: ContextValues.Constant(50));
+                buff.AddModifyD20(rule: RuleType.SkillCheck, specificSkill: true, skill: new StatType[] { Kingmaker.EntitySystem.Stats.StatType.SkillPerception }, replace: true, rollResult: ContextValues.Constant(1));
+                var buffref = buff.Configure().ToReference<BlueprintBuffReference>();
+
+                var strikeConfig = ManeuverConfigurator.NewStrike(Main.Context, "SapphireDisplacementStrike", silverCrane, 4, Kingmaker.UnitLogic.Commands.Base.UnitCommand.CommandType.Standard);
+                strikeConfig.ApplyWeaponStrikeBits();
+                strikeConfig.AddStrikeComponent();
+                strikeConfig.AddPayload(ManeuverConfigurator.ApplyBuffIfNotSaved(buffref, durationValue: ManeuverConfigurator.InitiatorModifierRounds(), savingThrowType: Kingmaker.EntitySystem.Stats.SavingThrowType.Fortitude));
+                strikeConfig.SetLocalizedSavingThrow(BlueprintCore.Blueprints.CustomConfigurators.UnitLogic.Abilities.SavingThrow.FortNegates);
+                strikeConfig.AddComponent<SilverCraneAntiFiendEffect>();
+                strikeConfig.ConfigureManeuver(Main.Context);
+            }
+
+
+
+            #endregion
+
+            #region level 5
+
+            SilverCranesSpiral();
+            void SilverCranesSpiral()
+            {
+                var strikeConfig = ManeuverConfigurator.NewStrike(Main.Context, "SilverCranesSpiral", silverCrane, 5, Kingmaker.UnitLogic.Commands.Base.UnitCommand.CommandType.Standard);
+                strikeConfig.AddWhirlwindComponent();
+                strikeConfig.ApplyWeaponStrikeBits();
+                strikeConfig.AddComponent<TypedAccuracyModifier>(x =>
+                {
+                    x.bonus = 2;
+                    x.modifierDescriptor = ModifierDescriptor.Insight;
+                });
+                
+                strikeConfig.AddComponent<SilverCraneAntiFiendEffect>();
+                strikeConfig.ConfigureManeuver(Main.Context);
+            }
+
+            ArgentKnightsBanner();
+            void ArgentKnightsBanner()
+            {
+                var strikeConfig = ManeuverConfigurator.NewStrike(Main.Context, "ArgentKnightsBanner", silverCrane, 5, Kingmaker.UnitLogic.Commands.Base.UnitCommand.CommandType.Standard);
+                strikeConfig.AddStrikeComponent();
+                strikeConfig.ApplyWeaponStrikeBits();
+                strikeConfig.AddFixedEnergyDamageToStrike(8, damageTypeDescription: new Kingmaker.RuleSystem.Rules.Damage.DamageTypeDescription()
+                {
+                    Type = Kingmaker.RuleSystem.Rules.Damage.DamageType.Energy,
+                    Energy = Kingmaker.Enums.Damage.DamageEnergyType.Holy
+                });
+                strikeConfig.AddPayload(ActionsBuilder.New().Add<SilverCraneHealPulse>(x => {
+                    x.dice = 4;
+                    x.useBonus = false;
+                    x.Feet = new Feet(30f);
+                }));
+                strikeConfig.ConfigureManeuver(Main.Context);
+            }
+
+            #endregion
+
+            #region level 6
+
+            ArgentKingsScepter();
+           void ArgentKingsScepter()
+            {
+                var strikeConfig = ManeuverConfigurator.NewStrike(Main.Context, "ArgentKingsScepter", silverCrane, 6, Kingmaker.UnitLogic.Commands.Base.UnitCommand.CommandType.Standard);
+                strikeConfig.AddStrikeComponent();
+                strikeConfig.ApplyWeaponStrikeBits();
+                strikeConfig.AddFixedEnergyDamageToStrike(12, damageTypeDescription: new Kingmaker.RuleSystem.Rules.Damage.DamageTypeDescription()
+                {
+                    Type = Kingmaker.RuleSystem.Rules.Damage.DamageType.Energy,
+                    Energy = Kingmaker.Enums.Damage.DamageEnergyType.Holy
+                });
+                strikeConfig.AddPayload(ActionsBuilder.New().Add<ManeuverHealSelf>(x=> {
+                    x.Value = ContextDice.Value(Kingmaker.RuleSystem.DiceType.Zero, diceCount: ContextValues.Constant(0), ContextValues.Constant(60));
+                }));
+                strikeConfig.ConfigureManeuver(Main.Context);
+            }
+
+            //HolyPinions();
+            void HolyPinions()
+            {
+                var buffGuid = Main.Context.Blueprints.GetGUID("HolyPinionsDebuff");
+                var buff = BuffConfigurator.New("HolyPinionsDebuff", buffGuid.ToString());
+                buff.SetDisplayName("HolyPinions");
+                buff.SetDescription("HolyPinionsDebuff");
+                
+                var buffref = buff.Configure().ToReference<BlueprintBuffReference>();
+
+                var strikeConfig = ManeuverConfigurator.NewStrike(Main.Context, "HolyPinions", silverCrane, 6, Kingmaker.UnitLogic.Commands.Base.UnitCommand.CommandType.Standard);
+                strikeConfig.AddStrikeComponent();
+                strikeConfig.ApplyWeaponStrikeBits();
+                strikeConfig.AddFixedEnergyDamageToStrike(10, damageTypeDescription: new Kingmaker.RuleSystem.Rules.Damage.DamageTypeDescription()
+                {
+                    Type = Kingmaker.RuleSystem.Rules.Damage.DamageType.Energy,
+                    Energy = Kingmaker.Enums.Damage.DamageEnergyType.Holy
+                });
+                strikeConfig.AddPayload(ManeuverConfigurator.ApplyBuffsIfNotSaved(new List<Blueprint<BlueprintBuffReference>>() {buffref, "09d39b38bb7c6014394b6daced9bacd3" }, ManeuverConfigurator.InitiatorModifierRounds(), SavingThrowType.Will, ConditionsBuilder.New().HasFact("c4a7f98d743bc784c9d4cf2105852c39")));
+                strikeConfig.SetLocalizedSavingThrow(BlueprintCore.Blueprints.CustomConfigurators.UnitLogic.Abilities.SavingThrow.WillPartial);
+                strikeConfig.ConfigureManeuver(Main.Context);
+            }
+
+            SilverCraneEndurance();
+            void SilverCraneEndurance()
+            {
+
+
+
+                var stanceConfig = ManeuverConfigurator.NewStance(Main.Context, "SilverCraneEndurance", silverCrane, 6, x =>
+                {
+
+                    x.AddEffectFastHealing(5);
+                });
+
+                stanceConfig.ConfigureManeuver(Main.Context);
+                
+            }
+            #endregion
+
+            #region level 7
+            DiamondDisplacementStrike();
+            void DiamondDisplacementStrike()
+            {
+
+                ActionsBuilder onHit = ActionsBuilder.New().SavingThrow(SavingThrowType.Will, onResult: ActionsBuilder.New().ConditionalSaved(failed: ActionsBuilder.New().ApplyBuffPermanent("187f88d96a0ef464280706b63635f2af", isFromSpell: false), succeed: ActionsBuilder.New().ApplyBuff("df3950af5a783bd4d91ab73eb8fa0fd3", ContextDuration.Fixed(1), isFromSpell: false)));
+
+                var strikeConfig = ManeuverConfigurator.NewStrike(Main.Context, "DiamondDisplacementStrike", silverCrane, 7, Kingmaker.UnitLogic.Commands.Base.UnitCommand.CommandType.Standard);
+                strikeConfig.ApplyWeaponStrikeBits();
+                strikeConfig.AddStrikeComponent();
+                strikeConfig.AddPayload(onHit);
+                strikeConfig.SetLocalizedSavingThrow(BlueprintCore.Blueprints.CustomConfigurators.UnitLogic.Abilities.SavingThrow.WillPartial);
+                
+                strikeConfig.AddComponent<SilverCraneAntiFiendEffect>();
+                strikeConfig.ConfigureManeuver(Main.Context);
+            }
+
+            HolyRush();
+            void HolyRush()
+            {
+                var config = ManeuverConfigurator.New(Main.Context, "HolyRush", silverCrane, 7, Backend.NewComponents.ManeuverBookSystem.ManeuverType.Boost, Kingmaker.UnitLogic.Commands.Base.UnitCommand.CommandType.Swift, false, Kingmaker.Visual.Animation.Kingmaker.Actions.UnitAnimationActionCastSpell.CastAnimationStyle.Directional);
+                config.AddAbilityCustomDimensionDoor();
+                config.AddComponent<AbilityRestrictionAdjacentAlly>();
+                config.SetRange(AbilityRange.Long);
+
+                config.ConfigureManeuver(Main.Context);
             }
 
 
             #endregion
-            SacredPinions();
-            void SacredPinions()
+
+            #region level 8
+            CelestialPinions();
+            void CelestialPinions()
             {
-                var strike = ManeuverTools.MakeStandardStrike(Main.Context, "SacredPinions", "Sacred Pinions", "The martial disciple enhances his melee strikes with the blessed wings of the Silver Crane, infusing them with celestial might to strike beyond flesh and bite spirit. Make an attack against a foe that inflicts an additional 5d6 points of damage. The initiator may also choose to strike incorporeal foes with this strike as if they were made manifest, including fiends who currently possess a creature. To strike a possessing fiend, the body they inhabit must be also struck, but all damage goes to the possessing fiend without harming the host.", 4, silverCrane, extraDice: 5, WeaponDamage: false, damageType: new Kingmaker.RuleSystem.Rules.Damage.DamageTypeDescription()
+                var strikeConfig = ManeuverConfigurator.NewStrike(Main.Context, "CelestialPinions", silverCrane, 8, Kingmaker.UnitLogic.Commands.Base.UnitCommand.CommandType.Standard);
+                strikeConfig.AddStrikeComponent();
+                strikeConfig.ApplyWeaponStrikeBits();
+                strikeConfig.AddFixedEnergyDamageToStrike(15, damageTypeDescription: new Kingmaker.RuleSystem.Rules.Damage.DamageTypeDescription()
                 {
                     Type = Kingmaker.RuleSystem.Rules.Damage.DamageType.Energy,
                     Energy = Kingmaker.Enums.Damage.DamageEnergyType.Holy
                 });
+                strikeConfig.AddPayload(ActionsBuilder.New().Conditional(ManeuverConfigurator.SilverCraneSpecialTarget().HasFact("c4a7f98d743bc784c9d4cf2105852c39"), ifTrue: ActionsBuilder.New().SavingThrow(SavingThrowType.Will, onResult: ActionsBuilder.New().ConditionalSaved(failed: ActionsBuilder.New().Kill(Kingmaker.UnitLogic.UnitState.DismemberType.None)))));
+                strikeConfig.ConfigureManeuver(Main.Context);
+            }
+            DiamondWingsOfTheImperialCrane();
+            void DiamondWingsOfTheImperialCrane()
+            {
 
-                ManeuverTools.FinishManeuver(strike, Main.Context);
+
+
+                var stanceConfig = ManeuverConfigurator.NewStance(Main.Context, "DiamondWingsOfTheImperialCrane", silverCrane, 8, x =>
+                {
+
+                    x.AddSpellResistance(value: ContextValues.Rank(AbilityRankType.Default));
+                    x.AddBuffAllSavesBonus(ModifierDescriptor.Sacred, 4);
+                    x.AddComponent<DWotICHealOnSpellResisted>();
+                });
+                stanceConfig.AddComponent<ContextRankConfig>(x =>
+                {
+                    ManeuverConfigurator.MakeScalingConfig(x, AbilityRankType.Default, 15, 1);
+                });
+
+                stanceConfig.ConfigureManeuver(Main.Context);
+                //TODO
+                //Using the perception of the disciple’s heavenly training to assist him, the Silver Crane practitioner may see many things which would remain hidden from the eyes of the impure. While in this stance, the initiator rolls twice on Perception checks or when attempting to pierce concealment, using the higher of the two rolls. Additionally, he may use detect evil as a spell-like ability at will with a caster level equal to his initiator level. 
 
                 
             }
 
-            
+
+            #endregion
+
+            #region level 9
+            StrikeOfSilverExorcism();
+            void StrikeOfSilverExorcism()
+            {
+                var strikeConfig = ManeuverConfigurator.NewStrike(Main.Context, "StrikeOfSilverExorcism", silverCrane, 9, Kingmaker.UnitLogic.Commands.Base.UnitCommand.CommandType.Standard);
+                strikeConfig.AddStrikeComponent();
+                strikeConfig.ApplyWeaponStrikeBits();
+                strikeConfig.AddFixedEnergyDamageToStrike(0, damageTypeDescription: new Kingmaker.RuleSystem.Rules.Damage.DamageTypeDescription()
+                {
+                    Type = Kingmaker.RuleSystem.Rules.Damage.DamageType.Energy,
+                    Energy = Kingmaker.Enums.Damage.DamageEnergyType.Holy
+                }, flatdamage: 80);
+                strikeConfig.AddFixedEnergyDamageToStrike(0, damageTypeDescription: new Kingmaker.RuleSystem.Rules.Damage.DamageTypeDescription()
+                {
+                    Type = Kingmaker.RuleSystem.Rules.Damage.DamageType.Energy,
+                    Energy = Kingmaker.Enums.Damage.DamageEnergyType.Holy
+                }, flatdamage: 40, target: ManeuverConfigurator.SilverCraneSpecialTarget());
+                strikeConfig.AddPayload(ActionsBuilder.New().ApplyBuff("df6d1025da07524429afbae248845ecc", durationValue: ContextDuration.Fixed(1), isFromSpell:false).Conditional(ManeuverConfigurator.SilverCraneSpecialTarget(), ifTrue: ActionsBuilder.New().SavingThrow(SavingThrowType.Will, onResult: ActionsBuilder.New().ConditionalSaved(failed: ActionsBuilder.New().Kill(Kingmaker.UnitLogic.UnitState.DismemberType.None), succeed: ManeuverConfigurator.ApplyBuff("0bc608c3f2b548b44b7146b7530613ac", ManeuverConfigurator.InitiatorModifierRounds())))));
+                strikeConfig.ConfigureManeuver(Main.Context);
+            }
+
+            #endregion
+
+
+
         }
     }
 }

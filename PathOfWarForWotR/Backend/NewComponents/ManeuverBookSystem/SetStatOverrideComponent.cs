@@ -6,10 +6,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using TheInfiniteCrusade.Backend.NewBlueprints;
-using TheInfiniteCrusade.Extensions;
+using PathOfWarForWotR.Backend.NewBlueprints;
+using PathOfWarForWotR.Extensions;
 
-namespace TheInfiniteCrusade.Backend.NewComponents.ManeuverBookSystem
+namespace PathOfWarForWotR.Backend.NewComponents.ManeuverBookSystem
 {
     class SetStatOverrideComponent : UnitFactComponentDelegate, IGlobalSubscriber, ISubscriber
     {

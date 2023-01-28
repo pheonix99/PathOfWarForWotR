@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using TabletopTweaks.Core.Utilities;
 
-namespace TheInfiniteCrusade.NewContent.MartialSystem
+namespace PathOfWarForWotR.NewContent.MartialSystem
 {
     class SystemLists
     {

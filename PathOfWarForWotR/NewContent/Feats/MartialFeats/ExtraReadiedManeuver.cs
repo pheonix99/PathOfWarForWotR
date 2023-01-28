@@ -1,8 +1,8 @@
 ﻿using Kingmaker.Blueprints.Classes.Selection;
 using TabletopTweaks.Core.Utilities;
-using TheInfiniteCrusade.Backend.NewComponents.Prerequisites;
+using PathOfWarForWotR.Backend.NewComponents.Prerequisites;
 
-namespace TheInfiniteCrusade.NewContent.Feats.MartialFeats
+namespace PathOfWarForWotR.NewContent.Feats.MartialFeats
 {
     class ExtraReadiedManeuver
     {

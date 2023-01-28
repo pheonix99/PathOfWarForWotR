@@ -1,12 +1,12 @@
 ﻿using UnityModManagerNet;
 using HarmonyLib;
-using TheInfiniteCrusade.ModLogic;
+using PathOfWarForWotR.ModLogic;
 using TabletopTweaks.Core.Utilities;
 using System;
 using Kingmaker.Blueprints.JsonSystem;
-using TheInfiniteCrusade.CustomUI.ManeuverBook;
+using PathOfWarForWotR.CustomUI.ManeuverBook;
 
-namespace TheInfiniteCrusade
+namespace PathOfWarForWotR
 {
     static class Main
     {

@@ -3,13 +3,13 @@ using Kingmaker.Blueprints.Classes.Spells;
 using Kingmaker.Blueprints.Items.Weapons;
 using Kingmaker.EntitySystem.Stats;
 using Kingmaker.Enums;
-using TheInfiniteCrusade.Defines;
+using PathOfWarForWotR.Defines;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
 using System.Linq;
 
-namespace TheInfiniteCrusade.Utilities
+namespace PathOfWarForWotR.Utilities
 {
     public static class DisciplineTools
     {

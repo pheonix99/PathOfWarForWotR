@@ -2,10 +2,10 @@
 using Kingmaker.Blueprints.Classes;
 using Kingmaker.PubSubSystem;
 using Kingmaker.UnitLogic;
-using TheInfiniteCrusade.Backend.NewBlueprints;
-using TheInfiniteCrusade.Backend.NewUnitParts;
+using PathOfWarForWotR.Backend.NewBlueprints;
+using PathOfWarForWotR.Backend.NewUnitParts;
 
-namespace TheInfiniteCrusade.Backend.NewComponents
+namespace PathOfWarForWotR.Backend.NewComponents
 {
     [AllowedOn(typeof(BlueprintCharacterClass))]
     class InitiatorClassComponent : UnitFactComponentDelegate, IGlobalSubscriber, ISubscriber

@@ -16,10 +16,10 @@ using Kingmaker.UnitLogic.Mechanics;
 using System.Collections.Generic;
 using System.Linq;
 using TabletopTweaks.Core.Utilities;
-using TheInfiniteCrusade.Defines;
-using TheInfiniteCrusade.Utilities;
+using PathOfWarForWotR.Defines;
+using PathOfWarForWotR.Utilities;
 
-namespace TheInfiniteCrusade.NewContent.MartialClasses
+namespace PathOfWarForWotR.NewContent.MartialClasses
 {
     class Mystic
     {

@@ -3,10 +3,10 @@ using Kingmaker.EntitySystem.Stats;
 using Kingmaker.UnitLogic.Abilities.Blueprints;
 using System.Collections.Generic;
 using TabletopTweaks.Core.ModLogic;
-using TheInfiniteCrusade.Backend.NewBlueprints;
+using PathOfWarForWotR.Backend.NewBlueprints;
 using UnityEngine;
 
-namespace TheInfiniteCrusade.Defines
+namespace PathOfWarForWotR.Defines
 {
     public class InitiatorProgressionDefine
     {

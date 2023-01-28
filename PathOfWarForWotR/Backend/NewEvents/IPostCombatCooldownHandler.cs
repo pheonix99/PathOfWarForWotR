@@ -1,6 +1,6 @@
 ﻿using Kingmaker.PubSubSystem;
 
-namespace TheInfiniteCrusade.Backend.NewEvents
+namespace PathOfWarForWotR.Backend.NewEvents
 {
     public interface IPostCombatCooldownHandler : IUnitSubscriber
     {

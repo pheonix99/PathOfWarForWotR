@@ -6,11 +6,11 @@ using Kingmaker.UnitLogic.Class.LevelUp;
 using Kingmaker.UnitLogic.Class.LevelUp.Actions;
 using Kingmaker.Utility;
 using System;
-using TheInfiniteCrusade.Backend.NewComponents;
-using TheInfiniteCrusade.Backend.NewUnitParts;
-using TheInfiniteCrusade.Extensions;
+using PathOfWarForWotR.Backend.NewComponents;
+using PathOfWarForWotR.Backend.NewUnitParts;
+using PathOfWarForWotR.Extensions;
 
-namespace TheInfiniteCrusade.CustomUI.UnitLogic.Class.LevelUp.Actions
+namespace PathOfWarForWotR.CustomUI.UnitLogic.Class.LevelUp.Actions
 {
     class ApplyManeuverBook : ILevelUpAction
     {

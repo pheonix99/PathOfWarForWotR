@@ -12,14 +12,14 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using TabletopTweaks.Core.Utilities;
-using TheInfiniteCrusade.Backend.NewBlueprints;
-using TheInfiniteCrusade.Backend.NewComponents.ManeuverBookSystem;
-using TheInfiniteCrusade.Backend.NewComponents.MartialAttackComponents;
-using TheInfiniteCrusade.Backend.NewEvents;
-using TheInfiniteCrusade.Backend.NewUnitDataClasses;
-using TheInfiniteCrusade.Extensions;
+using PathOfWarForWotR.Backend.NewBlueprints;
+using PathOfWarForWotR.Backend.NewComponents.ManeuverBookSystem;
+using PathOfWarForWotR.Backend.NewComponents.MartialAttackComponents;
+using PathOfWarForWotR.Backend.NewEvents;
+using PathOfWarForWotR.Backend.NewUnitDataClasses;
+using PathOfWarForWotR.Extensions;
 
-namespace TheInfiniteCrusade.Backend.NewUnitParts
+namespace PathOfWarForWotR.Backend.NewUnitParts
 {
     class UnitPartMartialDisciple : OldStyleUnitPart, IUnitSubscriber, IUnitCompleteLevelUpHandler, ISubscriber, IInitiatorRulebookSubscriber, ICombatStartedWhileCooledDownHandler, IPostCombatCooldownHandler
     {

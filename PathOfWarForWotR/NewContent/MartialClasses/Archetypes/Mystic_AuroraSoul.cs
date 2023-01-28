@@ -1,4 +1,4 @@
-﻿namespace TheInfiniteCrusade.NewContent.MartialClasses.Archetypes
+﻿namespace PathOfWarForWotR.NewContent.MartialClasses.Archetypes
 {
     class Mystic_AuroraSoul
     {

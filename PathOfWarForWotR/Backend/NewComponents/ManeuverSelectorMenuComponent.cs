@@ -1,9 +1,9 @@
 ﻿using Kingmaker.Blueprints;
 using Kingmaker.Blueprints.Classes.Selection;
-using TheInfiniteCrusade.Backend.NewBlueprints;
-using TheInfiniteCrusade.Backend.NewComponents.ManeuverBookSystem;
+using PathOfWarForWotR.Backend.NewBlueprints;
+using PathOfWarForWotR.Backend.NewComponents.ManeuverBookSystem;
 
-namespace TheInfiniteCrusade.Backend.NewComponents
+namespace PathOfWarForWotR.Backend.NewComponents
 {
     [AllowedOn(typeof(BlueprintFeatureSelection))]
     public class ManeuverSelectorMenuComponent : BlueprintComponent

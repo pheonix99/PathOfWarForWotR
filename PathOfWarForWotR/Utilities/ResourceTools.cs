@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using TabletopTweaks.Core.Utilities;
 
-namespace TheInfiniteCrusade.Utilities
+namespace PathOfWarForWotR.Utilities
 {
     class ResourceTools
     {

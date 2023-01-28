@@ -1,7 +1,7 @@
 ﻿using TabletopTweaks.Core.UMMTools;
 using UnityModManagerNet;
 
-namespace TheInfiniteCrusade
+namespace PathOfWarForWotR
 {
     internal static class UMMSettingsUI
     {

@@ -1,9 +1,9 @@
 ﻿using BlueprintCore.Utils;
 using Kingmaker.Blueprints;
 using System.Linq;
-using TheInfiniteCrusade.Serialization;
+using PathOfWarForWotR.Serialization;
 
-namespace TheInfiniteCrusade.Backend.NewUnitParts
+namespace PathOfWarForWotR.Backend.NewUnitParts
 {
     public class ManeuverSlot
     {

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace TheInfiniteCrusade.NewContent.MartialArchetypes
+namespace PathOfWarForWotR.NewContent.MartialArchetypes
 {
     class FulminantVessel
     {

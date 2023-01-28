@@ -4,7 +4,7 @@ using Kingmaker.UnitLogic.Abilities.Blueprints;
 using Kingmaker.UnitLogic.Abilities.Components.Base;
 using Kingmaker.UnitLogic.ActivatableAbilities;
 
-namespace TheInfiniteCrusade.Backend.NewComponents.AbilityRestrictions
+namespace PathOfWarForWotR.Backend.NewComponents.AbilityRestrictions
 {
     [AllowedOn(typeof(BlueprintActivatableAbility), false)]
     [AllowedOn(typeof(BlueprintAbility), false)]

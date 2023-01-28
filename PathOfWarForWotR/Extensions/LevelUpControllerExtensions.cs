@@ -1,9 +1,9 @@
 ﻿using HarmonyLib;
 using Kingmaker.UnitLogic.Class.LevelUp;
 using System.Linq;
-using TheInfiniteCrusade.CustomUI.UnitLogic.Class.LevelUp.Actions;
+using PathOfWarForWotR.CustomUI.UnitLogic.Class.LevelUp.Actions;
 
-namespace TheInfiniteCrusade.Extensions
+namespace PathOfWarForWotR.Extensions
 {
     public static class LevelUpControllerExtensions
     {

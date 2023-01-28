@@ -25,25 +25,26 @@ using System.Linq;
 using TabletopTweaks.Core.ModLogic;
 using TabletopTweaks.Core.NewComponents;
 using TabletopTweaks.Core.Utilities;
-using TheInfiniteCrusade.Backend.NewActions;
-using TheInfiniteCrusade.Backend.NewComponents;
-using TheInfiniteCrusade.Backend.NewComponents.Prerequisites;
-using TheInfiniteCrusade.Backend.NewComponents.MartialAttackComponents;
-using TheInfiniteCrusade.Defines;
+using PathOfWarForWotR.Backend.NewActions;
+using PathOfWarForWotR.Backend.NewComponents;
+using PathOfWarForWotR.Backend.NewComponents.Prerequisites;
+using PathOfWarForWotR.Backend.NewComponents.MartialAttackComponents;
+using PathOfWarForWotR.Defines;
 
 using UnityEngine;
-using TheInfiniteCrusade.Backend.NewComponents.AbilityRestrictions;
-using TheInfiniteCrusade.Backend.NewComponents.ManeuverBookSystem;
+using PathOfWarForWotR.Backend.NewComponents.AbilityRestrictions;
+using PathOfWarForWotR.Backend.NewComponents.ManeuverBookSystem;
 using Kingmaker.UnitLogic.Commands.Base;
 using Kingmaker.Visual.Animation.Kingmaker.Actions;
 using BlueprintCore.Blueprints.CustomConfigurators.UnitLogic.Buffs;
 
-namespace TheInfiniteCrusade.Utilities
+namespace PathOfWarForWotR.Utilities
 {
     public static class ManeuverTools
     {
         public static List<BlueprintFeatureReference> ManeuverLearnFeatures = new();
         public static List<BlueprintFeatureReference> StanceLearnFeatures = new();
+        #region no-bp-core
         public static void FinishManeuver(BlueprintAbility maneuver, ModContextBase context)
         {
             var comp = maneuver.GetComponent<ManeuverInformation>();
@@ -80,7 +81,7 @@ namespace TheInfiniteCrusade.Utilities
                 }
                 if (comp.DisciplineKeys.Contains("SilverCrane"))
                 {
-                    maneuver.AddComponent<SilverCraneStrikeIncorporeal>();
+                    maneuver.AddComponent<SilverCraneAntiFiendEffect>();
                 }
 
 
@@ -99,7 +100,7 @@ namespace TheInfiniteCrusade.Utilities
 
         }
 
-     
+
 
 
 
@@ -116,7 +117,7 @@ namespace TheInfiniteCrusade.Utilities
                 x.AddComponent<PrerequisiteManeuverSelectionLevelAllowed>();
                 x.AddComponent<PrerequisiteManeuverSelectionDisciplineManeuversKnown>();
                 x.IsClassFeature = true;
-                
+
             });
             if (stance)
                 StanceLearnFeatures.Add(picker.ToReference<BlueprintFeatureReference>());
@@ -125,10 +126,6 @@ namespace TheInfiniteCrusade.Utilities
 
         }
 
-        public static ConditionsBuilder SilverCraneSpecialTarget()
-        {
-            return ConditionsBuilder.New().AddOrAndLogic(ConditionsBuilder.New().HasFact("9054d3988d491d944ac144e27b6bc318").Alignment(AlignmentComponent.Evil)).HasFact("734a29b693e9ec346ba2951b27987e33").UseOr();
-        }
 
         public static BlueprintAbility MakeWhirlwindStrike(ModContextBase context, string sysName, string displayName, string desc, int level, DisciplineDefine discipline, MartialAttackMode mode = MartialAttackMode.Normal, bool fullRound = false, int extraHits = 0, int extraDice = 0, DiceType diceSize = DiceType.D6, bool WeaponDamage = true, bool VariableDamage = false, DamageTypeDescription damageType = null, int toHitShift = 0, ActionsBuilder payload = null, bool forceFlatfoot = false, bool allDamageIgnoresDr = false, bool extraIsPrecision = false, bool strikeDamageIgnoresDr = false, bool forceUnarmed = false, int flatDamage = 0, bool shieldBash = false, bool canRetarget = false, Sprite icon = null, bool autoHit = false)
         {
@@ -252,52 +249,9 @@ namespace TheInfiniteCrusade.Utilities
 
         }
 
-        public static ContextDurationValue InitiatorModifierRounds()
-        {
-            return new ContextDurationValue
-            {
-                BonusValue = new ContextValue { m_AbilityParameter = AbilityParameterType.CasterStatBonus, ValueType = ContextValueType.AbilityParameter },
-                m_IsExtendable = false,
-                Rate = DurationRate.Rounds,
-                DiceCountValue = 0
-            };
-        }
-
-        public static ActionsBuilder ApplyBuffIfNotSaved(Blueprint<BlueprintBuffReference> buff, ContextDurationValue durationValue, SavingThrowType savingThrowType, ConditionsBuilder conditions = null)
-        {
-            var baseEffect = ActionsBuilder.New().SavingThrow(savingThrowType).ConditionalSaved(failed: ApplyBuff(buff, durationValue));
-
-            if (conditions != null)
-            {
-                return ActionsBuilder.New().Conditional(conditions, baseEffect);
-            }
-
-            return baseEffect;
-        }
-
-        public static ConditionsBuilder LivingTargetsOnly()
-        {
-            return ConditionsBuilder.New().HasFact("UndeadType", true).HasFact("ConstructType", true);
-        }
-
-        public static ConditionsBuilder CrittableTargetsOnly()
-        {
-            return ConditionsBuilder.New();
-        }
-
-        public static ActionsBuilder ApplyBuffForever(Blueprint<BlueprintBuffReference> buff)
-        {
-            return ActionsBuilder.New().ApplyBuffPermanent(buff: buff, isNotDispelable: true, isFromSpell: false);
-        }
-        public static ActionsBuilder ApplyBuff(Blueprint<BlueprintBuffReference> buff, ContextDurationValue durationValue)
-        {
-            return ActionsBuilder.New().ApplyBuff(buff: buff, durationValue: durationValue, isNotDispelable: true, isFromSpell: false);
-        }
-
-        public static ActionsBuilder ApplyBuff(Blueprint<BlueprintBuffReference> buff, ContextDurationValue durationValue, ConditionsBuilder conditions)
-        {
-            return ActionsBuilder.New().Conditional(conditions, ApplyBuff(buff, durationValue));
-        }
+        
+      
+        
 
 
         public static BlueprintAbility MakeSimpleDamageUpStance(ModContextBase source, string sysName, string displayName, string description, int level, DisciplineDefine discipline, int baseValue, int levelsToIncrease, out BlueprintBuff buff, DamageTypeDescription damage = null, bool weaponDamage = true, bool variableDamage = false, Sprite icon = null)
@@ -367,33 +321,20 @@ namespace TheInfiniteCrusade.Utilities
             });
         }
 
-        public static void MakeScalingConfig(this ContextRankConfig config, AbilityRankType type, int baseValue, int levelsToIncrease)
-        {
-            config.m_Type = type;
-            config.m_Progression = ContextRankProgression.StartPlusDivStep;
-            if (baseValue > 1)
-            {
-                config.m_StartLevel = 1 - ((baseValue - 1) * levelsToIncrease);
-            }
-            else
-            {
-                config.m_StartLevel = 1;
-            }
-            config.m_StepLevel = levelsToIncrease;
-        }
+        
 
         public static BlueprintAbility MakeBoostStub(ModContextBase source, string sysName, string displayName, string description, int level, DisciplineDefine discipline, out BlueprintBuff buff, Action<BlueprintBuff> Make, int duration = 1, Sprite icon = null)
         {
             var ability = MakeManeuverStub(source, sysName, displayName, description, ManeuverType.Boost, level, discipline, icon);
 
             buff = Helpers.CreateBlueprint<BlueprintBuff>(source, sysName + "Buff", x =>
-              {
-                  x.SetNameDescription(source, displayName, description);
-                  x.FxOnStart = new();
-                  x.FxOnRemove = new();
-                  Make.Invoke(x);
-                  x.m_Icon = icon ?? discipline.defaultSprite;
-              });
+            {
+                x.SetNameDescription(source, displayName, description);
+                x.FxOnStart = new();
+                x.FxOnRemove = new();
+                Make.Invoke(x);
+                x.m_Icon = icon ?? discipline.defaultSprite;
+            });
 
             ability = AbilityConfigurator.For(ability).AddAbilityEffectRunAction(ApplyBuff(buff, ContextDuration.Fixed(duration))).Configure();
 
@@ -404,20 +345,20 @@ namespace TheInfiniteCrusade.Utilities
         public static BlueprintAbility MakeStanceStub(ModContextBase source, string sysName, string displayName, string description, int level, DisciplineDefine discipline, out BlueprintBuff buff, Sprite icon = null)
         {
             var localbuff = Helpers.CreateBlueprint<BlueprintBuff>(source, sysName + "Buff", x =>
-               {
-                   x.SetNameDescription(source, displayName, description);
-                   x.AddComponent<ManeuverInformation>(x =>
-                   {
-                       x.ManeuverLevel = level;
-                       x.ManeuverType = ManeuverType.Stance;
-                       x.isPrcAbility = false;
-                       x.DisciplineKeys = new string[] { discipline.SysName };
-                   });
-                   x.m_Icon = icon ?? discipline.defaultSprite;
-                   x.FxOnStart = new();
-                   x.FxOnRemove = new();
+            {
+                x.SetNameDescription(source, displayName, description);
+                x.AddComponent<ManeuverInformation>(x =>
+                {
+                    x.ManeuverLevel = level;
+                    x.ManeuverType = ManeuverType.Stance;
+                    x.isPrcAbility = false;
+                    x.DisciplineKeys = new string[] { discipline.SysName };
+                });
+                x.m_Icon = icon ?? discipline.defaultSprite;
+                x.FxOnStart = new();
+                x.FxOnRemove = new();
 
-               });
+            });
 
             var ability = MakeManeuverStub(source, sysName, displayName, description, ManeuverType.Stance, level, discipline, icon);
             ability.Range = AbilityRange.Personal;
@@ -437,52 +378,6 @@ namespace TheInfiniteCrusade.Utilities
         }
 
 
-        public static AbilityConfigurator MakeStance(ModContextBase source, string sysname, string displayName, string desc, DisciplineDefine disciplineDefine, int level, Action<BuffConfigurator> makeBuff, Sprite icon = null, AbilityType? abilityType = null)
-        {
-            var buffConfig = BuffTools.MakeBuff(source, sysname + "Buff", displayName, desc, icon ?? disciplineDefine.defaultSprite);
-            buffConfig.AddComponent<ManeuverInformation>(x =>
-            {
-                x.ManeuverLevel = level;
-                x.ManeuverType = ManeuverType.Stance;
-                x.isPrcAbility = false;
-                x.DisciplineKeys = new string[] { disciplineDefine.SysName };
-            });
-            makeBuff.Invoke(buffConfig);
-
-            var buff = buffConfig.Configure();
-
-            var config = MakeManeuverConfigurator(source, sysname, displayName, desc, UnitCommand.CommandType.Swift, UnitAnimationActionCastSpell.CastAnimationStyle.Self, disciplineDefine, level, ManeuverType.Stance, icon, abilityType);
-            config.SetRange(AbilityRange.Personal);
-            config.AddComponent<PseudoActivatable>(x =>
-            {
-                x.m_Type = PseudoActivatable.PseudoActivatableType.BuffToggle;
-                x.m_GroupName = "MartialStance";
-
-                x.m_Buff = buff.ToReference<BlueprintBuffReference>();
-            });
-            config.AddComponent<AbilityEffectToggleBuff>(x => { x.m_Buff = buff.ToReference<BlueprintBuffReference>(); });
-            return config;
-        }
-
-        public static AbilityConfigurator MakeManeuverConfigurator(ModContextBase source, string sysname, string displayName, string desc, UnitCommand.CommandType commandType, UnitAnimationActionCastSpell.CastAnimationStyle animationStyle, DisciplineDefine disciplineDefine, int level, ManeuverType maneuverType, Sprite icon = null, AbilityType? abilityType = null, bool fullRound = false, Duration? duration = null)
-        {
-
-           var config = AbilityTools.MakeAbility(source, sysname, displayName, desc, commandType, abilityType ?? (disciplineDefine.alwaysSupernatural ? AbilityType.Supernatural : AbilityType.Extraordinary), animationStyle, fullRound, duration);
-            config.AddComponent<ManeuverInformation>(x =>
-            {
-                x.ManeuverLevel = level;
-                x.ManeuverType = maneuverType;
-                x.isPrcAbility = false;
-                x.DisciplineKeys = new string[] { disciplineDefine.SysName };
-            });
-            config.SetIcon(icon ?? disciplineDefine.defaultSprite);
-            if (disciplineDefine.descriptor != SpellDescriptor.None)
-            {
-                config.SetSpellDescriptor(disciplineDefine.descriptor);
-                
-            }
-            return config;
-        }
 
         public static BlueprintAbility MakeManeuverStub(ModContextBase source, string sysName, string displayName, string description, ManeuverType type, int level, DisciplineDefine discipline, Sprite icon = null)
         {
@@ -510,5 +405,194 @@ namespace TheInfiniteCrusade.Utilities
 
 
         }
+
+        #endregion
+
+        #region bpcore
+        
+        public static ConditionsBuilder LivingTargetsOnly()
+        {
+            return ConditionsBuilder.New().HasFact("UndeadType", true).HasFact("ConstructType", true);
+        }
+
+        public static AbilityConfigurator MakeConventionalBoost(ModContextBase source, string sysname, string displayName, string desc, DisciplineDefine disciplineDefine, int level, Action<BuffConfigurator> makeBuff, Sprite icon = null, int duration = 1, AbilityType? abilityType = null)
+        {
+            var buffConfig = BuffTools.MakeBuff(source, sysname + "Buff", displayName, desc, icon ?? disciplineDefine.defaultSprite);
+            buffConfig.AddComponent<ManeuverInformation>(x =>
+            {
+                x.ManeuverLevel = level;
+                x.ManeuverType = ManeuverType.Boost;
+                x.isPrcAbility = false;
+                x.DisciplineKeys = new string[] { disciplineDefine.SysName };
+            });
+            makeBuff.Invoke(buffConfig);
+
+            var buff = buffConfig.Configure();
+
+            var config = MakeManeuverConfigurator(source, sysname, displayName, desc, UnitCommand.CommandType.Swift, UnitAnimationActionCastSpell.CastAnimationStyle.Self, disciplineDefine, level, ManeuverType.Boost, icon, abilityType);
+            config.SetRange(AbilityRange.Personal);
+            config.AddAbilityEffectRunAction(ApplyBuff(buff, ContextDuration.Fixed(duration))).Configure();
+
+            return config;
+        }
+
+        public static void FinishManeuver(AbilityConfigurator configIn, ModContextBase context)
+        {
+            var maneuver = configIn.Configure();
+            var comp = maneuver.GetComponent<ManeuverInformation>();
+            if (comp == null)
+            {
+                return;
+            }
+
+
+
+            //Any universal stuff goes here.
+
+
+            if (comp.isPrcAbility)
+            {
+                return;
+            }
+            else
+            {
+                if (comp.DisciplineKeys.Length == 1)
+                {
+                    if (comp.DisciplineKeys[0] == "BrokenBlade")
+                    {
+                        maneuver.AddComponent<BrokenBladeDisciplineWeaponsOnlyRestriction>();
+                    }
+                    if (comp.DisciplineKeys[0] == "IronTortoise" && !maneuver.Components.OfType<IronTortoiseShieldRequiredRestriction>().Any())
+                    {
+                        maneuver.AddComponent<IronTortoiseShieldRequiredRestriction>();
+                    }
+                    if (comp.DisciplineKeys[0] == "ScarletThrone" && !maneuver.Components.OfType<ScarletThroneNoShieldRule>().Any())
+                    {
+                        maneuver.AddComponent<ScarletThroneNoShieldRule>(x => x.AllowTwoHanderAtAll = true);
+                    }
+                }
+                if (comp.DisciplineKeys.Contains("SilverCrane"))
+                {
+                    maneuver.AddComponent<SilverCraneAntiFiendEffect>();
+                }
+
+
+                if (comp.ManeuverType == ManeuverType.Stance)
+                {
+                    BlueprintTools.GetModBlueprint<BlueprintSpellList>(Main.Context, "MasterStanceList").SpellsByLevel.FirstOrDefault(x => x.SpellLevel == comp.ManeuverLevel).m_Spells.Add(maneuver.ToReference<BlueprintAbilityReference>());
+                    MakeManuverPicker(maneuver, context, true);
+                }
+                else
+                {
+                    BlueprintTools.GetModBlueprint<BlueprintSpellList>(Main.Context, "MasterManeuverList").SpellsByLevel.FirstOrDefault(x => x.SpellLevel == comp.ManeuverLevel).m_Spells.Add(maneuver.ToReference<BlueprintAbilityReference>());
+                    MakeManuverPicker(maneuver, context, false);
+                }
+                Main.Context.Logger.LogPatch("Finished", maneuver);
+            }
+
+        }
+
+        
+
+        public static AbilityConfigurator AddWeaponDamageToStrike(this AbilityConfigurator strike, int dice, int flatDamage = 0, int twohandbonusdamage = 0, DiceType diceType = DiceType.D6, bool isPrecision = false)
+        {
+            return strike.AddComponent<WeaponBonusDamage>(x =>
+            {
+                x.m_DiceCount = dice;
+                x.m_DiceType = diceType;
+                x.m_FlatDamage = flatDamage;
+                x.ExtraDamageOnTwoHands = twohandbonusdamage;
+                x.IsPrecision = isPrecision;
+            });
+
+        }
+
+        public static AbilityConfigurator MakeSingleTargetWeaponStrike(ModContextBase source, string sysname, string displayName, string desc, DisciplineDefine disciplineDefine, int level, Sprite icon = null, AbilityType? abilityType = null, bool fullRound = false, Action<ActionsBuilder> beforeStrike = null, Action<ActionsBuilder> afterstrike = null, Action<ContextActionMartialAttack> attackConfig = null)
+        {
+            var config = MakeStrikeBase(source, sysname, displayName, desc, disciplineDefine, level, icon, abilityType, fullRound: fullRound);
+            config.SetCanTargetFriends(false);
+            config.SetCanTargetPoint(false);
+            config.SetCanTargetSelf(false);
+            config.SetRange(AbilityRange.Weapon);
+
+            var act = ActionsBuilder.New();
+            if (beforeStrike != null)
+            {
+                beforeStrike.Invoke(act);
+            }
+            act.Add<ContextActionMartialAttack>( attackConfig ?? ( x=>{ }));
+            if (afterstrike != null)
+            {
+                afterstrike.Invoke(act);
+            }
+            config.AddAbilityEffectRunAction(act);
+
+
+            return config;
+        }
+
+        public static AbilityConfigurator MakeStrikeBase(ModContextBase source, string sysname, string displayName, string desc, DisciplineDefine disciplineDefine, int level, Sprite icon = null, AbilityType? abilityType = null, UnitCommand.CommandType commandType = UnitCommand.CommandType.Standard, bool fullRound = false, UnitAnimationActionCastSpell.CastAnimationStyle animationStyle = UnitAnimationActionCastSpell.CastAnimationStyle.Special)
+        {
+            var config = MakeManeuverConfigurator(source, sysname, displayName, desc, commandType, animationStyle, disciplineDefine, level, ManeuverType.Strike, icon, abilityType, fullRound);
+          
+            
+            config.SetEffectOnEnemy(AbilityEffectOnUnit.Harmful);
+            
+
+            return config;
+        }
+
+        public static AbilityConfigurator MakeStance(ModContextBase source, string sysname, string displayName, string desc, DisciplineDefine disciplineDefine, int level, Action<BuffConfigurator> makeBuff, Sprite icon = null, AbilityType? abilityType = null)
+        {
+            var buffConfig = BuffTools.MakeBuff(source, sysname + "Buff", displayName, desc, icon ?? disciplineDefine.defaultSprite);
+            buffConfig.AddComponent<ManeuverInformation>(x =>
+            {
+                x.ManeuverLevel = level;
+                x.ManeuverType = ManeuverType.Stance;
+                x.isPrcAbility = false;
+                x.DisciplineKeys = new string[] { disciplineDefine.SysName };
+            });
+            makeBuff.Invoke(buffConfig);
+
+            var buff = buffConfig.Configure();
+
+            var config = MakeManeuverConfigurator(source, sysname, displayName, desc, UnitCommand.CommandType.Swift, UnitAnimationActionCastSpell.CastAnimationStyle.Self, disciplineDefine, level, ManeuverType.Stance, icon, abilityType);
+            config.SetRange(AbilityRange.Personal);
+
+            config.AddComponent<PseudoActivatable>(x =>
+            {
+                x.m_Type = PseudoActivatable.PseudoActivatableType.BuffToggle;
+                x.m_GroupName = "MartialStance";
+
+                x.m_Buff = buff.ToReference<BlueprintBuffReference>();
+            });
+            config.AddComponent<AbilityEffectToggleBuff>(x => { x.m_Buff = buff.ToReference<BlueprintBuffReference>(); });
+            return config;
+        }
+
+        public static AbilityConfigurator MakeManeuverConfigurator(ModContextBase source, string sysname, string displayName, string desc, UnitCommand.CommandType commandType, UnitAnimationActionCastSpell.CastAnimationStyle animationStyle, DisciplineDefine disciplineDefine, int level, ManeuverType maneuverType, Sprite icon = null, AbilityType? abilityType = null, bool fullRound = false, Duration? duration = null)
+        {
+
+            var config = AbilityTools.MakeAbility(source, sysname, displayName, desc, commandType, abilityType ?? (disciplineDefine.alwaysSupernatural ? AbilityType.Supernatural : AbilityType.Extraordinary), animationStyle, fullRound, duration);
+            config.AddComponent<ManeuverInformation>(x =>
+            {
+                x.ManeuverLevel = level;
+                x.ManeuverType = maneuverType;
+                x.isPrcAbility = false;
+                x.DisciplineKeys = new string[] { disciplineDefine.SysName };
+            });
+            config.SetIcon(icon ?? disciplineDefine.defaultSprite);
+            if (disciplineDefine.descriptor != SpellDescriptor.None)
+            {
+                config.SetSpellDescriptor(disciplineDefine.descriptor);
+
+            }
+            return config;
+        }
+
+
+        #endregion
+
+
     }
 }

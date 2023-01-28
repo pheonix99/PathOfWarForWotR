@@ -1,0 +1,265 @@
+﻿[
+  //level 1
+  {
+    "Key": "CraneStep.Name",
+    "enGB": "Crane Step"
+  },
+  {
+    "Key": "CraneStep.Desc",
+    "enGB": "The grace of the Silver Crane blesses the initiator with the ability to step through battle unhindered and unharmed. The initiator makes a free 5-ft step, even if he has already made one."
+  },
+  {
+    "Key": "FlashingWings.Name",
+    "enGB": "Flashing Wings"
+  },
+  {
+    "Key": "FlashingWings.Desc",
+    "enGB": "The flashing wings of the Silver Crane daze the foes of the martial disciple, burning their eyes with the light of Heaven. Make a melee attack and if successful, this attack inflicts an additional 1d4 points of damage and the target is dazzled for one round."
+  },
+  {
+    "Key": "SilverCraneWaltz.Name",
+    "enGB": "Silver Crane Waltz"
+  },
+  {
+    "Key": "SilverCraneWaltz.Desc",
+    "enGB": "The divine vantage point of the celestial realms infuses the mind of the disciple, granting him momentary flickers of foresight. A faint, ghostly image of wings is visible around the disciple but vanishes when he is looked upon directly. The initiator gains a +4 insight bonus to initiative checks if he is in this stance before combat begins, and a +2 insight bonus to Reflex saves and to AC. These bonuses increase by an additional +1 every eight levels after 1st level."
+  },
+  {
+    "Key": "EnduringCraneStrike.Name",
+    "enGB": "Enduring Crane Strike"
+  },
+  {
+    "Key": "EnduringCraneStrike.Desc",
+    "enGB": "Making his soul a wellspring of holy power, the disciple strikes out at a foe to unleashed his holy power to restore health to himself or an ally. The initiator makes an attack against a target creature, inflicting damage as normal, and the strike restores 1d6 hit points plus his initiation modifier to the initiator or to an ally within 30-ft. "
+  },
+  {
+    "Key": "SilverStrike.Name",
+    "enGB": "Silver Strike"
+  },
+  {
+    "Key": "SilverStrike.Desc",
+    "enGB": "Using the insight of the Heavens, the martial disciple learns to read the tangles of fate to direct their efforts in battle. The initiator makes two attack rolls and uses the better of the two rolls to determine result of the attack."
+  },
+  {
+    "Key": "EyesOfTheCrane.Name",
+    "enGB": "Eyes of the Crane"
+  },
+  {
+    "Key": "EyesOfTheCrane.Desc",
+    "enGB": "Using the perception of the disciple’s heavenly training to assist him, the Silver Crane practitioner may see many things which would remain hidden from the eyes of the impure. While in this stance, the initiator rolls twice on Perception checks or when attempting to pierce concealment, using the higher of the two rolls. ."
+  },
+  //level 2
+  {
+    "Key": "BlazingCranesWing.Name",
+    "enGB": "Blazing Crane's Wing"
+  },
+  {
+    "Key": "BlazingCranesWing.Desc",
+    "enGB": "By filling the Silver Crane disciple’s weapon with the strength of his celestial patrons, the warrior funnels their righteous wrath against those that are abominations in the eyes of all that is good. The initiator’s attacks until his next turn inflict an additional 2d6 points of damage against undead or evil outsiders."
+  },
+  {
+    "Key": "EmeraldDisplacementStrike.Name",
+    "enGB": "Emerald Displacement Strike "
+  },
+  {
+    "Key": "EmeraldDisplacementStrike.Desc",
+    "enGB": "Sight is imperative in arts of the hunting bird, and a warrior learns that this holds true for his enemy. An enemy that cannot see is an enemy who can be defeated with greater ease. Make an attack and the target must make a Fortitude save (DC 12 + initiation modifier) or suffer a -4 penalty to Perception checks and a 20% miss chance on all attack rolls for the character’s initiation modifier in rounds (minimum of one round)."
+  },
+  {
+    "Key": "EmeraldDisplacementStrikeDebuff.Desc",
+    "enGB": "Taking a -4 penalty to Perception checks and a 20% miss chance on all attack rolls from Emerald Displacement Strike."
+  },
+
+
+  {
+    "Key": "BlessedPinions.Name",
+    "enGB": "Blessed Pinions"
+  },
+  {
+    "Key": "BlessedPinions.Desc",
+    "enGB": "The pinion feathers of the Silver Crane’s wings gain an ethereal glimmer as if they were blessed steel. Heavenly agents guide their disciple’s attack so it may strike true as if it were blessed, even allowing it to strike the unseen. Make an attack against a foe that inflicts an additional 2d6 points of sacred damage and the attack is considered good aligned for the purposes of overcoming damage reduction. The disciple may also choose to strike incorporeal foes with this strike as if they were made manifest."
+  },
+  //level 3
+  {
+    "Key": "ExorcismStrike.Name",
+    "enGB": "Exorcism Strike"
+  },
+  {
+    "Key": "ExorcismStrike.Desc",
+    "enGB": "The foes of the celestial realms tremble in fear at the wrath of the Heavens themselves, and a disciple of the Silver Crane wields that righteous anger in battle. This strike inflicts an additional 6d6 points of sacred damage to the foe if it is an undead creature or an outsider with the evil subtype, with a chance to daze the target for 1 round if it fails a Fortitude save (DC 13 + initiation modifier). Success negates the daze effect. If the target is a possessing entity within a host creature, the damage inflicted from this strike is solely inflicted upon the possessor, not the host. If the target is neither undead nor an evil outsider, this attack inflicts an additional 2d6 points of damage, and does not daze the target."
+  },
+  {
+    "Key": "SilverKnightsBlade.Name",
+    "enGB": "Silver Knight's Blade"
+  },
+  {
+    "Key": "SilverKnightsBlade.Desc",
+    "enGB": "Those graced with the blessings of the Silver Crane are both terrors to their foes and heroes to their fellows. This strike inflicts an additional 4d6 points of sacred damage and heals the same to either the initiator or to a single ally within 30-ft of the martial disciple."
+  },
+
+  {
+    "Key": "StanceOfTheSilverCrane.Name",
+    "enGB": "Stance of the Silver Crane"
+  },
+  {
+    "Key": "StanceOfTheSilverCrane.Desc",
+    "enGB": "The martial disciple with knowledge of this stance learns to channel the potency of their celestial patrons to combat evil with great efficiency. In the midst of battle ghostly images of wings or blazing wrathful haloes can often be seen near Silver Crane disciples. While in this stance, any weapon that the martial disciple wields is treated as if it had the holy special weapon property. Additionally, the character is considered under the influence of a protection from evil spell with a caster level equal to his initiator level. "
+  },
+  {
+    "Key": "SilverCranesBlessing.Name",
+    "enGB": "Silver Crane’s Blessing"
+  },
+  {
+    "Key": "SilverCranesBlessing.Desc",
+    "enGB": "By invoking the powers of his celestial patrons upon successfully smiting an enemy of the heavens, the holy power of the Silver Crane disciple’s patron flows through him to restore the health of the vessel or the ally of the vessel. Upon a successful attack, the character may initiate this boost to heal himself or an ally within 30-ft of 2d6 points of damage plus his initiation modifier."
+  },
+  //Level 4
+  {
+    "Key": "SacredPinions.Name",
+    "enGB": "Sacred Pinions"
+  },
+  {
+    "Key": "SacredPinions.Desc",
+    "enGB": "The martial disciple enhances his melee strikes with the blessed wings of the Silver Crane, infusing them with celestial might to strike beyond flesh and bite spirit. Make an attack against a foe that inflicts an additional 5d6 points of damage. The initiator may also choose to strike incorporeal foes with this strike as if they were made manifest."
+  },
+  {
+    "Key": "SilverCranesLeap.Name",
+    "enGB": "Silver Crane’s Leap"
+  },
+  {
+    "Key": "SilverCranesLeap.Desc",
+    "enGB": "The flow of battle runs sharply through the Silver Crane disciple’s mind, allowing him to see where his opponents will move before he makes his own. By watching these flows, he may step before their movements, allowing him greater mobility without a cost to defense. The disciple may make a free movement up to his normal movement speed without provoking attacks of opportunity."
+  },
+
+  {
+    "Key": "SapphireDisplacementStrike.Name",
+    "enGB": "Sapphire Displacement Strike "
+  },
+  {
+    "Key": "SapphireDisplacementStrike.Desc",
+    "enGB": "The agents of the celestial realms guide your blade and hinder the senses of your foes. Make a successful attack and the target must make a Fortitude save (DC 14 + initiation modifier) or fail on all Perception checks and suffers a 50% miss chance on attack rolls for the disciple’s initiation modifier in rounds (minimum of one round)."
+  },
+  {
+    "Key": "SapphireDisplacementStrikeDebuff.Desc",
+    "enGB": "Automatically failing perception checks and taking a 50% miss chance on all attack rolls from Emerald Displacement Strike."
+  },
+
+  //Level 5
+  {
+    "Key": "SilverCranesSpiral.Name",
+    "enGB": "Silver Crane’s Spiral"
+  },
+  {
+    "Key": "SilverCranesSpiral.Desc",
+    "enGB": "Filling himself with the wrath of the heavens, the Silver Crane disciple takes on a nimbus of glowing wings and lashes out at all of his nearby enemies with smiting strikes. The character makes a single attack at his full attack bonus with a +2 insight bonus at each adjacent enemy or enemy that is within the area he threatens. Ranged attacks used with this maneuver may only be used against opponents within the weapon’s first range increment."
+  },
+
+  {
+    "Key": "ArgentKnightsBanner.Name",
+    "enGB": "Argent Knight’s Banner"
+  },
+  {
+    "Key": "ArgentKnightsBanner.Desc",
+    "enGB": "Infusing his arms and weapon with the glory of the Silver Crane’s majesty, the martial disciple smites his foe and radiates a banner of heavenly wings, which explode with celestial light and power. Make a melee attack that inflicts an additional 8d6 points of damage and heals the initiator and all of his allies within 30-ft for 4d6 points of damage."
+  },
+  {
+    "Key": "StanceOfTheCraneKnight.Name",
+    "enGB": "Stance of the Crane Knight "
+  },
+  {
+    "Key": "StanceOfTheCraneKnight.Desc",
+    "enGB": "As a disciple of the Silver Crane, the martial disciple may manifest the essence of his celestial patrons along his body, its light radiating from his soul to form silver-feathered ethereal wings from his back and a blazing halo of argent radiance around his head. While in this stance, you gain a fly speed equal to twice your base land speed with average maneuverability and you gain DR 10/evil. You also radiate light as a light spell from the halo-like effect of this stance while it is in effect."
+  },
+  //Level 6
+  {
+    "Key": "ArgentKingsScepter.Name",
+    "enGB": "Argent King’s Scepter"
+  },
+  {
+    "Key": "ArgentKingsScepter.Desc",
+    "enGB": "The initiator of this strike holds his weapon aloft briefly, allowing it to fill with holy wrath before striking the blazing weapon down with righteous finality. This strike inflicts an additional 12d6 points of damage and heals the initiator for 60 points of damage."
+  },
+  {
+    "Key": "HolyPinions.Name",
+    "enGB": "Holy Pinions"
+  },
+  {
+    "Key": "HolyPinions.Desc",
+    "enGB": "Using this advanced technique of the Silver Crane, the martial disciple infuses his strike with the pure celestial essence of their heavenly companion and smites the forces of the Lower Planes. Make an attack that inflicts and additional 10d6 points of damage. The disciple may also choose to strike incorporeal foes with this strike as if they were made manifest. If used against an incorporeal creature, he may attempt to make this creature corporeal. The creature must make a Will save (DC 16 + initiation modifier) or be made corporeal and stunned for the character’s initiation modifier in rounds (minimum of one round)."
+  },
+  {
+    "Key": "HolyPinionsDebuff.Desc",
+    "enGB": "Forced corporeal and and stunned."
+  },
+  {
+    "Key": "SilverCraneEndurance.Name",
+    "enGB": "Silver Crane Endurance"
+  },
+  {
+    "Key": "SilverCraneEndurance.Desc",
+    "enGB": "By reciting a litany of praises and prayers to the glory of the angels and to the heavens above, the Silver Crane disciple is filled with restorative power from his patrons. Some disciples shimmer with a holy glow, and others bear a halo or nimbus around their head when in this stance. While in this stance, the initiator gain fast healing 5."
+  },
+  {
+    "Key": "SilverCranesMercy.Name",
+    "enGB": "Silver Crane’s Mercy"
+  },
+  {
+    "Key": "SilverCranesMercy.Desc",
+    "enGB": "With a recitation of power and a prayer for mercy upon those who are servants of heaven, the Silver Crane disciple strikes out at the evil he battles. Upon making a successful attack, you or an ally within 30-ft of you is healed of 9d6 points of damage."
+  },
+  //Level 7
+  {
+    "Key": "DiamondDisplacementStrike.Name",
+    "enGB": "Diamond Displacement Strike "
+  },
+  {
+    "Key": "DiamondDisplacementStrike.Desc",
+    "enGB": "A blinded warrior cannot strike with his eyes, and most cannot strike with their mind. The disciple of the Silver Crane strikes hard at his opponent’s senses and rips them from him decisively, burning them out with holy light and thunderous power. Make an attack, the target of which must make a Will save (DC 17 + initiation modifier) or be permanently blinded and deafened by a celestial hand. Targets that succeed their saving throw are staggered for one round from the sensory overload of the attack."
+  },
+  {
+    "Key": "HolyRush.Name",
+    "enGB": "Holy Rush "
+  },
+  {
+    "Key": "HolyRush.Desc",
+    "enGB": "With a rush of speed and flare of arching wings of light, the martial disciple speeds towards an ally within the blink of an eye. When initiating this boost, you teleport to an square within 50 ft. and adjacent to an ally. If there is no ally within this range, this maneuver cannot be used. The disciple may teleport himself, his gear and equipment."
+  },
+  //Level 8
+  {
+    "Key": "CelestialPinions.Name",
+    "enGB": "Celestial Pinions"
+  },
+  {
+    "Key": "CelestialPinions.Desc",
+    "enGB": "Martial disciples with this technique have learned to strike through the ether and destroy the very essence of their infernal foes in a blazing torrent of holy light. Make an attack against a foe that inflicts an additional 15d6 points of damage. The disciple may also choose to strike incorporeal foes with this strike as if they were made manifest. If used against an incorporeal creature, the creature must make a Will save (DC 18 + initiation modifier) or be instantly slain."
+  },
+  {
+    "Key": "BenedictionOfTheSilverCrane.Name",
+    "enGB": "Benediction of the Silver Crane"
+  },
+  {
+    "Key": "BenedictionOfTheSilverCrane.Desc",
+    "enGB": "With a powerful cry of need, the true glory of heaven’s mercy pours down upon the Silver Crane disciple in a flood of healing benediction. Upon a successful attack, the initiator and all allies within 30- ft of his position are healed of 12d6 points of damage. ."
+  },
+  {
+    "Key": "DiamondWingsOfTheImperialCrane.Name",
+    "enGB": "Diamond Wings of the Imperial Crane"
+  },
+  {
+    "Key": "DiamondWingsOfTheImperialCrane.Desc",
+    "enGB": "The true master of the Silver Crane discipline who learns its mysteries must be prepared to take the fight to the enemies of the Upper Planes. By initiating this stance, a halo of ghostly wings erupts around the disciple to ward away harmful magics. While in this stance, the ghostly image of wings protects the initiator against the spells and powers of evil spells and dark powers, granting him spell resistance equal to 15 + his initiator level and a +4 sacred bonus to saving throws. Effects that fail to pass the initiator’s spell resistance restore twice the level of the effect in hit points to the disciple. ."
+  },
+  //level 9
+  {
+    "Key": "StrikeOfSilverExorcism.Name",
+    "enGB": "Strike of Silver Exorcism"
+  },
+  {
+    "Key": "StrikeOfSilverExorcism.Desc",
+    "enGB": "The ultimate technique of the Silver Crane is a strike that rends the essence of the foes of the heavens asunder and brings them to ruin in one blazing stroke. This strike adds an additional 80 points of sacred damage to the attack and dazzles the foe for one round. Undead or evil outsiders who are struck by this attack suffer 120 points of sacred damage instead and must make a Will save (DC 19 + initiation modifier) or be instantly slain. Creatures that succeed on the saving throw are instead hindered by holy power, being under the effects of a slow spell for the character’s initiation modifier in rounds as their very essence quakes with the agonies inflicted by pure celestial energies."
+  }
+
+
+
+
+]
