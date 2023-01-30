@@ -84,7 +84,7 @@ namespace PathOfWarForWotR.NewContent.Disciplines
                 ManeuverTools.FinishManeuver(roar, Main.Context);
 
             }
-
+            /*
             DistractingStrike();
             void DistractingStrike()
             {
@@ -93,7 +93,7 @@ namespace PathOfWarForWotR.NewContent.Disciplines
                 strike.SetLocalizedDuration(Main.Context, "1 round");
                 ManeuverTools.FinishManeuver(strike, Main.Context);
             }
-
+            */
             PyriteStrike();
             void PyriteStrike()
             {

@@ -130,6 +130,7 @@ namespace PathOfWarForWotR.NewContent.Disciplines
                 ManeuverTools.FinishManeuver(gl, Main.Context);
 
             }
+            /*
             DazingAttack();
             void DazingAttack()
             {
@@ -238,6 +239,7 @@ namespace PathOfWarForWotR.NewContent.Disciplines
                 ManeuverTools.FinishManeuver(gl, Main.Context);
 
             }
+            */
         }
             
     }

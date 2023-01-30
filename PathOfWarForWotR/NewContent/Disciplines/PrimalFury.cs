@@ -22,7 +22,7 @@ namespace PathOfWarForWotR.NewContent.Disciplines
 
             DisciplineTools.AddDiscipline("PrimalFury", "Primal Fury", "The way of the Primal Fury is a simple method of undeniable ferocity coupled with unstoppable aggression in the face of the enemy. By focusing the cold rage within a warrior’s heart and combining that power with calculated skill and intellect, the Primal Fury practitioner is a force of remorseless warfare that is capable of truly devastating shows of force. Learned by those emulating the hunt and attack methods of great cats, such as pumas, lions, leopards, and tigers, the early practitioners of this discipline spread throughout the world, teaching it nearly everywhere. Many even regard this discipline as the oldest of all disciplines. The disciples of the Primal Fury have a few unifying principles, however, and that is firstly survival. All disciples of the Primal Fury are survivors of hardships in battle, trading blows stoically and fighting on with indomitable will to live to fight again. This drive to victory makes many of them very taciturn, but others simply shrug off the specter of death and focus more on the moment. The associated skill for the Primal Fury discipline is Survival, and its associated weapon groups are axes, heavy blades, and hammers.", new Kingmaker.Blueprints.Items.Weapons.WeaponFighterGroup[] { Kingmaker.Blueprints.Items.Weapons.WeaponFighterGroup.Axes, Kingmaker.Blueprints.Items.Weapons.WeaponFighterGroup.BladesHeavy, Kingmaker.Blueprints.Items.Weapons.WeaponFighterGroup.Hammers }, Kingmaker.EntitySystem.Stats.StatType.SkillLoreNature, bash.Icon);
             DisciplineTools.Disciplines.TryGetValue("PrimalFury", out var primalFury);
-
+            /*
             CrushingBlow();
            void CrushingBlow()
             {
@@ -147,6 +147,7 @@ namespace PathOfWarForWotR.NewContent.Disciplines
 
 
             }
+            */
         }
 
         

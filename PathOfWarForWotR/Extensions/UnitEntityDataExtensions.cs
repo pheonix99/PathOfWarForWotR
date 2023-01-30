@@ -5,12 +5,23 @@ using Kingmaker.UnitLogic;
 using System.Collections.Generic;
 using PathOfWarForWotR.Backend.NewBlueprints;
 using PathOfWarForWotR.Backend.NewUnitDataClasses;
+using System.Linq;
 
 namespace PathOfWarForWotR.Extensions
 {
     public static class UnitEntityDataExtensions
     {
         private static Dictionary<UnitDescriptor, Dictionary<BlueprintManeuverBook, ManeuverBook>> AllManeuverBooks = new();
+
+        public static bool HasMartialStuff(this UnitEntityData unit)
+        {
+            if (AllManeuverBooks.TryGetValue(unit, out var books))
+            {
+                if (books != null)
+                    return books.Any();
+            }
+            return false;
+        }
 
         public static int CurrentHP(this UnitEntityData unit)
         {
@@ -62,6 +73,7 @@ namespace PathOfWarForWotR.Extensions
                 }
                 else
                 {
+                    Main.Context.Logger.Log($"Added {blueprintManeuverBook.name} to {data.CharacterName} via Demand");
                     book = new ManeuverBook(data, blueprintManeuverBook);
                     keyValuePairs.Add(blueprintManeuverBook, book);
                 }
@@ -70,6 +82,7 @@ namespace PathOfWarForWotR.Extensions
             else
             {
                 AllManeuverBooks.Add(data, new());
+                Main.Context.Logger.Log($"Added {blueprintManeuverBook.name} to {data.CharacterName} via Demand");
                 var book = new ManeuverBook(data, blueprintManeuverBook);
                 AllManeuverBooks[data].Add(blueprintManeuverBook, book);
 

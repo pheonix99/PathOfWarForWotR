@@ -17,6 +17,8 @@ using PathOfWarForWotR.Backend.NewActions;
 using PathOfWarForWotR.Backend.NewComponents.AbilityRestrictions;
 using PathOfWarForWotR.Backend.NewComponents.MartialAttackComponents;
 using PathOfWarForWotR.Backend.NewComponents.AbilitySpecific;
+using Kingmaker.UnitLogic.Mechanics.Components;
+using BlueprintCore.Utils;
 
 namespace PathOfWarForWotR.NewContent.Disciplines
 {
@@ -25,7 +27,7 @@ namespace PathOfWarForWotR.NewContent.Disciplines
         public static void BuildBrokenBlade()
         {
             var ius = BlueprintTools.GetBlueprint<BlueprintFeature>("7d1bac926c0945a892bf0eda76004379");
-
+            LocalizationTool.LoadLocalizationPack("Mods\\PathOfWarForWotR\\Localization\\BrokenBlade.json");
             DisciplineTools.AddDiscipline("BrokenBlade", "Broken Blade", "Legend has it the first practitioner of the Broken Blade style was a powerful swordsman who in the middle of a life-or-death duel with an old enemy found his sword broken by his opponent and had to toss it aside. Disheartened by his lack of weapons, he quickly realized that his years of training, exercise, and conditioning had made his body a weapon all on its own. Using only his fists and his nerve, this long-forgotten swordsman became the first to develop this discipline’s techniques, and he passed his experience on to others. Disciples of the Broken Blade teach these methods in monasteries, to cloistered warrior-monks who learn to operate without the use of traditional weapons of combat. Others learn from parents or individual mentors, haphazard or otherwise, and scrap their way through as it suits them. The Broken Blade’s associated skill is Acrobatics, and its associated weapon groups are close, monk, and natural. ", new Kingmaker.Blueprints.Items.Weapons.WeaponFighterGroup[] { Kingmaker.Blueprints.Items.Weapons.WeaponFighterGroup.Monk, Kingmaker.Blueprints.Items.Weapons.WeaponFighterGroup.Close, Kingmaker.Blueprints.Items.Weapons.WeaponFighterGroup.Natural }, Kingmaker.EntitySystem.Stats.StatType.SkillMobility, ius.Icon);
             DisciplineTools.Disciplines.TryGetValue("BrokenBlade", out var brokenBlade);
 
@@ -33,14 +35,18 @@ namespace PathOfWarForWotR.NewContent.Disciplines
             IronHandStance();
             void IronHandStance()
             {
+                var stance = ManeuverConfigurator.NewStance(Main.Context, "IronHandStance", brokenBlade, 1, x =>
+                {
+                    x.AddContextStatBonus(Kingmaker.EntitySystem.Stats.StatType.AC, ContextValues.Rank(Kingmaker.Enums.AbilityRankType.Default), Kingmaker.Enums.ModifierDescriptor.Shield);
+                    x.AddComponent<ContextRankConfig>(x => ManeuverConfigurator.MakeScalingConfig(x, Kingmaker.Enums.AbilityRankType.Default, 2, 6));
+
+                });
+
+                stance.ConfigureManeuver(Main.Context);
+
                 
-
-                var IronHandStance = ManeuverTools.MakeSimpleStatUpStance(Main.Context, "IronHandStance", "Iron Hand Stance", "By keeping his hands stiff and his arms loose and ready, the disciple uses his bare palms as shields to protect himself from the weapons of his foes. While in this stance, the initiator gains a +2 shield bonus to his AC while he has at least one free hand. At the initiator’s 6th initiator level, this bonus increases by +1, again at 12th level, and a final time at 18th level.", 1, brokenBlade, Kingmaker.EntitySystem.Stats.StatType.AC, Kingmaker.Enums.ModifierDescriptor.Shield, 2, 6, out var IHSbuff);
-                IronHandStance.SetLocalizedDuration(Main.Context, "");
-                IronHandStance.SetLocalizedSavingThrow(Main.Context, "");
-                ManeuverTools.FinishManeuver(IronHandStance, Main.Context);
             }
-
+            /*
             PugilistStance();
             void PugilistStance()
             {
@@ -161,9 +167,10 @@ namespace PathOfWarForWotR.NewContent.Disciplines
                    
                 }, icon: ius.Icon);
             }
-
+            */
 
             #endregion
+            /*
             #region level 2
 
             KnuckleToTheBlade();
@@ -378,7 +385,7 @@ namespace PathOfWarForWotR.NewContent.Disciplines
             };
 
             #endregion
-
+            */
             BlueprintAbility BrokenBladeStandardStrikeStrike(ModContextBase context, string sysName, string displayName, string desc, int level, bool unarmedOnly, bool fullRound = false, MartialAttackMode mode = MartialAttackMode.Normal, int extraHits = 0, int extraDice = 0, bool strikeDamageIgnoresDr = false, int toHitShift = 0, bool allDamageIgnoresDr = false, bool extraIsPrecision = false, bool forceFlatfoot = false, ActionsBuilder payload = null, Sprite icon = null)
             {
                 var abilty = ManeuverTools.MakeStandardStrike(context, sysName, displayName, desc, level, brokenBlade, mode, fullRound, extraHits: extraHits, extraDice: extraDice, Kingmaker.RuleSystem.DiceType.D6, WeaponDamage: true, VariableDamage: false, forceFlatfoot: forceFlatfoot, damageType: null, toHitShift: 0, allDamageIgnoresDr: allDamageIgnoresDr, payload: payload, forceUnarmed: unarmedOnly, extraIsPrecision: extraIsPrecision, strikeDamageIgnoresDr:strikeDamageIgnoresDr, icon: icon);

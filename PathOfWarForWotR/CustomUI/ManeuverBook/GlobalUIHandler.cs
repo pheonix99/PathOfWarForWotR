@@ -24,6 +24,7 @@ namespace PathOfWarForWotR.CustomUI.ManeuverBook
         {
             try
             {
+                /*
                 var spellScreen = UIHelpers.SpellbookScreen.gameObject;
                 if (spellScreen.GetComponent<ManeuverBookController>() == null)
                 {
@@ -36,6 +37,7 @@ namespace PathOfWarForWotR.CustomUI.ManeuverBook
 
                     
                 }
+                */
             }
             catch (Exception e)
             {

@@ -17,6 +17,7 @@ using PathOfWarForWotR.Backend.NewComponents;
 using PathOfWarForWotR.Backend.NewComponents.ManeuverBookSystem;
 using PathOfWarForWotR.Defines;
 using PathOfWarForWotR.Utilities;
+using Kingmaker.Localization;
 
 namespace PathOfWarForWotR.NewContent.Feats.MartialFeats
 {
@@ -29,7 +30,7 @@ namespace PathOfWarForWotR.NewContent.Feats.MartialFeats
         public static void Build()
         {
 
-
+            LocalizationTool.LoadLocalizationPack("Mods\\PathOfWarForWotR\\Localization\\MartialTraining.json");
             var slots = BuildMTSlotsFeature();
             BlueprintFeatureReference BuildMTSlotsFeature()
             {
@@ -80,7 +81,7 @@ namespace PathOfWarForWotR.NewContent.Feats.MartialFeats
             {
                 x.Name = LocalizationTool.CreateString("MartialTrainingManeuverBook.Name", "Martial Training", false);
                 x.m_ManeuverSlotsReference = slotsProp.ToReference<BlueprintUnitPropertyReference>();
-                x.m_InitiatorLevelReference = initatorLevelProp.ToReference<BlueprintUnitPropertyReference>();
+                x.BookType = BlueprintManeuverBook.ManeuverBookType.MartialTraining;
             });
 
             bookRef = book.ToReference<BlueprintManeuverBookReference>();
@@ -114,7 +115,7 @@ namespace PathOfWarForWotR.NewContent.Feats.MartialFeats
                         x.Stat = Kingmaker.EntitySystem.Stats.StatType.Intelligence;
                         x.Value = 11;
                     });
-
+                    x.AddComponent<AddMartialTrainingPartComponent>(x => { x.m_ManeuverBook = bookRef; });
 
 
                 });
@@ -136,7 +137,7 @@ namespace PathOfWarForWotR.NewContent.Feats.MartialFeats
                         x.Stat = Kingmaker.EntitySystem.Stats.StatType.Wisdom;
                         x.Value = 11;
                     });
-
+                    x.AddComponent<AddMartialTrainingPartComponent>(x => { x.m_ManeuverBook = bookRef; });
 
 
                 });
@@ -160,7 +161,7 @@ namespace PathOfWarForWotR.NewContent.Feats.MartialFeats
                         x.Stat = Kingmaker.EntitySystem.Stats.StatType.Charisma;
                         x.Value = 11;
                     });
-
+                    x.AddComponent<AddMartialTrainingPartComponent>(x => { x.m_ManeuverBook = bookRef; });
 
 
                 });
@@ -203,16 +204,51 @@ namespace PathOfWarForWotR.NewContent.Feats.MartialFeats
 
 
             }
-            var level1 = MartialTraining1();
+            MartialTrainingProgression();
+            BlueprintFeature MartialTrainingProgression()
+            {
+                var guid = Main.Context.Blueprints.GetGUID("MartialTrainingProgression");
+                var config = ProgressionConfigurator.New("MartialTrainingProgression", guid.ToString());
+                config.SetDisplayName("MartialTraining1.Name");
+                config.SetDescription("MartialTraining1.Desc");
+                config.AddToFeaturesRankIncrease("MartialTrainingProgression");
+                config.AddToLevelEntries(1, disciplineSelector.Guid.ToString(), statSelector.Guid.ToString(), maneuverLearnRef.Guid.ToString(), maneuverLearnRef.Guid.ToString());
+                config.AddToLevelEntries(2, slots.Guid.ToString(), maneuverLearnRef.Guid.ToString(), maneuverLearnRef.Guid.ToString(), stanceLearnRef.Guid.ToString());
+                config.AddToLevelEntries(3, slots.Guid.ToString(), maneuverLearnRef.Guid.ToString(), maneuverLearnRef.Guid.ToString(), stanceLearnRef.Guid.ToString());
+                config.AddToLevelEntries(4, slots.Guid.ToString(), maneuverLearnRef.Guid.ToString(), maneuverLearnRef.Guid.ToString());
+                config.AddToLevelEntries(5, slots.Guid.ToString(), maneuverLearnRef.Guid.ToString(), maneuverLearnRef.Guid.ToString(), stanceLearnRef.Guid.ToString());
+                config.AddToLevelEntries(6, slots.Guid.ToString(), maneuverLearnRef.Guid.ToString());
+                config.SetHideInUI(false);
+                config.SetHideInCharacterSheetAndLevelUp(false);
+                config.SetClasses(new Blueprint<BlueprintCharacterClassReference>[] { });
+                config.SetGroups(FeatureGroup.CombatFeat, FeatureGroup.Feat);
+                var made = config.Configure();
+
+                var feature = FeatureConfigurator.For(made);
+
+                
+                feature.AddPrerequisiteCharacterLevel(1);
+                
+                feature.AddComponent<AddMartialTrainingRankComponent>();
+                feature.AddPrerequisiteStatValue(Kingmaker.EntitySystem.Stats.StatType.Intelligence, 3);
+                feature.AddPrerequisiteIsPet(not: true);
+                return feature.Configure();
+            }
+
+            //var level1 = MartialTraining1();
+
             BlueprintFeature MartialTraining1()
             {
                 var featureConfig = MoreFeatTools.MakeFeature(Main.Context, "MartialTraining1Feature", "Martial Training I", "Select a martial discipline. The associated skill for this discipline is now a class skill. Your initiation modifier is chosen from Intelligence, Wisdom, or Charisma. Your martial initiator level maneuvers granted by this feat (and subsequent Martial Training feats) is equal to half your character level + your initiation modifier. You may select any two maneuvers from the 1st level maneuvers from this discipline, and you may ready one of your maneuvers for use. You may recover one maneuver by expending a full round action to recover it./nSpecial: If you ever gain levels in a martial adept class or possess them previously, these maneuvers continue to use their own initiator level and recovery method, independent of your martial adept level. Those wishing to add new maneuvers from a discipline that is already available to their class should instead select the Advanced Study feat instead.", true, featureGroups: new FeatureGroup[] { FeatureGroup.CombatFeat, FeatureGroup.Feat });
                 featureConfig.AddPrerequisiteCharacterLevel(1);
-                featureConfig.AddComponent<AddMartialTrainingPartComponent>();
+                //featureConfig.AddComponent<AddMartialTrainingPartComponent>(x => { x.m_ManeuverBook = bookRef; });
                 featureConfig.AddComponent<AddMartialTrainingRankComponent>();
 
-                
-                featureConfig.AddFacts(facts: new() { disciplineSelector.Guid.ToString(), statSelector.Guid.ToString(), slots.Guid.ToString(), maneuverLearnRef.Guid.ToString(), maneuverLearnRef.Guid.ToString(), recovery });
+                featureConfig.AddFeatureOnApply(disciplineSelector.Guid.ToString());
+                featureConfig.AddFeatureOnApply(statSelector.Guid.ToString());
+                featureConfig.AddFeatureOnApply(maneuverLearnRef.Guid.ToString());
+                featureConfig.AddFeatureOnApply(maneuverLearnRef.Guid.ToString());
+                //featureConfig.AddFacts(facts: new() { disciplineSelector.Guid.ToString(), statSelector.Guid.ToString(), slots.Guid.ToString(), maneuverLearnRef.Guid.ToString(), maneuverLearnRef.Guid.ToString(), recovery });
               
                 featureConfig.AddPrerequisiteStatValue(Kingmaker.EntitySystem.Stats.StatType.Intelligence, 3);
                 featureConfig.AddPrerequisiteIsPet(not: true);
@@ -238,14 +274,16 @@ namespace PathOfWarForWotR.NewContent.Feats.MartialFeats
 
 
 
-                featureConfig.AddFacts(facts: new() { slots.Guid.ToString(), maneuverLearnRef.Guid.ToString(), maneuverLearnRef.Guid.ToString(), stanceLearnRef.Guid.ToString() });
+               // featureConfig.AddFacts(facts: new() { slots.Guid.ToString(), maneuverLearnRef.Guid.ToString(), maneuverLearnRef.Guid.ToString(), stanceLearnRef.Guid.ToString() });
 
-                featureConfig.AddPrerequisiteFeature("MartialTraining1Feature");
+                //featureConfig.AddPrerequisiteFeature("MartialTraining1Feature");
+                featureConfig.AddPrerequisiteFeature("MartialTrainingProgression");
               
 
                 var feature = featureConfig.Configure();
 
-                //FeatureConfigurator.For("MartialTraining1Feature").SetIsPrerequisiteFor("MartialTraining2Feature").Configure();
+                FeatureConfigurator.For("MartialTrainingProgression").SetIsPrerequisiteFor("MartialTraining2Feature").Configure();
+                ProgressionConfigurator.For("MartialTrainingProgression").AddToFeaturesRankIncrease(feature).Configure();
 
                 return feature;
             }
@@ -259,14 +297,14 @@ namespace PathOfWarForWotR.NewContent.Feats.MartialFeats
                 featureConfig.AddComponent<AddMartialTrainingRankComponent>();
                 featureConfig.AddPrerequisiteStatValue(Kingmaker.EntitySystem.Stats.StatType.Intelligence, 3);
                 featureConfig.AddPrerequisiteIsPet(not: true);
-                featureConfig.AddFacts(facts: new() { slots.Guid.ToString(), maneuverLearnRef.Guid.ToString(), maneuverLearnRef.Guid.ToString(), stanceLearnRef.Guid.ToString() });
+                //featureConfig.AddFacts(facts: new() { slots.Guid.ToString(), maneuverLearnRef.Guid.ToString(), maneuverLearnRef.Guid.ToString(), stanceLearnRef.Guid.ToString() });
                 featureConfig.AddPrerequisiteFeature("MartialTraining2Feature");
             
                 featureConfig.AddPrerequisiteIsPet(not: true);
                 var feature = featureConfig.Configure();
 
                 FeatureConfigurator.For("MartialTraining2Feature").SetIsPrerequisiteFor("MartialTraining3Feature").Configure();
-
+                ProgressionConfigurator.For("MartialTrainingProgression").AddToFeaturesRankIncrease(feature).Configure();
                 return feature;
 
                 
@@ -280,13 +318,13 @@ namespace PathOfWarForWotR.NewContent.Feats.MartialFeats
                 featureConfig.AddComponent<AddMartialTrainingRankComponent>();
                 featureConfig.AddPrerequisiteStatValue(Kingmaker.EntitySystem.Stats.StatType.Intelligence, 3);
                 featureConfig.AddPrerequisiteIsPet(not: true);
-                featureConfig.AddFacts(facts: new() { slots.Guid.ToString(), maneuverLearnRef.Guid.ToString(), maneuverLearnRef.Guid.ToString() });
+               // featureConfig.AddFacts(facts: new() { slots.Guid.ToString(), maneuverLearnRef.Guid.ToString(), maneuverLearnRef.Guid.ToString() });
                 featureConfig.AddPrerequisiteFeature("MartialTraining3Feature");
             
                 var feature = featureConfig.Configure();
 
                 FeatureConfigurator.For("MartialTraining3Feature").SetIsPrerequisiteFor("MartialTraining4Feature").Configure();
-
+                ProgressionConfigurator.For("MartialTrainingProgression").AddToFeaturesRankIncrease(feature).Configure();
                 return feature;
 
                 
@@ -302,13 +340,13 @@ namespace PathOfWarForWotR.NewContent.Feats.MartialFeats
                 featureConfig.AddComponent<AddMartialTrainingRankComponent>();
                 featureConfig.AddPrerequisiteStatValue(Kingmaker.EntitySystem.Stats.StatType.Intelligence, 3);
                 featureConfig.AddPrerequisiteIsPet(not: true);
-                featureConfig.AddFacts(facts: new() { slots.Guid.ToString(), maneuverLearnRef.Guid.ToString(), maneuverLearnRef.Guid.ToString(), stanceLearnRef.Guid.ToString() });
+                //featureConfig.AddFacts(facts: new() { slots.Guid.ToString(), maneuverLearnRef.Guid.ToString(), maneuverLearnRef.Guid.ToString(), stanceLearnRef.Guid.ToString() });
                 featureConfig.AddPrerequisiteFeature("MartialTraining4Feature");
 
                 var feature = featureConfig.Configure();
 
                 FeatureConfigurator.For("MartialTraining4Feature").SetIsPrerequisiteFor("MartialTraining5Feature").Configure();
-
+                ProgressionConfigurator.For("MartialTrainingProgression").AddToFeaturesRankIncrease(feature).Configure();
                 return feature;
 
                 
@@ -318,36 +356,31 @@ namespace PathOfWarForWotR.NewContent.Feats.MartialFeats
             var level6 = MartialTraining6();
             BlueprintFeature MartialTraining6()
             {
-                var configA = MoreFeatTools.MakeFeature(Main.Context, "MartialTraining6AFeature", "Two Maneuvers", "You may select two new maneuvers from your chosen discipline of up to 6th level.  You must meet the minimum initiator level to select any maneuver.", true);
-                configA.AddFacts(facts: new() { maneuverLearnRef.Guid.ToString(), maneuverLearnRef.Guid.ToString() });
-                var featureA = configA.Configure();
-                var configB = MoreFeatTools.MakeFeature(Main.Context, "MartialTraining6BFeature", "Maneuver And Stance", "You may select one new maneuver and one new stance from your chosen discipline of up to 6th level.  You must meet the minimum initiator level to select any maneuver.", true);
-                configB.AddFacts(facts: new() { maneuverLearnRef.Guid.ToString(), maneuverLearnRef.Guid.ToString() });
-                var featureB = configA.Configure();
+               
 
 
                 
 
                 var featureConfig = MoreFeatTools.MakeFeatureSelector(Main.Context, "MartialTraining6Feature", "Martial Training VI", "You may select two new maneuvers or one new maneuver and one new stance from your chosen discipline of up to 6th level, and you may ready an additional maneuver.  You must meet the minimum initiator level to select any maneuver.", true, featureGroups: new FeatureGroup[] { FeatureGroup.CombatFeat, FeatureGroup.Feat });
-                featureConfig.AddToAllFeatures(featureA, featureB);
+                featureConfig.AddToAllFeatures(maneuverLearnRef.Guid.ToString(), stanceLearnRef.Guid.ToString());
                 
                 featureConfig.AddPrerequisiteCharacterLevel(13);
                 featureConfig.AddComponent<AddMartialTrainingRankComponent>();
                 featureConfig.AddPrerequisiteStatValue(Kingmaker.EntitySystem.Stats.StatType.Intelligence, 3);
                 featureConfig.AddPrerequisiteIsPet(not: true);
-                featureConfig.AddFacts(facts: new() { slots.Guid.ToString() });
+                //featureConfig.AddFacts(facts: new() { slots.Guid.ToString() });
                 featureConfig.AddPrerequisiteFeature("MartialTraining5Feature");
 
                 var feature = featureConfig.Configure();
 
                 FeatureConfigurator.For("MartialTraining5Feature").SetIsPrerequisiteFor("MartialTraining6Feature").Configure();
-
+                ProgressionConfigurator.For("MartialTrainingProgression").AddToFeaturesRankIncrease(feature).AddToLevelEntries(6, feature).Configure();
                 return feature;
 
                
             }
 
-            FeatTools.AddAsFeat(level1, level2, level3, level4, level5, level6);
+            //FeatTools.AddAsFeat(level1, level2, level3, level4, level5, level6);
 
         }
 
@@ -392,12 +425,12 @@ namespace PathOfWarForWotR.NewContent.Feats.MartialFeats
             void HandleLearn()
             {
                 var selector = stanceLearnRef.Get();
-                selector.AddFeatures(ManeuverTools.StanceLearnFeatures.ToArray());
+                selector.AddFeatures(ManeuverConfigurator.StanceLearnFeatures.ToArray());
 
                 Main.Context.Logger.Log($"{selector.name} options length:{selector.m_Features.Length}");
 
                 var selector2 = maneuverLearnRef.Get();
-                selector2.AddFeatures(ManeuverTools.ManeuverLearnFeatures.ToArray());
+                selector2.AddFeatures(ManeuverConfigurator.ManeuverLearnFeatures.ToArray());
                 Main.Context.Logger.Log($"{selector2.name} options length:{selector2.m_Features.Length}");
             }
 

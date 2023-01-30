@@ -49,6 +49,10 @@ namespace PathOfWarForWotR.CustomUI.UnitLogic.Class.LevelUp.Actions
                 {
                     x.AddLevelFromClass(classData);
                 }
+                else
+                {
+
+                }
             });
             
             

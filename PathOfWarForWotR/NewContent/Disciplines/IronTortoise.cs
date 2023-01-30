@@ -72,7 +72,7 @@ namespace PathOfWarForWotR.NewContent.Disciplines
 
             }
 
-
+            /*
             SmashingShell();
             void SmashingShell()
             {
@@ -84,7 +84,7 @@ namespace PathOfWarForWotR.NewContent.Disciplines
 
 
             }
-
+            */
             ShellShock();
             void ShellShock()
             {

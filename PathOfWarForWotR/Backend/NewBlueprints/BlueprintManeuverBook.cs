@@ -60,7 +60,7 @@ namespace PathOfWarForWotR.Backend.NewBlueprints
         public BlueprintArchetypeReference[] ArchetypeReference = new BlueprintArchetypeReference[] { };
         public bool IsGranted = false;
         public BlueprintUnitPropertyReference m_ManeuverSlotsReference;
-        public BlueprintUnitPropertyReference m_InitiatorLevelReference;
+        
 
         /// <summary>
         /// Remember that anytime you check this you have to make sure it's not martial training, because martial training doesn't have one

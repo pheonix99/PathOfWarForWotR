@@ -108,8 +108,7 @@ namespace PathOfWarForWotR.Utilities
                 x.IsGranted = define.GrantedType;
                 x.ClassReference = define.ClassesForClassTemplate.ToArray();
                 x.GrantingProgression = progression.ToReference<BlueprintProgressionReference>();
-                x.m_InitiatorLevelReference = MLProperty.ToReference<BlueprintUnitPropertyReference>();
-  
+                
             });
 
             
@@ -591,12 +590,12 @@ namespace PathOfWarForWotR.Utilities
             void HandleLearn()
             {
                 var selector = define.stanceSelector.Get();
-                selector.AddFeatures(ManeuverTools.StanceLearnFeatures.ToArray());
+                selector.AddFeatures(ManeuverConfigurator.StanceLearnFeatures.ToArray());
 
                 Main.Context.Logger.Log($"{selector.name} options length:{selector.m_Features.Length}");
 
                 var selector2 = define.maneuverSelector.Get();
-                selector2.AddFeatures(ManeuverTools.ManeuverLearnFeatures.ToArray());
+                selector2.AddFeatures(ManeuverConfigurator.ManeuverLearnFeatures.ToArray());
                 Main.Context.Logger.Log($"{selector2.name} options length:{selector2.m_Features.Length}");
             }
 

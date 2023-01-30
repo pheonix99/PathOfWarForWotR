@@ -36,32 +36,29 @@ namespace PathOfWarForWotR.Backend.NewUnitDataClasses
 
         private bool HalfLevel = false;
 
-        private int AdjustedBaseLevel
-        {
-            get
-            {
-                
-                if (this.BookType == BlueprintManeuverBook.ManeuverBookType.MartialTraining)
-                {
-                    return Math.Min(Owner.Progression.CharacterLevel, BaseLevel + Owner.Stats.GetStat<ModifiableValueAttributeStat>(InitiatingStat).PermanentBonus);
-                }
-                return this.BaseLevel;
-            }
-        }
+       
         public int BaseLevel
         {
             get
             {
                 
 
-                return Math.Max(0, this.AdjustedBaseLevel);
+                return Math.Max(0, this.RawBaseLevel);
             }
         }
+        
+
         public int RawBaseLevel
         {
             get
             {
-                return this.AdjustedBaseLevel;
+               
+
+                if (this.BookType == BlueprintManeuverBook.ManeuverBookType.MartialTraining && InitiatingStat.IsAttribute())
+                {
+                    return Math.Min(Owner.Progression.CharacterLevel, m_BaseLevelInternal + Owner.Stats.GetStat<ModifiableValueAttributeStat>(InitiatingStat).PermanentBonus);
+                }
+                return this.m_BaseLevelInternal;
             }
         }
 
@@ -72,7 +69,7 @@ namespace PathOfWarForWotR.Backend.NewUnitDataClasses
             get
             {
                 //TODO ADD HAX
-                return AdjustedBaseLevel;
+                return BaseLevel;
             }
         }
 
@@ -176,7 +173,7 @@ namespace PathOfWarForWotR.Backend.NewUnitDataClasses
         public bool IsGranted => Blueprint.IsGranted;
 
         public BlueprintUnitPropertyReference ManeuverSlotsPropertyReference => Blueprint.m_ManeuverSlotsReference;
-        public BlueprintUnitPropertyReference InitiatorLevelReference => Blueprint.m_InitiatorLevelReference;
+      
 
         public string Name { get; internal set; }
 

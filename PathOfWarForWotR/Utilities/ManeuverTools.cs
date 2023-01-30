@@ -336,7 +336,7 @@ namespace PathOfWarForWotR.Utilities
                 x.m_Icon = icon ?? discipline.defaultSprite;
             });
 
-            ability = AbilityConfigurator.For(ability).AddAbilityEffectRunAction(ApplyBuff(buff, ContextDuration.Fixed(duration))).Configure();
+            //ability = AbilityConfigurator.For(ability).AddAbilityEffectRunAction(ApplyBuff(buff, ContextDuration.Fixed(duration))).Configure();
 
 
             return ability;
@@ -431,7 +431,7 @@ namespace PathOfWarForWotR.Utilities
 
             var config = MakeManeuverConfigurator(source, sysname, displayName, desc, UnitCommand.CommandType.Swift, UnitAnimationActionCastSpell.CastAnimationStyle.Self, disciplineDefine, level, ManeuverType.Boost, icon, abilityType);
             config.SetRange(AbilityRange.Personal);
-            config.AddAbilityEffectRunAction(ApplyBuff(buff, ContextDuration.Fixed(duration))).Configure();
+            //config.AddAbilityEffectRunAction(ApplyBuff(buff, ContextDuration.Fixed(duration))).Configure();
 
             return config;
         }

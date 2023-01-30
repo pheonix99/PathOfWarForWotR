@@ -132,8 +132,8 @@ namespace PathOfWarForWotR.Backend.NewUnitParts
 
         public bool CanLearnDisciplineAsFreeStudy(string disciplineKey, BlueprintManeuverBookReference reference)
         {
-
-            throw new NotImplementedException();
+            //TODO ASSESS
+            return true;
         }
 
         public bool CanLearnDisciplineAsPrestigeClass(string disciplineKey, BlueprintCharacterClassReference currentClass)

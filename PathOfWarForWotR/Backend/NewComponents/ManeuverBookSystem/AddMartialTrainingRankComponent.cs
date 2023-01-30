@@ -26,6 +26,7 @@ namespace PathOfWarForWotR.Backend.NewComponents.ManeuverBookSystem
         {
 
             base.OnTurnOn();
+            Owner.Ensure<UnitPartMartialDisciple>();
             var part = base.Owner.Ensure<UnitPartMartialTraining>();
             part.RegisterFact(Fact);
 

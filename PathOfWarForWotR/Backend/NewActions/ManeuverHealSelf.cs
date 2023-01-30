@@ -37,12 +37,12 @@ namespace PathOfWarForWotR.Backend.NewActions
 				PFLog.Default.Error(this, "Caster is missing", Array.Empty<object>());
 				return;
 			}
-			RuleHealDamage healRule = this.GetHealRule(base.Context.MaybeCaster, base.Target.Unit);
+			RuleHealDamage healRule = this.GetHealRule(base.Context.MaybeCaster, base.Context.MaybeCaster);
 			base.Context.TriggerRule<RuleHealDamage>(healRule);
 		}
 
 		// Token: 0x0600C966 RID: 51558 RVA: 0x003446A0 File Offset: 0x003428A0
-		public RuleHealDamage GetHealRule(UnitEntityData initiator)
+		public RuleHealDamage GetHealRule(UnitEntityData initiator, UnitEntityData target)
 		{
 			RuleHealDamage ruleHealDamage = new RuleHealDamage(initiator, initiator, new DiceFormula(this.Value.DiceCountValue.Calculate(base.Context), this.Value.DiceType), this.Value.BonusValue.Calculate(base.Context));
 			ruleHealDamage.SourceFact = ContextDataHelper.GetFact();
@@ -50,7 +50,9 @@ namespace PathOfWarForWotR.Backend.NewActions
 			return ruleHealDamage;
 		}
 
-		// Token: 0x04008616 RID: 34326
-		public ContextDiceValue Value;
+        
+
+        // Token: 0x04008616 RID: 34326
+        public ContextDiceValue Value;
 	}
 }

@@ -30,6 +30,7 @@ namespace PathOfWarForWotR.Backend.NewComponents.ManeuverBookSystem
 
             base.OnTurnOn();
             var part = base.Owner.Ensure<UnitPartMartialDisciple>();
+            Owner.DemandManeuverBook(m_ManeuverBook);
             part.RegisterNonClassManeuverBook(m_ManeuverBook);
 
         }

@@ -6,6 +6,7 @@ using Kingmaker.UnitLogic;
 using Kingmaker.UnitLogic.Class.LevelUp;
 using PathOfWarForWotR.Backend.NewComponents.ManeuverBookSystem;
 using PathOfWarForWotR.Backend.NewUnitParts;
+using PathOfWarForWotR.Extensions;
 
 namespace PathOfWarForWotR.Backend.NewComponents.Prerequisites
 {
@@ -52,7 +53,7 @@ namespace PathOfWarForWotR.Backend.NewComponents.Prerequisites
                 }
                 int moveLevel = abilityData2.ManeuverLevel;
                 lastBook = selectionData.targetBook.Get().DisplayName;
-                var level = selectionData.targetBook.Get().m_InitiatorLevelReference.Get().GetInt(unit);
+                var level = unit.DemandManeuverBook(selectionData.targetBook).InitiatorLevel;
                 LastLevel = level;
                 return level >= (1 + (moveLevel - 1) * 2);
                
