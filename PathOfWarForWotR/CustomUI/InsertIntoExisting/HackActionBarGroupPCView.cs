@@ -42,6 +42,12 @@ namespace PathOfWarForWotR.CustomUI.InsertIntoExisting
             Main.Context.Logger.Log($"SetStatePosition callled for {__instance.name}");
         }
 
+        [HarmonyPatch(nameof(ActionBarGroupPCView.DrawSlots)), HarmonyPrefix]
+        static void DrawSlots(ActionBarGroupPCView __instance, List<ActionBarSlotVM> slotVms)
+        {
+            Main.Context.Logger.Log($"DrawSlots callled for {__instance.name}");
+        }
+
         [HarmonyPatch(nameof(ActionBarGroupPCView.Initialize)), HarmonyPrefix]
         static void Initialize(ActionBarGroupPCView __instance, ActionBarGroupType type, List<ActionBarGroupPCView> neighbors)
         {

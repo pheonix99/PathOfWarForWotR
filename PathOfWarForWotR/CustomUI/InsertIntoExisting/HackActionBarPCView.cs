@@ -100,11 +100,17 @@ namespace PathOfWarForWotR.CustomUI.InsertIntoExisting
                 var otherButtons = groupsOBJ.GetComponentsInChildren<ActionBarGroupPCView>();
                 var clone = GameObject.Instantiate(abilityPopout.gameObject, groupsOBJ);
                 var extant = clone.GetComponent<ActionBarGroupPCView>();
-
-                
-                //clone.DestroyComponents<ActionBarGroupPCView>();
-                //clone.AddComponent<ActionBarManeuverGroupPCView>();
-                m_manuverView = clone.GetComponent<ActionBarGroupPCView>();
+                var extantslot = extant.m_Slot;
+                var slotcontainter = extant.m_SlotContainer;
+                var button = extant.m_SwitchButton;
+                var label = extant.m_GroupNameLabel;
+                clone.DestroyComponents<ActionBarGroupPCView>();
+                clone.AddComponent<ActionBarManeuverGroupPCView>();
+                m_manuverView = clone.GetComponent<ActionBarManeuverGroupPCView>();
+                m_manuverView.m_Slot = extant.m_Slot;
+                m_manuverView.m_SlotContainer = slotcontainter;
+                m_manuverView.m_SwitchButton = button;
+                m_manuverView.m_GroupNameLabel = label;
 
                 //Do faux initiatialize
                 m_manuverView.m_Neighbours = new();
@@ -130,8 +136,8 @@ namespace PathOfWarForWotR.CustomUI.InsertIntoExisting
                     }
                     m_manuverView.m_Neighbours.Add(v);
                 }
-                //m_manuverView.m_GroupType = ActionBarGroupType_EXT.Manuevers;
-                m_manuverView.m_GroupType = Kingmaker.UI.MVVM._VM.ActionBar.ActionBarGroupType.Ability;
+                m_manuverView.m_GroupType = ActionBarGroupType_EXT.Manuevers;
+                //m_manuverView.m_GroupType = Kingmaker.UI.MVVM._VM.ActionBar.ActionBarGroupType.Ability;
                 clone.transform.Find("Background/OpenCloseButton/Background/Letter").GetComponent<TextMeshProUGUI>().SetText("M");
                 clone.transform.Find("Background/Header/HeaderText").GetComponent<TextMeshProUGUI>().SetText("Maneuvers");
                 clone.transform.localPosition = new Vector3(-270, clone.transform.localPosition.y, clone.transform.localPosition.z);
@@ -152,6 +158,7 @@ namespace PathOfWarForWotR.CustomUI.InsertIntoExisting
 
                 m_manuverView.Bind(__instance.ViewModel);
 
+                m_manuverView.ClearSlots();
                 //m_manuverView.BindViewImplementation();
 
                 /*
