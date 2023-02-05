@@ -11,7 +11,7 @@ using UnityEngine;
 
 
 
-namespace PathOfWarForWotR.CustomUI.ManeuverBook
+namespace PathOfWarForWotR.CustomUI.ManeuverBookUI
 {
     class ManeuverBookController : MonoBehaviour
     {

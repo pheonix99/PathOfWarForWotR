@@ -59,7 +59,7 @@ namespace PathOfWarForWotR.Utilities
             {
                 res.SetIcon(icon);
             }
-
+           
             return res;
 
         }

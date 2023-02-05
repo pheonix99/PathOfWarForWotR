@@ -1,0 +1,26 @@
+﻿[
+  {
+    "Key": "SolarWind.Name",
+    "enGB": "Solar Wind"
+  },
+  {
+    "Key": "SolarWind.Desc",
+    "enGB": "The disciples of the Solar Wind learn their arts on the windy plains where they train to deliver deadly force and precision in any environment. Throwing weapons and archery are their tools, and they rarely miss. Hallmark maneuvers include ricochet maneuvers, deadly precision strikes, supernaturally forceful maneuvers that may fire through opponents in a deadly line, showers of phantom weapons that inflict true damage, and ranged attack counters which shoot enemy missiles from the sky. Solar Wind’s associated skill is Perception and its weapon groups are bows, crossbows, firearms, and thrown."
+  },
+  {
+    "Key": "HorizonWindLancet.Name",
+    "enGB": "Horizon Wind Lancet "
+  },
+  {
+    "Key": "HorizonWindLancet.Desc",
+    "enGB": "The tenets of the Solar Wind have taught the disciple how to place more force behind his attacks. The initiator inflicts an additional 1d6 points of damage on a single ranged attack he makes this round. If the initiator is making multiple attacks in this round, this bonus applies to the first attack the initiator makes. "
+  },
+  {
+    "Key": "StanceOfPiercingRays.Name",
+    "enGB": "Stance of Piercing Rays"
+  },
+  {
+    "Key": "StanceOfPiercingRays.Desc",
+    "enGB": "A Solar Wind disciple learns to cause his ammunition to pierce like the burning rays of the sun itself. While in this stance, the initiator’s ranged attacks inflict an additional 1d6 points of fire damage. This bonus damage increases by an additional 1d6 points of fire damage every eight initiator levels. This is a supernatural ability."
+  }
+]

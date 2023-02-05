@@ -11,7 +11,7 @@ namespace PathOfWarForWotR.Backend.NewUnitParts
 {
     public class UnitPartManeuverVariableTypeDamage : OldStyleUnitPart
     {
-        private List<DiscipleVariableEnabled> DiscipleVariableEnableds = new();
+        private List<DisciplineVariableDamageEnabled> DiscipleVariableEnableds = new();
 
         
         
@@ -66,7 +66,7 @@ namespace PathOfWarForWotR.Backend.NewUnitParts
             };
         }
 
-        private class DiscipleVariableEnabled
+        private class DisciplineVariableDamageEnabled
         {
             public UnitFact source;
             public string Key;

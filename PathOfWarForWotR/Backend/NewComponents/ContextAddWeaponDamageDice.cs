@@ -8,6 +8,7 @@ using Kingmaker.UnitLogic.Buffs.Blueprints;
 using Kingmaker.UnitLogic.Mechanics;
 using System.Linq;
 using PathOfWarForWotR.Backend.NewUnitParts;
+using Kingmaker.Blueprints.Facts;
 
 namespace PathOfWarForWotR.Backend.NewComponents
 {
@@ -18,6 +19,9 @@ namespace PathOfWarForWotR.Backend.NewComponents
 
         public void OnEventAboutToTrigger(RuleCalculateWeaponStats evt)
         {
+            if (RangedOnly && !evt.Weapon.Blueprint.IsRanged)
+                return;
+
             int dice = Value.Calculate(base.Fact.MaybeContext);
             if (DealWeaponDamage)
             {
@@ -56,7 +60,8 @@ namespace PathOfWarForWotR.Backend.NewComponents
                 evt.DamageDescription.Add(new DamageDescription()
                 {
                     Dice = new DiceFormula(dice, diceType),
-                    TypeDescription = DamageType
+                    TypeDescription = DamageType,
+                    SourceFact = base.Fact
 
                 });
             }
@@ -66,7 +71,8 @@ namespace PathOfWarForWotR.Backend.NewComponents
                 evt.DamageDescription.Add(new DamageDescription()
                 {
                     Dice = new DiceFormula(dice, diceType),
-                    TypeDescription = part.GetVariableDamageForManeuver(evt.Reason.Ability.Blueprint)
+                    TypeDescription = part.GetVariableDamageForManeuver(evt.Reason.Ability.Blueprint),
+                    SourceFact = base.Fact
                 });
             }
            
@@ -75,7 +81,10 @@ namespace PathOfWarForWotR.Backend.NewComponents
 
         public void OnEventDidTrigger(RuleCalculateWeaponStats evt)
         {
-            
+            if (RangedOnly && !evt.Weapon.Blueprint.IsRanged)
+                return;
+            if (Once)
+                Owner.RemoveFact((BlueprintUnitFact)OwnerBlueprint);
         }
 
         public ContextValue Value;
@@ -84,6 +93,10 @@ namespace PathOfWarForWotR.Backend.NewComponents
         public bool DealWeaponDamage;
         public bool DealVariableTypeDamage;
         public DamageTypeDescription DamageType;
+
+        public bool Once = false;
+
+        public bool RangedOnly = false;
 
         //TODO ADD CONDITIONS
     }

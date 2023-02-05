@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 using System.Linq;
+using BlueprintCore.Utils;
 
 namespace PathOfWarForWotR.Utilities
 {
@@ -15,9 +16,25 @@ namespace PathOfWarForWotR.Utilities
     {
         public static Dictionary<string, DisciplineDefine> Disciplines = new();
         public static Dictionary<string, BlueprintGuid> MasterGuids = new();
-        
 
-       
+
+        public static bool AddDiscipline(string sysName, WeaponFighterGroup[] weaponGroups, StatType skill, Sprite defaultSprite, out DisciplineDefine discipline, BlueprintItemWeaponReference[] specificWeapons = null, WeaponCategory[] weaponCategories = null, bool alwaysSupernatural = false, SpellDescriptor descriptor = SpellDescriptor.None)
+        {
+            if (Disciplines.ContainsKey(sysName))
+            {
+                discipline = null;
+                return false;
+            }
+            else
+            {
+                discipline = new DisciplineDefine(sysName, LocalizationTool.GetString(sysName + ".Name"), LocalizationTool.GetString(sysName + ".Desc"), weaponGroups, skill, defaultSprite, specificWeapons, weaponCategories, alwaysSupernatural, descriptor);
+                Disciplines.Add(sysName, discipline);
+                MasterGuids.Add(sysName, discipline.masterGuid);
+                return true;
+            }
+
+
+        }
 
         public static bool AddDiscipline(string sysName, string displayName, string description, WeaponFighterGroup[] weaponGroups, StatType skill, Sprite defaultSprite, BlueprintItemWeaponReference[] specificWeapons = null, WeaponCategory[] weaponCategories = null, bool alwaysSupernatural = false, SpellDescriptor descriptor = SpellDescriptor.None)
         {

@@ -2,11 +2,15 @@
 using Kingmaker.Blueprints;
 using System.Linq;
 using PathOfWarForWotR.Serialization;
+using Kingmaker.UnitLogic.Abilities;
 
 namespace PathOfWarForWotR.Backend.NewUnitParts
 {
     public class ManeuverSlot
     {
+       
+
+
         public readonly int Index;
 
         public readonly SlotType SlotType;

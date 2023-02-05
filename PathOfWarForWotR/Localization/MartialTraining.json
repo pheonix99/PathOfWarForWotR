@@ -1,6 +1,13 @@
 ﻿[
+  {
+    "Key": "MartialTrainingAddManeuverSlotFeature.Name",
+    "enGB": "Add Martial Training Readied Maneuver"
+  },
+  {
+    "Key": "MartialTrainingAddManeuverSlotFeature.Desc",
+    "enGB": ""
+  },
 
-  
   {
     "Key": "MartialTraining1.Name",
     "enGB": "Martial Training I"

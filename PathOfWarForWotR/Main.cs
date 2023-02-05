@@ -4,7 +4,7 @@ using PathOfWarForWotR.ModLogic;
 using TabletopTweaks.Core.Utilities;
 using System;
 using Kingmaker.Blueprints.JsonSystem;
-using PathOfWarForWotR.CustomUI.ManeuverBook;
+using PathOfWarForWotR.CustomUI.ManeuverBookUI;
 
 namespace PathOfWarForWotR
 {
@@ -40,6 +40,13 @@ namespace PathOfWarForWotR
         static void OnSaveGUI(UnityModManager.ModEntry modEntry)
         {
             Context.SaveAllSettings();
+        }
+
+        public static void LogDebug(string message)
+        {
+#if DEBUG
+            Context.Logger.Log(message);
+#endif
         }
 
         public static void LogPatch(IScriptableObjectWithAssetId obj)

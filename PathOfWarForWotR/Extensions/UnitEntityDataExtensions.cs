@@ -11,7 +11,7 @@ namespace PathOfWarForWotR.Extensions
 {
     public static class UnitEntityDataExtensions
     {
-        private static Dictionary<UnitDescriptor, Dictionary<BlueprintManeuverBook, ManeuverBook>> AllManeuverBooks = new();
+        private static Dictionary<UnitEntityData, Dictionary<BlueprintManeuverBook, ManeuverBook>> AllManeuverBooks = new();
 
         public static bool HasMartialStuff(this UnitEntityData unit)
         {
@@ -29,47 +29,16 @@ namespace PathOfWarForWotR.Extensions
         }
         public static ManeuverBook DemandManeuverBook(this UnitEntityData data, BlueprintManeuverBookReference book)
         {
-            return data.Descriptor.DemandManeuverBook(book);
+            return data.DemandManeuverBook(book.Get());
         }
 
-        public static ManeuverBook DemandManeuverBook(this UnitEntityData data, BlueprintManeuverBook book)
-        {
-            return data.Descriptor.DemandManeuverBook(book);
-        }
-
-        public static ManeuverBook GetManeuverBook(this UnitEntityData data, BlueprintManeuverBookReference book)
-        {
-            return data.Descriptor.GetManeuverBook(book);
-        }
-
-        public static ManeuverBook GetManeuverBook(this UnitEntityData data, BlueprintManeuverBook book)
-        {
-            return data.Descriptor.GetManeuverBook(book);
-        }
-
-        public static ManeuverBook GetManeuverBook(this UnitDescriptor data, [NotNull] BlueprintManeuverBook blueprintManeuverBook)
+        public static ManeuverBook DemandManeuverBook(this UnitEntityData data, BlueprintManeuverBook blueprintManeuverBook)
         {
             if (AllManeuverBooks.TryGetValue(data, out var keyValuePairs))
             {
                 if (keyValuePairs.TryGetValue(blueprintManeuverBook, out var book))
                 {
-                    return book;
-                }
-               
-            }
 
-            return null;
-        }
-
-        
-
-        public static ManeuverBook DemandManeuverBook(this UnitDescriptor data, BlueprintManeuverBook blueprintManeuverBook)
-        {
-            if (AllManeuverBooks.TryGetValue(data, out var keyValuePairs))
-            {
-                if (keyValuePairs.TryGetValue(blueprintManeuverBook, out var book))
-                {
-                
                 }
                 else
                 {
@@ -87,26 +56,61 @@ namespace PathOfWarForWotR.Extensions
                 AllManeuverBooks[data].Add(blueprintManeuverBook, book);
 
                 return book;
-            }    
+            }
+        }
+
+        public static ManeuverBook GetManeuverBook(this UnitEntityData data, BlueprintManeuverBookReference book)
+        {
+            return data.GetManeuverBook(book.Get());
+        }
+
+        public static ManeuverBook GetManeuverBook(this UnitEntityData data, BlueprintManeuverBook blueprintManeuverBook)
+        {
+            if (AllManeuverBooks.TryGetValue(data, out var keyValuePairs))
+            {
+                if (keyValuePairs.TryGetValue(blueprintManeuverBook, out var book))
+                {
+                    return book;
+                }
+
+            }
+
+            return null;
+        }
+
+        public static ManeuverBook GetManeuverBook(this UnitDescriptor data, [NotNull] BlueprintManeuverBook blueprintManeuverBook)
+        {
+            return data.Unit.GetManeuverBook(blueprintManeuverBook);
+        }
+
+        
+
+        public static ManeuverBook DemandManeuverBook(this UnitDescriptor data, BlueprintManeuverBook blueprintManeuverBook)
+        {
+            return data.Unit.DemandManeuverBook(blueprintManeuverBook);
 
         }
 
         public static IEnumerable<ManeuverBook> ManeuverBooks(this UnitEntityData data)
         {
-            return data.Descriptor.ManeuverBooks();
-        }
-
-        public static IEnumerable<ManeuverBook> ManeuverBooks (this UnitDescriptor data)
-        {
+        
+            //Main.Context.Logger.Log($"Calling ManueverBooks on {data.CharacterName}");
             if (AllManeuverBooks.TryGetValue(data, out var dict))
             {
                 return dict.Values;
             }
             else
             {
+               // Main.Context.Logger.Log($"Entry For ManueverBooks not found on {data.CharacterName}, adding");
                 AllManeuverBooks.Add(data, new());
                 return AllManeuverBooks[data].Values;
             }
+          
+        }
+
+        public static IEnumerable<ManeuverBook> ManeuverBooks (this UnitDescriptor data)
+        {
+            return data.Unit.ManeuverBooks();
         }
 
         [HarmonyPatch(typeof(UnitDescriptor), nameof(UnitDescriptor.Dispose))]

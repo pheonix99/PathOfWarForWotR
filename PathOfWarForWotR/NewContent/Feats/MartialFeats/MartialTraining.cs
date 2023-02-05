@@ -18,6 +18,7 @@ using PathOfWarForWotR.Backend.NewComponents.ManeuverBookSystem;
 using PathOfWarForWotR.Defines;
 using PathOfWarForWotR.Utilities;
 using Kingmaker.Localization;
+using BlueprintCore.Blueprints.Configurators.UnitLogic.Properties;
 
 namespace PathOfWarForWotR.NewContent.Feats.MartialFeats
 {
@@ -31,24 +32,16 @@ namespace PathOfWarForWotR.NewContent.Feats.MartialFeats
         {
 
             LocalizationTool.LoadLocalizationPack("Mods\\PathOfWarForWotR\\Localization\\MartialTraining.json");
-            var slots = BuildMTSlotsFeature();
-            BlueprintFeatureReference BuildMTSlotsFeature()
-            {
-                string sysName = "MartialTrainingAddManeuverSlotFeature";
-                string displayName = "Add Martial Training Readied Maneuver";
-                string discription = $"";
-                var feature = Helpers.CreateBlueprint<BlueprintFeature>(Main.Context, sysName, x =>
-                {
-                    x.SetNameDescription(Main.Context, displayName, discription);
-                    x.IsClassFeature = true;
-                    x.Ranks = 50;
-                    x.HideInUI = true;
-                    x.HideInCharacterSheetAndLevelUp = true;
+            var slotsGUID = Main.Context.Blueprints.GetGUID("MartialTrainingAddManeuverSlotFeature");
+            var slotsConfig = FeatureConfigurator.New("MartialTrainingAddManeuverSlotFeature", slotsGUID.ToString());
+            slotsConfig.SetDisplayName("MartialTrainingAddManeuverSlotFeature.Name");
+            slotsConfig.SetDescription("MartialTrainingAddManeuverSlotFeature.Desc");
+            slotsConfig.SetRanks(50);
+            slotsConfig.SetHideInCharacterSheetAndLevelUp(true);
+            slotsConfig.SetHideInUI(true);
+           var slots = slotsConfig.Configure();
 
-                });
-
-                return feature.ToReference<BlueprintFeatureReference>();
-            }
+            
 
             var initatorLevelProp = Helpers.CreateBlueprint<BlueprintUnitProperty>(Main.Context, "MartialTrainingInitiatorLevelProperty", x => {
                 x.AddComponent<CompositeCustomPropertyGetter>(x =>
@@ -70,12 +63,12 @@ namespace PathOfWarForWotR.NewContent.Feats.MartialFeats
 
                 });
             });
-            var slotsProp = Helpers.CreateBlueprint<BlueprintUnitProperty>(Main.Context, "MartialTrainingSlotsProperty", x => {
-                x.AddComponent<FactRankGetter>(x =>
-                {
-                    x.m_Fact = slots.Get().ToReference<BlueprintUnitFactReference>();
-                });
-            });
+
+            var slotsPropGUID = Main.Context.Blueprints.GetGUID("MartialTrainingSlotsProperty");
+            var slotsPropConfig = UnitPropertyConfigurator.New("MartialTrainingSlotsProperty", slotsPropGUID.ToString());
+            slotsPropConfig.AddFactRankGetter(slots);
+            var slotsProp = slotsPropConfig.Configure();
+            
 
             var book = Helpers.CreateBlueprint<BlueprintManeuverBook>(Main.Context, "MartialTrainingManeuverBook", x =>
             {
@@ -212,18 +205,18 @@ namespace PathOfWarForWotR.NewContent.Feats.MartialFeats
                 config.SetDisplayName("MartialTraining1.Name");
                 config.SetDescription("MartialTraining1.Desc");
                 config.AddToFeaturesRankIncrease("MartialTrainingProgression");
-                config.AddToLevelEntries(1, disciplineSelector.Guid.ToString(), statSelector.Guid.ToString(), maneuverLearnRef.Guid.ToString(), maneuverLearnRef.Guid.ToString());
-                config.AddToLevelEntries(2, slots.Guid.ToString(), maneuverLearnRef.Guid.ToString(), maneuverLearnRef.Guid.ToString(), stanceLearnRef.Guid.ToString());
-                config.AddToLevelEntries(3, slots.Guid.ToString(), maneuverLearnRef.Guid.ToString(), maneuverLearnRef.Guid.ToString(), stanceLearnRef.Guid.ToString());
-                config.AddToLevelEntries(4, slots.Guid.ToString(), maneuverLearnRef.Guid.ToString(), maneuverLearnRef.Guid.ToString());
-                config.AddToLevelEntries(5, slots.Guid.ToString(), maneuverLearnRef.Guid.ToString(), maneuverLearnRef.Guid.ToString(), stanceLearnRef.Guid.ToString());
-                config.AddToLevelEntries(6, slots.Guid.ToString(), maneuverLearnRef.Guid.ToString());
+                config.AddToLevelEntries(1, slots, disciplineSelector.Guid.ToString(), statSelector.Guid.ToString(), maneuverLearnRef.Guid.ToString(), maneuverLearnRef.Guid.ToString());
+                config.AddToLevelEntries(2, slots, maneuverLearnRef.Guid.ToString(), maneuverLearnRef.Guid.ToString(), stanceLearnRef.Guid.ToString());
+                config.AddToLevelEntries(3, slots, maneuverLearnRef.Guid.ToString(), maneuverLearnRef.Guid.ToString(), stanceLearnRef.Guid.ToString());
+                config.AddToLevelEntries(4, slots, maneuverLearnRef.Guid.ToString(), maneuverLearnRef.Guid.ToString());
+                config.AddToLevelEntries(5, slots, maneuverLearnRef.Guid.ToString(), maneuverLearnRef.Guid.ToString(), stanceLearnRef.Guid.ToString());
+                config.AddToLevelEntries(6, slots, maneuverLearnRef.Guid.ToString());
                 config.SetHideInUI(false);
                 config.SetHideInCharacterSheetAndLevelUp(false);
                 config.SetClasses(new Blueprint<BlueprintCharacterClassReference>[] { });
                 config.SetGroups(FeatureGroup.CombatFeat, FeatureGroup.Feat);
                 var made = config.Configure();
-
+                book.GrantingProgression = made.ToReference<BlueprintProgressionReference>();
                 var feature = FeatureConfigurator.For(made);
 
                 

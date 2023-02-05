@@ -1,4 +1,4 @@
-﻿namespace PathOfWarForWotR.CustomUI.ManeuverBook
+﻿namespace PathOfWarForWotR.CustomUI.ManeuverBookUI
 {
     class ManeuverBookView
     {

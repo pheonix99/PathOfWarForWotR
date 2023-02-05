@@ -25,6 +25,7 @@ namespace PathOfWarForWotR.Backend.NewUnitDataClasses
             Owner = owner;
             Blueprint = blueprint;
             
+            
         }
         #region properties
         public BlueprintManeuverBook.ManeuverBookType BookType => Blueprint.BookType;
@@ -159,7 +160,7 @@ namespace PathOfWarForWotR.Backend.NewUnitDataClasses
 
         private List<BlueprintAbilityReference> knownStances = new();
 
-        public readonly UnitFact source;
+        
 
         public List<ManeuverSlot> ManeuverSlots = new();
 
@@ -173,9 +174,9 @@ namespace PathOfWarForWotR.Backend.NewUnitDataClasses
         public bool IsGranted => Blueprint.IsGranted;
 
         public BlueprintUnitPropertyReference ManeuverSlotsPropertyReference => Blueprint.m_ManeuverSlotsReference;
-      
 
-        public string Name { get; internal set; }
+
+        public string Name => Blueprint.DisplayName ?? Blueprint.name;
 
 
         #endregion
@@ -217,19 +218,23 @@ namespace PathOfWarForWotR.Backend.NewUnitDataClasses
 
         public List<AbilityData> AllReadiedManeuvers(SlotLayer layer)
         {
+            
             var abilities = ManeuverSlots.Select(x => x.Get(layer).Get());
+            Main.Context.Logger.Log($"AllReadiedManuevers called on {Owner.CharacterName} for {Name} in layer: {layer}, count is {abilities.Count()}, Maneuver slot count is {ManeuverSlots.Count}");
             var dataList = new List<AbilityData>();
 
             foreach (var known in abilities)
             {
+                Main.Context.Logger.Log($"Creating abilityData for {known?.name ?? "!NULL!"}");
                 var comp = known.GetComponent<ManeuverInformation>();
                 if (comp == null)
                     continue;
-                var data = new AbilityData(known, source.Owner);
+                var data = new AbilityData(known, Owner);
 
 
 
                 data.OverrideSpellLevel = comp.ManeuverLevel;
+                dataList.Add(data);
             }
 
 
@@ -302,8 +307,16 @@ namespace PathOfWarForWotR.Backend.NewUnitDataClasses
         
         internal void DemandSlotsUpdate()
         {
+            Main.Context.Logger.Log("Starting Demand Slots Update");
+            Main.Context.Logger.Log($"Blueprint is {(Blueprint is not null ? "not":"")} null On ManueverBook");
+            
+         
+            Main.Context.Logger.Log($"ManeuverSlotsPropertyReference is {(ManeuverSlotsPropertyReference is not null ? "not" : "")} null On ManueverBook");
+            Main.Context.Logger.Log($"ManeuverSlotsPropertyReference.Get() is {(ManeuverSlotsPropertyReference.Get() is not null ? "not" : "")} null On ManueverBook");
+            
 
-            int correctSlots = ManeuverSlotsPropertyReference.Get().GetInt(source.Owner);
+            int correctSlots = ManeuverSlotsPropertyReference.Get().GetInt(Owner);
+            Main.Context.Logger.Log($"Called demandSlotsUpdate on {Owner.CharacterName} for {Name}, value is {correctSlots}");
             if (correctSlots == ManeuverSlots.Count)
             {
                 Main.Context.Logger.Log($"Slots Update Called On {Name}, slots are correct: {ManeuverSlots.Count}");
@@ -446,10 +459,11 @@ namespace PathOfWarForWotR.Backend.NewUnitDataClasses
            
         }
 
-        #region serialization
+#region serialization
 
         public void SaveBook()
         {
+            Main.Context.Logger.Log($"Saving {Name} Book Info For {Owner.CharacterName}");
             var record = ManeuverBookStorage.Instance.ForCharacter(Owner).ForManeuverBook(this.Blueprint);
             record.HalfLevel = HalfLevel;
             record.ManeuverGuids.Clear();
@@ -457,6 +471,7 @@ namespace PathOfWarForWotR.Backend.NewUnitDataClasses
             record.BaseLevel = m_BaseLevelInternal;
             foreach (var move in knownManeuvers)
             {
+                Main.Context.Logger.Log($"Saving {move.NameSafe()} - {Name} Book Info For {Owner.CharacterName}");
                 record.ManeuverGuids.Add(move.guid);
             }
             foreach (var move in knownStances)
@@ -474,16 +489,20 @@ namespace PathOfWarForWotR.Backend.NewUnitDataClasses
 
         public void LoadBook()
         {
-            Main.Context.Logger.Log($"Loading {Name} Book Info - stage : in Unit Part");
+            Main.Context.Logger.Log($"Loading {Name} Book Info For {Owner.CharacterName}");
             var record = ManeuverBookStorage.Instance.ForCharacter(Owner).ForManeuverBook(this.Blueprint);
+           
             ManeuverSlots.Clear();
+
             knownManeuvers.Clear();
             knownStances.Clear();
             HalfLevel = record.HalfLevel;
             m_BaseLevelInternal = record.BaseLevel;
             foreach (var move in record.ManeuverGuids)
             {
-                LearnManeuver(BlueprintTools.GetBlueprintReference<BlueprintAbilityReference>(move));
+                var moveref = BlueprintTools.GetBlueprintReference<BlueprintAbilityReference>(move);
+                Main.Context.Logger.Log($"Loading {moveref.NameSafe()} - {Name} Book Info For {Owner.CharacterName}");
+                LearnManeuver(moveref);
             }
             foreach (var slot in record.SlotRecords)
             {
@@ -491,7 +510,7 @@ namespace PathOfWarForWotR.Backend.NewUnitDataClasses
             }
             DemandSlotsUpdate();
         }
-        #endregion
+#endregion
 
         internal bool CanRecover(BlueprintAbilityReference blueprintAbilityReference)
         {

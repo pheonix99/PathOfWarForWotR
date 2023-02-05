@@ -14,8 +14,9 @@ namespace PathOfWarForWotR.ModifiedComponents
         {
             static void Postfix(RuleCalculateAbilityParams __instance, RulebookEventContext context)
             {
-                if (__instance.AbilityData.Blueprint?.GetComponent<ManeuverInformation>() != null)
+                if (__instance.AbilityData?.Blueprint?.GetComponent<ManeuverInformation>() != null)
                 {
+                    Main.LogDebug("RuleCalculateAbilityParams called for maneuver");
                     var ability = __instance.AbilityData.Blueprint;
                     var comp = __instance.AbilityData.Blueprint.GetComponent<ManeuverInformation>();
 

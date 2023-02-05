@@ -18,6 +18,7 @@ using PathOfWarForWotR.Backend.NewComponents.MartialAttackComponents;
 using PathOfWarForWotR.Backend.NewEvents;
 using PathOfWarForWotR.Backend.NewUnitDataClasses;
 using PathOfWarForWotR.Extensions;
+using PathOfWarForWotR.Serialization;
 
 namespace PathOfWarForWotR.Backend.NewUnitParts
 {
@@ -42,6 +43,7 @@ namespace PathOfWarForWotR.Backend.NewUnitParts
         {
             if (!UnlocksForBooks.ContainsKey(reference))
                 UnlocksForBooks.Add(reference, new());
+            Owner.DemandManeuverBook(reference);
         }
 
         internal void RegisterClassManueverBook(BlueprintCharacterClass blueprintCharacterClass, BlueprintManeuverBookReference blueprintManeuverBookReference)
@@ -50,6 +52,7 @@ namespace PathOfWarForWotR.Backend.NewUnitParts
                 ClassToBookLinkage.Add(blueprintCharacterClass.ToReference<BlueprintCharacterClassReference>(), blueprintManeuverBookReference);
             if (!UnlocksForBooks.ContainsKey(blueprintManeuverBookReference))
                 UnlocksForBooks.Add(blueprintManeuverBookReference, new());
+            Owner.DemandManeuverBook(blueprintManeuverBookReference);
         }
 
         internal void UnregisterClassManueverBook(BlueprintCharacterClass blueprintCharacterClass, BlueprintManeuverBookReference blueprintManeuverBookReference)
@@ -63,7 +66,7 @@ namespace PathOfWarForWotR.Backend.NewUnitParts
         #region handle unlocks
         internal void RegisterBookUnlock(UnitFact fact, BlueprintManeuverBookReference bookRef, string disciplineType)
         {
-            
+            Main.LogDebug($"RegisterBookUnlock called for {Owner.CharacterName} with fact: {fact.Name} for book {bookRef.NameSafe()} with discipline {disciplineType}");
             if (UnlocksForBooks.TryGetValue(bookRef, out var list))
             {
 
@@ -156,11 +159,22 @@ namespace PathOfWarForWotR.Backend.NewUnitParts
         #region serialization 
         public override void OnPostLoad()
         {
-            Main.Context.Logger.Log($"Loading Maneuver  Info: from Unit Part");
-            foreach (var book in ManeuverBooks)
+            Main.Context.Logger.Log($"Loading Maneuver Info: from Unit Part");
+            foreach (var savedBook in ManeuverBookStorage.Instance.ForCharacter(Owner).ManeuverBooks)
             {
+               
+                var bookRef = BlueprintTools.GetBlueprint<BlueprintManeuverBook>(savedBook.Key);
+                Main.Context.Logger.Log($"Loading Maneuver Info for {bookRef.Name} from Unit Part");
+                var book = Owner.DemandManeuverBook(bookRef);
                 book.LoadBook();
             }
+            /*
+            foreach (var book in ManeuverBooks)
+            {
+              
+                book.LoadBook();
+            }*/
+
         }
         public override void OnPreSave()
         {
@@ -399,55 +413,63 @@ namespace PathOfWarForWotR.Backend.NewUnitParts
         
         public void HandleUnitCompleteLevelup(UnitEntityData unit)
         {
-
-            if (Owner.Unit != unit)
+            try
             {
-
-            }
-            else
-            {
-                Main.Context.Logger.Log($"Starting Post Level Up Martial Recording for {unit.CharacterName}");
-
-                foreach (ManeuverBook book in ManeuverBooks)
+                if (Owner.Unit != unit)
                 {
-                    
-                    
-                    Main.Context.Logger.Log($"Starting Post Level Up Recording for {unit.CharacterName} with Maneuver Book {book.Name}");
-                    book.DemandSlotsUpdate();
-                    Main.Context.Logger.Log($"{book.ManeuverSlots.Count} slots in book");
-                    if (book.ManeuverSlots.Any(x => x.Readied == null))
+
+                }
+                else
+                {
+                    Main.Context.Logger.Log($"Starting Post Level Up Martial Recording for {unit.CharacterName}");
+
+                    foreach (ManeuverBook book in ManeuverBooks)
                     {
-                        Main.Context.Logger.Log($"{unit.CharacterName} has {book.ManeuverSlots.Count(x => x.Readied == null)} empty slots for book {book.Name}, fixing");
-                        var available = book.GetKnownManeuvers().Where(x => !book.ManeuverIsReadied(x)).ToList();
-                        int empty = 0;
-                        foreach (var slot in book.ManeuverSlots.Where(x => x.Readied == null))//TODO improve for multiclassing
+
+
+                        Main.Context.Logger.Log($"Starting Post Level Up Recording for {unit.CharacterName} with Maneuver Book {book.Name}");
+                        book.DemandSlotsUpdate();
+                        Main.Context.Logger.Log($"{book.ManeuverSlots.Count} slots in book");
+                        if (book.ManeuverSlots.Any(x => x.Readied == null))
                         {
-                            empty++;
-                            Main.Context.Logger.Log($"Trying to fix empty slot: {empty}");
-                            if (available.Any())
+                            Main.Context.Logger.Log($"{unit.CharacterName} has {book.ManeuverSlots.Count(x => x.Readied == null)} empty slots for book {book.Name}, fixing");
+                            var available = book.GetKnownManeuvers().Where(x => !book.ManeuverIsReadied(x)).ToList();
+                            int empty = 0;
+                            foreach (var slot in book.ManeuverSlots.Where(x => x.Readied == null))//TODO improve for multiclassing
                             {
-                                var pick = available.FirstOrDefault();
-                                if (pick != null)
+                                empty++;
+                                Main.Context.Logger.Log($"Trying to fix empty slot: {empty}");
+                                if (available.Any())
                                 {
-                                    Main.Context.Logger.Log($"Auto-adding {pick} to list");
-                                    slot.SetAsReadied(pick.ToReference<BlueprintAbilityReference>());
-                                    available.RemoveAll(x=>x.AssetGuid.Equals(pick.AssetGuid));
+                                    var pick = available.FirstOrDefault();
+                                    if (pick != null)
+                                    {
+                                        Main.Context.Logger.Log($"Auto-adding {pick} to list");
+                                        slot.SetAsReadied(pick.ToReference<BlueprintAbilityReference>());
+                                        available.RemoveAll(x => x.AssetGuid.Equals(pick.AssetGuid));
+                                    }
+                                }
+                                else
+                                {
+                                    Main.Context.Logger.Log($"No Filler Found");
                                 }
                             }
-                            else
-                            {
-                                Main.Context.Logger.Log($"No Filler Found");
-                            }
+
+
+
                         }
-
-
-
-                    }
-                    foreach (var slot in book.ManeuverSlots.Where(x => x.Readied != null && x.Combat == null))
-                    {
-                        slot.SetAsReadied(slot.Readied);
+                        foreach (var slot in book.ManeuverSlots.Where(x => x.Readied != null && x.Combat == null))
+                        {
+                            slot.SetAsReadied(slot.Readied);
+                        }
+                        Main.Context.Logger.Log($"Finished Post Level Up Recording for {unit.CharacterName} with Maneuver Book {book.Name}, recorded maneuvers in readied mode: {book.AllReadiedManeuvers(SlotLayer.Readied).Count}");
                     }
                 }
+
+            }
+            catch (Exception e)
+            {
+                Main.Context.Logger.LogError(e, "Error in UnitPartMartialDisciple.HandleUnitCompleteLevelup");
             }
 
         }

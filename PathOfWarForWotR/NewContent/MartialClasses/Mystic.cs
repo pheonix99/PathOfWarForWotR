@@ -155,6 +155,7 @@ namespace PathOfWarForWotR.NewContent.MartialClasses
                 
 
                 var made = config.Configure();
+                FeatureSelectionConfigurator.For(made).SetGroup(FeatureGroup.CombatFeat).Configure(delayed: true);
                 BonusFeat = made.ToReference<BlueprintFeatureSelectionReference>();
             
                 Main.LogPatch(made);
@@ -335,7 +336,7 @@ namespace PathOfWarForWotR.NewContent.MartialClasses
 
             mysticProgression.AddToProgressionLevels(1, elementalAttune.Get().ToReference<BlueprintFeatureBaseReference>());
             mysticProgression.AddToProgressionLevels(3, mysticGlyphs);
-            mysticProgression.AddToProgressionLevels(20, glyphMaster);
+            mysticProgression.AddToProgressionLevels(20, glyphMaster);//TODO BUILD CAPSTONE SETUP
 
             mysticProgression.AddToProgressionLevels(1, mysticAugments1.Get().ToReference<BlueprintFeatureBaseReference>());
             mysticProgression.AddToProgressionLevels(4, mysticAugments2.Get().ToReference<BlueprintFeatureBaseReference>());

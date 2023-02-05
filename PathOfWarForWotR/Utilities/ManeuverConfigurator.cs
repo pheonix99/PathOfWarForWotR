@@ -362,7 +362,49 @@ namespace PathOfWarForWotR.Utilities
 
         }
 
-        
+        public static BuffConfigurator AddScalingConfig(this BuffConfigurator buff, AbilityRankType type, int baseValue, int levelsToIncrease)
+        {
+            int start;
+            if (baseValue > 1)
+            {
+                start = 1 - ((baseValue - 1) * levelsToIncrease);
+            }
+            else
+            {
+                start = 1;
+            }
+
+            return buff.AddContextRankConfig(new ContextRankConfig()
+            {
+                m_Type = type,
+                m_Progression = ContextRankProgression.StartPlusDivStep,
+                m_StartLevel = start,
+                m_StepLevel = levelsToIncrease,
+
+            });
+        }
+
+        public static AbilityConfigurator AddScalingConfig(this AbilityConfigurator buff, AbilityRankType type, int baseValue, int levelsToIncrease)
+        {
+            int start;
+            if (baseValue > 1)
+            {
+                start = 1 - ((baseValue - 1) * levelsToIncrease);
+            }
+            else
+            {
+                start = 1;
+            }
+
+            return buff.AddContextRankConfig(new ContextRankConfig()
+            {
+                m_Type = type,
+                m_Progression = ContextRankProgression.StartPlusDivStep,
+                m_StartLevel = start,
+                m_StepLevel = levelsToIncrease,
+
+            });
+        }
 
         public static void MakeScalingConfig(this ContextRankConfig config, AbilityRankType type, int baseValue, int levelsToIncrease)
         {
@@ -378,6 +420,16 @@ namespace PathOfWarForWotR.Utilities
                 config.m_StartLevel = 1;
             }
             config.m_StepLevel = levelsToIncrease;
+        }
+
+        public static AbilityConfigurator NewTriggeredBoost(ModContextBase contextBase, string sysName, DisciplineDefine disciplineDefine, int level,  UnitAnimationActionCastSpell.CastAnimationStyle animationStyle = UnitAnimationActionCastSpell.CastAnimationStyle.Self, Sprite icon = null, AbilityType? type = null)
+        {
+            
+
+            var config = New(contextBase, sysName, disciplineDefine, level, ManeuverType.Boost, CommandType.Swift, false, animationStyle, icon, type);
+
+
+            return config;
         }
 
         public static AbilityConfigurator NewNormalBoost(ModContextBase contextBase, string sysName, DisciplineDefine disciplineDefine, int level, Action<BuffConfigurator> buffmaker, UnitAnimationActionCastSpell.CastAnimationStyle animationStyle = UnitAnimationActionCastSpell.CastAnimationStyle.Self, Sprite icon = null, AbilityType? type = null, int duration = 1)

@@ -4,7 +4,7 @@ using Kingmaker.UI.MVVM._PCView.ActionBar;
 using Owlcat.Runtime.UI.Controls.Button;
 using Owlcat.Runtime.UI.Controls.Other;
 using Owlcat.Runtime.UI.Utility;
-using PathOfWarForWotR.CustomUI.ManeuverBook;
+using PathOfWarForWotR.CustomUI.ManeuverBookUI;
 using PathOfWarForWotR.EnumHacks;
 using PathOfWarForWotR.Extensions;
 using System;
@@ -28,10 +28,10 @@ namespace PathOfWarForWotR.CustomUI.InsertIntoExisting
     [HarmonyPatch(typeof(ActionBarPCView))]
     static class HackActionBarPCView
     {
-      
+
         public static ActionBarGroupPCView m_manuverView;
 
-       
+
 
         public static ActionBarGroupPCView GetActionBarManeuverGroupPCView(this ActionBarPCView actionBarPCView)
         {
@@ -68,7 +68,7 @@ namespace PathOfWarForWotR.CustomUI.InsertIntoExisting
             Main.Context.Logger.Log("Initalize Postfix called for ActionBarPCView");
             try
             {
-                
+
 
                 if (m_manuverView is not null)
                 {
@@ -141,24 +141,34 @@ namespace PathOfWarForWotR.CustomUI.InsertIntoExisting
                 clone.transform.Find("Background/OpenCloseButton/Background/Letter").GetComponent<TextMeshProUGUI>().SetText("M");
                 clone.transform.Find("Background/Header/HeaderText").GetComponent<TextMeshProUGUI>().SetText("Maneuvers");
                 clone.transform.localPosition = new Vector3(-270, clone.transform.localPosition.y, clone.transform.localPosition.z);
-                for (int i = 0; i < m_manuverView.GetMinSlotsCount(); i++)
+                /*for (int i = 0; i < m_manuverView.GetMinSlotsCount(); i++)
                 {
                     ActionBarBaseSlotPCView widget = WidgetFactory.GetWidget<ActionBarBaseSlotPCView>(m_manuverView.m_Slot, true, false);
                     widget.transform.SetParent(m_manuverView.m_SlotContainer, false);
                     widget.Initialize();
                     widget.CanvasGroup.alpha = 0f;
                     m_manuverView.m_SlotsList.Add(widget);
-                }
+                }*/
 
                 Main.Context.Logger.Log($"m_manuverView was set: {m_manuverView is not null}");
-                
+
                 clone.name = "ManueverGroupView";
 
                 Main.Context.Logger.Log("Passed faux initialize");
-
-                m_manuverView.Bind(__instance.ViewModel);
+                Main.Context.Logger.Log($"early m_ManeverView slotkids :{m_manuverView.gameObject.GetComponentsInChildren<ActionBarBaseSlotPCView>().Length} with null issues {m_manuverView.gameObject.GetComponentsInChildren<ActionBarBaseSlotPCView>().Where(x => x.ViewModel?.MechanicActionBarSlot is null).Count()}");
+                while (m_manuverView.gameObject.GetComponentsInChildren<ActionBarBaseSlotPCView>().Any(x => x.ViewModel?.MechanicActionBarSlot is null) )
+                {
+                    Main.LogDebug("Nuking bad ActionBarBaseSlotPCView");
+                    m_manuverView.gameObject.DestroyChildrenImmediate(m_manuverView.gameObject.GetComponentsInChildren<ActionBarBaseSlotPCView>().Where(x => x.ViewModel?.MechanicActionBarSlot is null).FirstOrDefault().name);
+                }
+               
 
                 m_manuverView.ClearSlots();
+                m_manuverView.Bind(__instance.ViewModel);
+
+                Main.Context.Logger.Log($"m_manuverView slot-kids at creation: {m_manuverView.gameObject.GetComponentsInChildren<ActionBarBaseSlotPCView>().Length}, m_manuverView slots in code: {m_manuverView.m_SlotsList?.Count ?? 0}");
+                Main.Context.Logger.Log($" m_ManeverView slotkids with null issues {m_manuverView.gameObject.GetComponentsInChildren<ActionBarBaseSlotPCView>().Where(x => x.ViewModel?.MechanicActionBarSlot is null).Count()}");
+
                 //m_manuverView.BindViewImplementation();
 
                 /*
@@ -171,14 +181,14 @@ namespace PathOfWarForWotR.CustomUI.InsertIntoExisting
                 {
                     m_manuverView.SetVisible(!m_manuverView.VisibleState, false);
                 }));
-               (/
+                */
 
 
                 //clone.gameObject.SetActive(Game.Instance.SelectionCharacter.SelectedUnit.Value.Value.HasMartialStuff());
 
-                
+
                 //spellview.m_Neighbours.Add(clone.GetComponent<ActionBarGroupPCView>());
-                
+
 
 
             }
@@ -189,55 +199,10 @@ namespace PathOfWarForWotR.CustomUI.InsertIntoExisting
 
         }
 
-        [HarmonyPatch("BindViewImplementation"), HarmonyPostfix]
-        static void BindViewImplementation2(ActionBarPCView __instance)
-        {
-            try
-            {
-                /*
-                var spellview = __instance.GetComponentInChildren<ActionBarSpellGroupPCView>();
-                if (spellview == null)
-                {
-                    Main.Context.Logger.Log("Spellview is null in postfix");
-                }
-                spellview = __instance.m_SpellsGroup
-                var groupsOBJ = spellview.transform.parent;
-                if (groupsOBJ == null)
-                {
-                    Main.Context.Logger.Log("groupsOBJ is null in postfix");
-                }
-                var otherButtons = groupsOBJ.GetComponentsInChildren<ActionBarGroupPCView>();
 
-                foreach (var v in otherButtons.Where(x => x.name != "ManueverGroupView"))
-                {
-                    Main.Context.Logger.Log($"About to hook {v.name} to maneuver popout");
-                    if (v.m_Neighbours == null)
-                    {
-                        Main.Context.Logger.Log($"{v.name}.m_neighbors is null");
-                    }
-                    if (cloneview is null)
-                    {
-                        Main.Context.Logger.Log($"cloneview is null is null");
-                    }
-                    else if (cloneview.m_Neighbours is null)
-                    {
-                        Main.Context.Logger.Log($"cloneview.m_neighbors is null");
-                    }
-                    v.m_Neighbours.Add(cloneview);
-                    cloneview.m_Neighbours.Add(v);
-                }
 
-                */
-            }
-            catch (Exception ex)
-            {
-                Main.Context.Logger.LogError(ex, "setting neighbors for maneuvers menu");
-            }
 
-        }
-        
-        
-        
+
     }
 
 

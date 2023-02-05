@@ -23,6 +23,7 @@ using BlueprintCore.Conditions.Builder.ContextEx;
 using PathOfWarForWotR.Backend.NewComponents.ManeuverBookSystem;
 using PathOfWarForWotR.Backend.NewComponents.AbilityRestrictions;
 using PathOfWarForWotR.Backend.NewComponents.AbilitySpecific;
+using Kingmaker.Blueprints.Classes.Spells;
 
 namespace PathOfWarForWotR.NewContent.Disciplines
 {
@@ -37,6 +38,13 @@ namespace PathOfWarForWotR.NewContent.Disciplines
 
             #region level 1
             //TODO CRANE STEP
+
+            CraneStep();
+            void CraneStep()
+            {
+                //TODO!
+                //REQUIRES movement-as-ability!
+            }
 
             FlashingWings();
             void FlashingWings()
@@ -53,10 +61,10 @@ namespace PathOfWarForWotR.NewContent.Disciplines
                 strikeConfig.AddComponent<SilverCraneAntiFiendEffect>();
                 strikeConfig.SetLocalizedDuration(BlueprintCore.Blueprints.CustomConfigurators.UnitLogic.Abilities.Duration.OneRound);
                 strikeConfig.ConfigureManeuver(Main.Context);
-                
+
             }
 
-            
+
 
             SilverCraneWaltz();
             void SilverCraneWaltz()
@@ -71,7 +79,7 @@ namespace PathOfWarForWotR.NewContent.Disciplines
                     {
                         ValueType = Kingmaker.UnitLogic.Mechanics.ContextValueType.Rank,
                         ValueRank = AbilityRankType.Default
-                        
+
                     }, descriptor: ModifierDescriptor.Insight);
                     x.AddContextStatBonus(stat: Kingmaker.EntitySystem.Stats.StatType.AC, value: new Kingmaker.UnitLogic.Mechanics.ContextValue()
                     {
@@ -92,23 +100,23 @@ namespace PathOfWarForWotR.NewContent.Disciplines
                 stanceConfig.ConfigureManeuver(Main.Context);
             }
 
-           
+
             EnduringCraneStrike();
             void EnduringCraneStrike()
             {
                 var strikeConfig = ManeuverConfigurator.NewStrike(Main.Context, "EnduringCraneStrike", silverCrane, 1, Kingmaker.UnitLogic.Commands.Base.UnitCommand.CommandType.Standard);
                 strikeConfig.AddStrikeComponent();
                 strikeConfig.ApplyWeaponStrikeBits();
-                
+
                 strikeConfig.AddPayload(ActionsBuilder.New().Add<SilverCraneSingleTargetHeal>(x =>
                 {
-                    
+
                 }));
                 strikeConfig.AddComponent<SilverCraneAntiFiendEffect>();
                 strikeConfig.ConfigureManeuver(Main.Context);
             }
 
-            
+
 
             EyesOfTheCrane();
             void EyesOfTheCrane()
@@ -134,12 +142,12 @@ namespace PathOfWarForWotR.NewContent.Disciplines
                 strikeConfig.AddComponent<SilverCraneAntiFiendEffect>();
                 strikeConfig.ConfigureManeuver(Main.Context);
             }
-            
+
 
 
 
             #endregion
-            #region level 2
+            #region level 2 - all non-counters clear
             BlazingCranesWing();
             void BlazingCranesWing()
             {
@@ -191,17 +199,22 @@ namespace PathOfWarForWotR.NewContent.Disciplines
                     Type = Kingmaker.RuleSystem.Rules.Damage.DamageType.Energy,
                     Energy = Kingmaker.Enums.Damage.DamageEnergyType.Holy
                 }, diceType: Kingmaker.RuleSystem.DiceType.D6);
-                
+
                 strikeConfig.AddComponent<SilverCraneAntiFiendEffect>();
                 strikeConfig.ConfigureManeuver(Main.Context);
             }
-           
 
-            
+            DefensiveStep();
+            void DefensiveStep()
+            {
+                //Requires Move-As-Ability;
+                //No idea what happens if you step out of an ongoing full attack
+            }
 
-            
 
-            
+
+
+
 
             #endregion
             #region level 3
@@ -226,7 +239,13 @@ namespace PathOfWarForWotR.NewContent.Disciplines
                 strikeConfig.SetLocalizedSavingThrow(BlueprintCore.Blueprints.CustomConfigurators.UnitLogic.Abilities.SavingThrow.FortPartial);
                 strikeConfig.ConfigureManeuver(Main.Context);
             }
-           
+
+            SilverCranesBlessing();
+            void SilverCranesBlessing()
+            {
+                //TODO requires reaction-boosts!
+            }
+
             SilverKnightsBlade();
             void SilverKnightsBlade()
             {
@@ -248,7 +267,7 @@ namespace PathOfWarForWotR.NewContent.Disciplines
             StanceOfTheSilverCrane();
             void StanceOfTheSilverCrane()
             {
-                
+
 
 
                 var stanceConfig = ManeuverConfigurator.NewStance(Main.Context, "StanceOfTheSilverCrane", silverCrane, 3, x =>
@@ -258,7 +277,7 @@ namespace PathOfWarForWotR.NewContent.Disciplines
                     x.AddSavingThrowBonusAgainstAlignment(AlignmentComponent.Evil, ContextValues.Constant(2), ModifierDescriptor.Deflection);
                     x.AddArmorClassBonusAgainstAlignment(AlignmentComponent.Evil, ContextValues.Constant(2), ModifierDescriptor.Deflection);
                     x.AddFormationACBonus(2, unitProperty: false);
-                    
+
                 });
 
                 stanceConfig.ConfigureManeuver(Main.Context);
@@ -268,7 +287,7 @@ namespace PathOfWarForWotR.NewContent.Disciplines
                 var protfromevil = BlueprintTool.Get<BlueprintBuff>("4a6911969911ce9499bf27dde9bfcedc");
                 var buff = BuffConfigurator.For("StanceOfTheSilverCraneBuff");
                 buff.AddSpecificBuffImmunity(AlignmentComponent.Evil, protfromevil.GetComponent<SpecificBuffImmunity>().m_Buff);
-                buff.AddSpellImmunity(AlignmentComponent.Evil, type: Kingmaker.UnitLogic.Parts.SpellImmunityType.Specific, exceptions: protfromevil.GetComponent<AddSpellImmunity>().m_Exceptions.Select(x=>(Blueprint<BlueprintAbilityReference>)x).ToList());
+                buff.AddSpellImmunity(AlignmentComponent.Evil, type: Kingmaker.UnitLogic.Parts.SpellImmunityType.Specific, exceptions: protfromevil.GetComponent<AddSpellImmunity>().m_Exceptions.Select(x => (Blueprint<BlueprintAbilityReference>)x).ToList());
                 buff.Configure(delayed: true);
             }
 
@@ -294,7 +313,7 @@ namespace PathOfWarForWotR.NewContent.Disciplines
             SapphireDisplacementStrike();
             void SapphireDisplacementStrike()
             {
-            
+
                 var buffGuid = Main.Context.Blueprints.GetGUID("SapphireDisplacementStrikeDebuff");
                 var buff = BuffConfigurator.New("SapphireDisplacementStrikeDebuff", buffGuid.ToString());
                 buff.SetDisplayName("SapphireDisplacementStrike");
@@ -312,7 +331,17 @@ namespace PathOfWarForWotR.NewContent.Disciplines
                 strikeConfig.ConfigureManeuver(Main.Context);
             }
 
+            SilverCraneResurgence();
+            void SilverCraneResurgence()
+            {
+                //Requires reaction interface or smart-logic to determine threat level of failed save
+            }
 
+            SilverCranesLeap();
+            void SilverCranesLeap()
+            {
+                //Requires move-as-ability
+            }
 
             #endregion
 
@@ -333,6 +362,19 @@ namespace PathOfWarForWotR.NewContent.Disciplines
                 strikeConfig.AddComponent<SilverCraneAntiFiendEffect>();
                 strikeConfig.ConfigureManeuver(Main.Context);
             }
+            StanceOfTheCraneKnight();
+            void StanceOfTheCraneKnight()
+            {
+                var stance = ManeuverConfigurator.NewStance(Main.Context, "StanceOfTheCraneKnight", silverCrane, 5, x =>
+                {
+                    x.AddDamageResistancePhysical(alignment: Kingmaker.Enums.Damage.DamageAlignment.Evil, bypassedByAlignment: true, value: ContextValues.Constant(10));
+                    x.AddSpellImmunityToSpellDescriptor(descriptor: SpellDescriptor.Ground);
+                    x.AddACBonusAgainstAttacks(againstMeleeOnly: true, armorClassBonus: 3, descriptor: ModifierDescriptor.Dodge);
+                    x.AddBuffMovementSpeed(value: 30, descriptor: ModifierDescriptor.Trait);
+
+                });
+                stance.ConfigureManeuver(Main.Context);
+            }
 
             ArgentKnightsBanner();
             void ArgentKnightsBanner()
@@ -351,6 +393,12 @@ namespace PathOfWarForWotR.NewContent.Disciplines
                     x.Feet = new Feet(30f);
                 }));
                 strikeConfig.ConfigureManeuver(Main.Context);
+            }
+
+            EmeraldTippedFeathers();
+            void EmeraldTippedFeathers()
+            {
+                //TODO requires boost-as-interrupt
             }
 
             #endregion
@@ -375,7 +423,7 @@ namespace PathOfWarForWotR.NewContent.Disciplines
             }
 
             //HolyPinions();
-            void HolyPinions()
+            void HolyPinions()//TODO figure out how to implement making incorporeal corporeal or replace
             {
                 var buffGuid = Main.Context.Blueprints.GetGUID("HolyPinionsDebuff");
                 var buff = BuffConfigurator.New("HolyPinionsDebuff", buffGuid.ToString());
@@ -412,6 +460,13 @@ namespace PathOfWarForWotR.NewContent.Disciplines
                 stanceConfig.ConfigureManeuver(Main.Context);
                 
             }
+            SilverCranesMercy();
+            void SilverCranesMercy()
+            {
+                //TODO requires reaction-boosts!
+            }
+
+
             #endregion
 
             #region level 7
@@ -441,7 +496,13 @@ namespace PathOfWarForWotR.NewContent.Disciplines
 
                 config.ConfigureManeuver(Main.Context);
             }
-
+            DiamondTippedFeathers();
+            void DiamondTippedFeathers()
+            {
+                //Condition removal mode requires UI?
+                //Condition negator mode requires smart-logic?
+                //TODO requires boost-as-interrupt
+            }
 
             #endregion
 
@@ -484,7 +545,11 @@ namespace PathOfWarForWotR.NewContent.Disciplines
 
                 
             }
-
+            BenedictionOfTheSilverCrane();
+            void BenedictionOfTheSilverCrane()
+            {
+                //TODO requires boost-as-interrupt
+            }
 
             #endregion
 
