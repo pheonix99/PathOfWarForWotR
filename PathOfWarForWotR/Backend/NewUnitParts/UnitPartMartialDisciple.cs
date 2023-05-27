@@ -69,12 +69,13 @@ namespace PathOfWarForWotR.Backend.NewUnitParts
             Main.LogDebug($"RegisterBookUnlock called for {Owner.CharacterName} with fact: {fact.Name} for book {bookRef.NameSafe()} with discipline {disciplineType}");
             if (UnlocksForBooks.TryGetValue(bookRef, out var list))
             {
-
+                
                 list.Add(new DisciplineUnlock() { sourceFeature = fact, discipline = disciplineType });
             }
             else
             {
-                UnlocksForBooks.Add(bookRef, new());
+                list = new();
+                UnlocksForBooks.Add(bookRef, list);
                 list.Add(new DisciplineUnlock() { sourceFeature = fact, discipline = disciplineType });
             }
             AllUnlocks.Add(new DisciplineUnlock() { sourceFeature = fact, discipline = disciplineType });
@@ -159,12 +160,12 @@ namespace PathOfWarForWotR.Backend.NewUnitParts
         #region serialization 
         public override void OnPostLoad()
         {
-            Main.Context.Logger.Log($"Loading Maneuver Info: from Unit Part");
+            
             foreach (var savedBook in ManeuverBookStorage.Instance.ForCharacter(Owner).ManeuverBooks)
             {
                
                 var bookRef = BlueprintTools.GetBlueprint<BlueprintManeuverBook>(savedBook.Key);
-                Main.Context.Logger.Log($"Loading Maneuver Info for {bookRef.Name} from Unit Part");
+               
                 var book = Owner.DemandManeuverBook(bookRef);
                 book.LoadBook();
             }

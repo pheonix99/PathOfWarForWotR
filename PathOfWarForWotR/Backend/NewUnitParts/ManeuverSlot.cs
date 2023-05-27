@@ -3,13 +3,13 @@ using Kingmaker.Blueprints;
 using System.Linq;
 using PathOfWarForWotR.Serialization;
 using Kingmaker.UnitLogic.Abilities;
+using System;
 
 namespace PathOfWarForWotR.Backend.NewUnitParts
 {
-    public class ManeuverSlot
+    public class ManeuverSlot : IDisposable, IComparable<ManeuverSlot>
     {
-       
-
+        
 
         public readonly int Index;
 
@@ -137,6 +137,16 @@ namespace PathOfWarForWotR.Backend.NewUnitParts
                 return true;
             }
             return false;
+        }
+
+        public void Dispose()
+        {
+            
+        }
+
+        public int CompareTo(ManeuverSlot other)
+        {
+            return this.Index.CompareTo(other.Index);
         }
     }
     public enum SlotType

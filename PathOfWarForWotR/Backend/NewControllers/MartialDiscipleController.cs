@@ -9,6 +9,7 @@ using Kingmaker.Utility;
 using TabletopTweaks.Core.Utilities;
 using PathOfWarForWotR.Backend.NewEvents;
 using PathOfWarForWotR.Extensions;
+using PathOfWarForWotR.NewContent;
 
 namespace PathOfWarForWotR.Backend.NewControllers
 {
@@ -26,9 +27,9 @@ namespace PathOfWarForWotR.Backend.NewControllers
 
         public void HandleNewCombatRound(UnitEntityData unit)
         {
-            if (unit.HasFact(BlueprintTools.GetModBlueprint<BlueprintBuff>(Main.Context, "InCombatModeSystemBuff")))
+            if (unit.HasFact(CommonBuffs.combatMode))
             {
-                unit.RemoveFact(BlueprintTools.GetModBlueprint<BlueprintBuff>(Main.Context, "InCombatModeSystemBuff"));
+                unit.RemoveFact(CommonBuffs.combatMode);
             }
             else
             {
@@ -48,7 +49,7 @@ namespace PathOfWarForWotR.Backend.NewControllers
         public void HandleUnitLeaveCombat(UnitEntityData unit)
         {
 
-            unit.AddBuff(BlueprintTools.GetModBlueprint<BlueprintBuff>(Main.Context, "InCombatModeSystemBuff"), unit, new Rounds(10).Seconds);
+            unit.AddBuff(CommonBuffs.combatMode, unit, new Rounds(10).Seconds);
             
         }
 

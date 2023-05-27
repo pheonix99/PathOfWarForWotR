@@ -119,7 +119,7 @@ namespace PathOfWarForWotR.CustomUI.InsertIntoExisting
                     }
                     else
                     {
-                        var slot = new ActionBarSlotVM(new MechanicActionBarReadiedManeuverNormal(v) {Unit = unit });//THIS IS NOT WORKING!
+                        var slot = new ActionBarSlotVM(new MechanicActionBarReadiedManeuverNormal(v, spellbook) {Unit = unit });
                         m_groupManuevers.Add(slot);
                         Main.Context.Logger.Log($"Collecting Manuever {v.Name} on {unit.CharacterName} for {spellbook.Name} as {slot.MechanicActionBarSlot.GetType().ToString()}");
                     }

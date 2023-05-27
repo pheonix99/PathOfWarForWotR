@@ -8,6 +8,7 @@ namespace PathOfWarForWotR.NewContent
     class CommonBuffs
     {
         public static BlueprintBuffReference enforcedFlatfooted;
+        public static BlueprintBuffReference combatMode;
 
         public static void Build()
         {
@@ -27,9 +28,9 @@ namespace PathOfWarForWotR.NewContent
                 buff.SetFlags(Kingmaker.UnitLogic.Buffs.Blueprints.BlueprintBuff.Flags.HiddenInUi);
 
                 
-                buff.AddNotDispelable().SetStacking(Kingmaker.UnitLogic.Buffs.Blueprints.StackingType.Replace).AddComponent<OnCombatModeExpired>().Configure();
+              var made =  buff.AddNotDispelable().SetStacking(Kingmaker.UnitLogic.Buffs.Blueprints.StackingType.Replace).AddComponent<OnCombatModeExpired>().Configure();
+                combatMode = made.ToReference<BlueprintBuffReference>();
 
-                
 
             }
 

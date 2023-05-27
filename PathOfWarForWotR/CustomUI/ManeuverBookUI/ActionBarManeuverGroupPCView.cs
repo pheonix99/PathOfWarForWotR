@@ -50,7 +50,7 @@ namespace PathOfWarForWotR.CustomUI.ManeuverBookUI
             }
 			foreach (ActionBarSlotVM actionBarSlotVM in slotVms)
 			{
-				if (actionBarSlotVM.MechanicActionBarSlot is MechanicActionBarMartial)
+				if (actionBarSlotVM.MechanicActionBarSlot is MechanicActionBarMartialManeuver)
                 {
 					list.Add(actionBarSlotVM);
 					Main.Context.Logger.Log("Adding MechanicActionBarMartial to ActionBarManeuverGroupPCView");

@@ -15,6 +15,7 @@ using PathOfWarForWotR.Backend.NewComponents.ManeuverBookSystem;
 using PathOfWarForWotR.Backend.NewUnitParts;
 using PathOfWarForWotR.Extensions;
 using PathOfWarForWotR.Serialization;
+using BlueprintCore.Utils;
 
 namespace PathOfWarForWotR.Backend.NewUnitDataClasses
 {
@@ -37,7 +38,8 @@ namespace PathOfWarForWotR.Backend.NewUnitDataClasses
 
         private bool HalfLevel = false;
 
-       
+        private Dictionary<BlueprintAbilityReference, Ability> Maneuvers = new();
+
         public int BaseLevel
         {
             get
@@ -229,11 +231,13 @@ namespace PathOfWarForWotR.Backend.NewUnitDataClasses
                 var comp = known.GetComponent<ManeuverInformation>();
                 if (comp == null)
                     continue;
-                var data = new AbilityData(known, Owner);
+                var data = new AbilityData(known, Owner, Maneuvers[known.ToReference<BlueprintAbilityReference>()],null);
 
 
 
                 data.OverrideSpellLevel = comp.ManeuverLevel;
+                data.OverrideCasterLevel = EffectiveInitiatorLevel;
+                
                 dataList.Add(data);
             }
 
@@ -422,7 +426,16 @@ namespace PathOfWarForWotR.Backend.NewUnitDataClasses
                 }
                 else if (comp.ManeuverType != ManeuverType.Stance && !knownManeuvers.Contains(maneuver))
                 {
+                    var ability = new Ability(maneuver, Owner);//THIS IS NOT THE WAY TO DO IT - need active fact to hook it to as sourc
+            
+                    
                     knownManeuvers.Add(maneuver);
+                    if (!Maneuvers.ContainsKey(maneuver))
+                    {
+                        Maneuvers.Add(maneuver, ability);
+                    }
+                   
+                    
                 }
             }
         }
@@ -471,8 +484,9 @@ namespace PathOfWarForWotR.Backend.NewUnitDataClasses
             record.BaseLevel = m_BaseLevelInternal;
             foreach (var move in knownManeuvers)
             {
-                Main.Context.Logger.Log($"Saving {move.NameSafe()} - {Name} Book Info For {Owner.CharacterName}");
-                record.ManeuverGuids.Add(move.guid);
+                var guid = move.Guid.ToString();
+                Main.Context.Logger.Log($"Saving {move.NameSafe()} with guid {guid} - {Name} Book Info For {Owner.CharacterName}");
+                record.ManeuverGuids.Add(guid);
             }
             foreach (var move in knownStances)
             {
@@ -500,8 +514,9 @@ namespace PathOfWarForWotR.Backend.NewUnitDataClasses
             m_BaseLevelInternal = record.BaseLevel;
             foreach (var move in record.ManeuverGuids)
             {
-                var moveref = BlueprintTools.GetBlueprintReference<BlueprintAbilityReference>(move);
-                Main.Context.Logger.Log($"Loading {moveref.NameSafe()} - {Name} Book Info For {Owner.CharacterName}");
+                Main.Context.Logger.Log($"Processing GUID {move}");
+                var moveref = BlueprintTool.GetRef<BlueprintAbilityReference>(move);
+                Main.Context.Logger.Log($"Loading {moveref.Get().name} - {Name} Book Info For {Owner.CharacterName}");
                 LearnManeuver(moveref);
             }
             foreach (var slot in record.SlotRecords)
@@ -509,6 +524,7 @@ namespace PathOfWarForWotR.Backend.NewUnitDataClasses
                 ManeuverSlots.Add(new ManeuverSlot(slot));
             }
             DemandSlotsUpdate();
+            Main.LogDebug($"At end of LoadBook for {Name}, known maneuver count in list is {knownManeuvers.Count()}");
         }
 #endregion
 

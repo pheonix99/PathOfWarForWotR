@@ -10,11 +10,12 @@ using System.Threading.Tasks;
 
 namespace PathOfWarForWotR.CustomUI.ManeuverBookUI
 {
-    class MechanicActionBarReadiedManeuverNormal : MechanicActionBarMartial
+    class MechanicActionBarReadiedManeuverNormal : MechanicActionBarMartialManeuver
     {
 		
-		public MechanicActionBarReadiedManeuverNormal(AbilityData spellSlot)
+		public MechanicActionBarReadiedManeuverNormal(AbilityData spellSlot, ManeuverBook book) : base(book)
 		{
+			//TODO UPGRADE TO PROPER SPELL SETUP
 			this._manuever = spellSlot;
 		}
 

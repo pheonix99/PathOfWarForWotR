@@ -13,6 +13,7 @@ using Kingmaker.UnitLogic.Commands.Base;
 using Kingmaker.Utility;
 using Owlcat.Runtime.UI.Tooltips;
 using PathOfWarForWotR.Backend.NewComponents.ManeuverBookSystem;
+using PathOfWarForWotR.Backend.NewUnitDataClasses;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -24,8 +25,13 @@ using UnityEngine.UI;
 
 namespace PathOfWarForWotR.CustomUI.ManeuverBookUI
 {
-    public abstract class MechanicActionBarMartial : MechanicActionBarSlot
+    public abstract class MechanicActionBarMartialManeuver : MechanicActionBarSlot
     {
+		public MechanicActionBarMartialManeuver(ManeuverBook book)
+        {
+			maneuverBook = book;
+        }
+		public readonly ManeuverBook maneuverBook;
         public abstract AbilityData Maneuver { get; }
 
 		public override string KeyName
@@ -63,7 +69,10 @@ namespace PathOfWarForWotR.CustomUI.ManeuverBookUI
 					resource = new int?(this.GetResource());
 				}
 			}
+
+
 			return (!CombatController.IsInTurnBasedCombat() || base.CanUseIfTurnBased()) && !base.IsDisabled(resource.Value) && !this.IsNotAvailable;
+			//return (!CombatController.IsInTurnBasedCombat() || base.CanUseIfTurnBased()) && !base.IsDisabled(resource.Value) && !this.IsNotAvailable;
 		}
 
 		public override bool CanUseIfTurnBasedInternal()
@@ -148,11 +157,14 @@ namespace PathOfWarForWotR.CustomUI.ManeuverBookUI
 		public override int GetResource()
 		{
 			AbilityData spell = this.Maneuver;
+			
 			if (spell == null)
 			{
 				return 0;
 			}
-			return spell.GetAvailableForCastCount();
+			var resourceval = maneuverBook.ManueverIsAvailable(spell.Blueprint) ? 1 : 0;
+			this.ResourceCount = resourceval;
+			return resourceval;
 		}
 
 		public override Sprite GetIcon()
