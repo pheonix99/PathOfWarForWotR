@@ -21,17 +21,13 @@ namespace PathOfWarForWotR.CustomUI.InsertIntoExisting
         [HarmonyPatch(nameof(ActionBarGroupPCView.SetVisible)), HarmonyPrefix]
         static void SetVisible(ActionBarGroupPCView __instance, bool state, bool force)
         {
-           
-
-           
+            if (__instance.m_TogglableChildren == null)
+                __instance.m_TogglableChildren = new();
         }
 
         [HarmonyPatch(nameof(ActionBarGroupPCView.SetVisible)), HarmonyPostfix]
         static void SetVisible2(ActionBarGroupPCView __instance, bool state, bool force)
         {
-            
-            
-
         }
 
         [HarmonyPatch(nameof(ActionBarGroupPCView.BindViewImplementation)), HarmonyPrefix]
