@@ -1,255 +1,255 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <LangVersion>latest</LangVersion>
+	<PropertyGroup>
+		<LangVersion>latest</LangVersion>
 
-    <TargetFramework>net472</TargetFramework>
-  </PropertyGroup>
+		<TargetFramework>net472</TargetFramework>
+	</PropertyGroup>
 
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\PathOfWarForWotR</OutputPath>
-  </PropertyGroup>
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+		<Optimize>false</Optimize>
+		<OutputPath>bin\Debug\PathOfWarForWotR</OutputPath>
+	</PropertyGroup>
 
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\PathOfWarForWotR</OutputPath>
-  </PropertyGroup>
-
-
-
-  <ItemGroup>
-    <PackageReference Include="AssemblyPublicizer" Version="1.0.1">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-    </PackageReference>
-    <PackageReference Include="ILRepack.MSBuild.Task" Version="2.0.13" />
-    <PackageReference Include="WW-Blueprint-Core" Version="2.8.0" />
-  </ItemGroup>
-  <!-- DLL Merging -->
-  <Target Name="ILRepack" AfterTargets="Build">
-    <ItemGroup>
-      <InputAssemblies Include="BlueprintCore.dll" />
-    
-      <InputAssemblies Include="PathOfWarForWotR.dll" />
-      <OutputAssembly Include="PathOfWarForWotR.dll" />
-    </ItemGroup>
-
-    <Message Text="Merging: @(InputAssemblies) into @(OutputAssembly)" Importance="High" />
-
-    <ILRepack OutputType="Dll" MainAssembly="PathOfWarForWotR.dll" OutputAssembly="@(OutputAssembly)" InputAssemblies="@(InputAssemblies)" WorkingDirectory="$(OutputPath)" />
-  </Target>
-
-
-  <!-- Publicize Target -->
-  <Target Name="Publicize" AfterTargets="Clean">
-    <ItemGroup>
-
-      <Assemblies Include="$(WrathPath)\Wrath_Data\Managed\Assembly-CSharp.dll" />
-      <Assemblies Include="$(WrathPath)\Wrath_Data\Managed\Owlcat.Runtime.UI.dll" />
-      <Assemblies Include="$(WrathPath)\Wrath_Data\Managed\Owlcat.Runtime.UniRx.dll" />
-      <PublicAssembly Include="$(SolutionDir)\lib\Assembly-CSharp_public.dll" />
-      <RenamedAssembly Include="$(SolutionDir)\lib\Assembly-CSharp.dll" />
-    </ItemGroup>
-    <PublicizeTask InputAssemblies="@(Assemblies)" OutputDir="$(SolutionDir)lib/" />
-    <Move SourceFiles="@(PublicAssembly)" DestinationFiles="@(RenamedAssembly)" />
-  </Target>
-  
-  <ItemGroup>
-    <None Remove="Config\Blueprints.json" />
-    <None Remove="Localization\BrokenBlade.json" />
-    <None Remove="Localization\LocalizationPack.json" />
-    <None Remove="Localization\MartialTraining.json" />
-    <None Remove="Localization\SilverCrane.json" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Config\Blueprints.json" />
-    <EmbeddedResource Include="Localization\BrokenBlade.json">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Localization\LocalizationPack.json">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Localization\MartialTraining.json">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Localization\SilverCrane.json">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </EmbeddedResource>
-  </ItemGroup>
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+		<Optimize>false</Optimize>
+		<OutputPath>bin\Debug\PathOfWarForWotR</OutputPath>
+	</PropertyGroup>
 
 
 
-  <ItemGroup>
-    <Reference Include="0Harmony">
-      <HintPath>$(WrathPath)\Wrath_Data\Managed\UnityModManager\0Harmony.dll</HintPath>
-    </Reference>
-    <Reference Include="Assembly-CSharp-public">
-      <HintPath>$(SolutionDir)lib\Assembly-CSharp.dll</HintPath>
-     
-    </Reference>
-    <Reference Include="Assembly-CSharp-firstpass">
-      <HintPath>$(WrathPath)\Wrath_Data\Managed\Assembly-CSharp-firstpass.dll</HintPath>
-    
-      <EmbedInteropTypes>false</EmbedInteropTypes>
-    </Reference>
-    <Reference Include="AstarPathfindingProject">
-      <HintPath>..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\Pathfinder Second Adventure\Wrath_Data\Managed\AstarPathfindingProject.dll</HintPath>
-    </Reference>
-    <Reference Include="Newtonsoft.Json">
-      <HintPath>$(WrathPath)\Wrath_Data\Managed\Newtonsoft.Json.dll</HintPath>
-    </Reference>
-    <Reference Include="Owlcat.Runtime.Core">
-      <HintPath>$(WrathPath)\Wrath_Data\Managed\Owlcat.Runtime.Core.dll</HintPath>
-    </Reference>
-    <Reference Include="Owlcat.Runtime.UI">
-      <HintPath>$(SolutionDir)lib\Owlcat.Runtime.UI_public.dll</HintPath>
-    </Reference>
-    <Reference Include="Owlcat.Runtime.UniRx">
-      <HintPath>..\lib\Owlcat.Runtime.UniRx_public.dll</HintPath>
-    </Reference>
-    <Reference Include="Owlcat.Runtime.Validation">
-      <HintPath>$(WrathPath)\Wrath_Data\Managed\Owlcat.Runtime.Validation.dll</HintPath>
-    </Reference>
-    <Reference Include="Owlcat.Runtime.Visual">
-      <HintPath>$(WrathPath)\Wrath_Data\Managed\Owlcat.Runtime.Visual.dll</HintPath>
-    </Reference>
-    <Reference Include="TabletopTweaks-Core">
-      <HintPath>$(WrathPath)\Mods\TabletopTweaks-Core\TabletopTweaks-Core.dll</HintPath>
-    </Reference>
-    <Reference Include="UniRx">
-      <HintPath>..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\Pathfinder Second Adventure\Wrath_Data\Managed\UniRx.dll</HintPath>
-    </Reference>
-    <Reference Include="Unity.TextMeshPro">
-      <HintPath>..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\Pathfinder Second Adventure\Wrath_Data\Managed\Unity.TextMeshPro.dll</HintPath>
-    </Reference>
-    <Reference Include="UnityEngine">
-      <HintPath>$(WrathPath)\Wrath_Data\Managed\UnityEngine.dll</HintPath>
-    </Reference>
-    <Reference Include="UnityEngine.CoreModule">
-      <HintPath>$(WrathPath)\Wrath_Data\Managed\UnityEngine.CoreModule.dll</HintPath>
-    
-      <EmbedInteropTypes>false</EmbedInteropTypes>
-    </Reference>
-    <Reference Include="UnityEngine.ImageConversionModule">
-      <HintPath>..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\Pathfinder Second Adventure\Wrath_Data\Managed\UnityEngine.ImageConversionModule.dll</HintPath>
-    </Reference>
-    <Reference Include="UnityEngine.IMGUIModule">
-      <HintPath>$(WrathPath)\Wrath_Data\Managed\UnityEngine.IMGUIModule.dll</HintPath>
-   
-      <EmbedInteropTypes>false</EmbedInteropTypes>
-    </Reference>
-    <Reference Include="UnityEngine.UI">
-      <HintPath>..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\Pathfinder Second Adventure\Wrath_Data\Managed\UnityEngine.UI.dll</HintPath>
-    </Reference>
-    <Reference Include="UnityEngine.UIModule">
-      <HintPath>..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\Pathfinder Second Adventure\Wrath_Data\Managed\UnityEngine.UIModule.dll</HintPath>
-    </Reference>
-    <Reference Include="UnityModManager">
-      <HintPath>$(WrathPath)\Wrath_Data\Managed\UnityModManager\UnityModManager.dll</HintPath>
-   
-      <EmbedInteropTypes>false</EmbedInteropTypes>
-    </Reference>
-  </ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="AssemblyPublicizer" Version="*">
+			<PrivateAssets>all</PrivateAssets>
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		</PackageReference>
+		<PackageReference Include="ILRepack.MSBuild.Task" Version="2.0.13" />
+		<PackageReference Include="WW-Blueprint-Core" Version="2.8.0" />
+	</ItemGroup>
+	<!-- DLL Merging -->
+	<Target Name="ILRepack" AfterTargets="Build">
+		<ItemGroup>
+			<InputAssemblies Include="BlueprintCore.dll" />
 
-  <ItemGroup>
-    <None Update="Assets\Fly.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="Info.json">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
+			<InputAssemblies Include="PathOfWarForWotR.dll" />
+			<OutputAssembly Include="PathOfWarForWotR.dll" />
+		</ItemGroup>
 
-  <ItemGroup>
-    <Reference Update="System">
-      <Private>false</Private>
-      <EmbedInteropTypes>false</EmbedInteropTypes>
-    </Reference>
-  </ItemGroup>
+		<Message Text="Merging: @(InputAssemblies) into @(OutputAssembly)" Importance="High" />
 
-  <ItemGroup>
-    <Reference Update="System.Core">
-      <Private>false</Private>
-      <EmbedInteropTypes>false</EmbedInteropTypes>
-    </Reference>
-  </ItemGroup>
-
-  <ItemGroup>
-    <Reference Update="System.Data">
-      <Private>false</Private>
-      <EmbedInteropTypes>false</EmbedInteropTypes>
-    </Reference>
-  </ItemGroup>
-
-  <ItemGroup>
-    <Reference Update="System.Drawing">
-      <Private>false</Private>
-      <EmbedInteropTypes>false</EmbedInteropTypes>
-    </Reference>
-  </ItemGroup>
-
-  <ItemGroup>
-    <Reference Update="System.IO.Compression.FileSystem">
-      <Private>false</Private>
-      <EmbedInteropTypes>false</EmbedInteropTypes>
-    </Reference>
-  </ItemGroup>
-
-  <ItemGroup>
-    <Reference Update="System.Numerics">
-      <Private>false</Private>
-      <EmbedInteropTypes>false</EmbedInteropTypes>
-    </Reference>
-  </ItemGroup>
-
-  <ItemGroup>
-    <Reference Update="System.Runtime.Serialization">
-      <Private>false</Private>
-      <EmbedInteropTypes>false</EmbedInteropTypes>
-    </Reference>
-  </ItemGroup>
-
-  <ItemGroup>
-    <Reference Update="System.Xml">
-      <Private>false</Private>
-      <EmbedInteropTypes>false</EmbedInteropTypes>
-    </Reference>
-  </ItemGroup>
-
-  <ItemGroup>
-    <Reference Update="System.Xml.Linq">
-      <Private>false</Private>
-      <EmbedInteropTypes>false</EmbedInteropTypes>
-    </Reference>
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Assets\" />
-    <Folder Include="ModifyExistingContent\" />
-    <Folder Include="NewComponents\Controllers\" />
-    <Folder Include="NewComponents\ManeuverProperties\" />
-    <Folder Include="NewComponents\MartialAbilityInformation\" />
-    <Folder Include="NewComponents\UnitParts\ManeuverBookSystem\" />
-  </ItemGroup>
+		<ILRepack OutputType="Dll" MainAssembly="PathOfWarForWotR.dll" OutputAssembly="@(OutputAssembly)" InputAssemblies="@(InputAssemblies)" WorkingDirectory="$(OutputPath)" />
+	</Target>
 
 
-  <Target Name="Deploy" AfterTargets="Build">
-    <ItemGroup>
-      <Assembly Include="$(OutputPath)\PathOfWarForWotR.dll" />
-      <ModConfig Include="$(OutputPath)\Info.json" />
-      <Localization Include="$(OutputPath)\Localization\LocalizationPack.json"></Localization>
-      <Localization Include="$(OutputPath)\Localization\SilverCrane.json"></Localization>
-      <Localization Include="$(OutputPath)\Localization\BrokenBlade.json"></Localization>
-      <Localization Include="$(OutputPath)\Localization\MartialTraining.json"></Localization>
-      <Assets Include="$(OutputPath)\Assets\Fly.png" />
-    </ItemGroup>
-    
-    <Copy SourceFiles="@(Assembly)" DestinationFolder="$(WrathPath)\Mods\$(MSBuildProjectName)" />
-    <Copy SourceFiles="@(ModConfig)" DestinationFolder="$(WrathPath)\Mods\$(MSBuildProjectName)" />
-    <Copy SourceFiles="@(Assets)" DestinationFolder="$(WrathPath)\Mods\$(MSBuildProjectName)\Assets" />
-    <Copy SourceFiles="@(Localization)" DestinationFolder="$(WrathPath)\Mods\$(MSBuildProjectName)\Localization" />
-  </Target>
+	<!-- Publicize Target -->
+	<Target Name="Publicize" AfterTargets="Clean">
+		<ItemGroup>
+
+			<Assemblies Include="$(WrathPath)\Wrath_Data\Managed\Assembly-CSharp.dll" />
+			<Assemblies Include="$(WrathPath)\Wrath_Data\Managed\Owlcat.Runtime.UI.dll" />
+			<Assemblies Include="$(WrathPath)\Wrath_Data\Managed\Owlcat.Runtime.UniRx.dll" />
+			<PublicAssembly Include="$(SolutionDir)\lib\Assembly-CSharp_public.dll" />
+			<RenamedAssembly Include="$(SolutionDir)\lib\Assembly-CSharp.dll" />
+		</ItemGroup>
+		<PublicizeTask InputAssemblies="@(Assemblies)" OutputDir="$(SolutionDir)lib/" />
+		<Move SourceFiles="@(PublicAssembly)" DestinationFiles="@(RenamedAssembly)" />
+	</Target>
+
+	<ItemGroup>
+		<None Remove="Config\Blueprints.json" />
+		<None Remove="Localization\BrokenBlade.json" />
+		<None Remove="Localization\LocalizationPack.json" />
+		<None Remove="Localization\MartialTraining.json" />
+		<None Remove="Localization\SilverCrane.json" />
+	</ItemGroup>
+	<ItemGroup>
+		<EmbeddedResource Include="Config\Blueprints.json" />
+		<EmbeddedResource Include="Localization\BrokenBlade.json">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</EmbeddedResource>
+		<EmbeddedResource Include="Localization\LocalizationPack.json">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</EmbeddedResource>
+		<EmbeddedResource Include="Localization\MartialTraining.json">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</EmbeddedResource>
+		<EmbeddedResource Include="Localization\SilverCrane.json">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</EmbeddedResource>
+	</ItemGroup>
+
+
+
+	<ItemGroup>
+		<Reference Include="0Harmony">
+			<HintPath>$(WrathPath)\Wrath_Data\Managed\UnityModManager\0Harmony.dll</HintPath>
+		</Reference>
+		<Reference Include="Assembly-CSharp-public">
+			<HintPath>$(SolutionDir)lib\Assembly-CSharp.dll</HintPath>
+
+		</Reference>
+		<Reference Include="Assembly-CSharp-firstpass">
+			<HintPath>$(WrathPath)\Wrath_Data\Managed\Assembly-CSharp-firstpass.dll</HintPath>
+
+			<EmbedInteropTypes>false</EmbedInteropTypes>
+		</Reference>
+		<Reference Include="AstarPathfindingProject">
+			<HintPath>$(WrathPath)\Wrath_Data\Managed\AstarPathfindingProject.dll</HintPath>
+		</Reference>
+		<Reference Include="Newtonsoft.Json">
+			<HintPath>$(WrathPath)\Wrath_Data\Managed\Newtonsoft.Json.dll</HintPath>
+		</Reference>
+		<Reference Include="Owlcat.Runtime.Core">
+			<HintPath>$(WrathPath)\Wrath_Data\Managed\Owlcat.Runtime.Core.dll</HintPath>
+		</Reference>
+		<Reference Include="Owlcat.Runtime.UI">
+			<HintPath>$(SolutionDir)lib\Owlcat.Runtime.UI_public.dll</HintPath>
+		</Reference>
+		<Reference Include="Owlcat.Runtime.UniRx">
+			<HintPath>$(SolutionDir)lib\Owlcat.Runtime.UniRx_public.dll</HintPath>
+		</Reference>
+		<Reference Include="Owlcat.Runtime.Validation">
+			<HintPath>$(WrathPath)\Wrath_Data\Managed\Owlcat.Runtime.Validation.dll</HintPath>
+		</Reference>
+		<Reference Include="Owlcat.Runtime.Visual">
+			<HintPath>$(WrathPath)\Wrath_Data\Managed\Owlcat.Runtime.Visual.dll</HintPath>
+		</Reference>
+		<Reference Include="TabletopTweaks-Core">
+			<HintPath>$(WrathPath)\Mods\TabletopTweaks-Core\TabletopTweaks-Core.dll</HintPath>
+		</Reference>
+		<Reference Include="UniRx">
+			<HintPath>$(WrathPath)\Wrath_Data\Managed\UniRx.dll</HintPath>
+		</Reference>
+		<Reference Include="Unity.TextMeshPro">
+			<HintPath>$(WrathPath)\Wrath_Data\Managed\Unity.TextMeshPro.dll</HintPath>
+		</Reference>
+		<Reference Include="UnityEngine">
+			<HintPath>$(WrathPath)\Wrath_Data\Managed\UnityEngine.dll</HintPath>
+		</Reference>
+		<Reference Include="UnityEngine.CoreModule">
+			<HintPath>$(WrathPath)\Wrath_Data\Managed\UnityEngine.CoreModule.dll</HintPath>
+
+			<EmbedInteropTypes>false</EmbedInteropTypes>
+		</Reference>
+		<Reference Include="UnityEngine.ImageConversionModule">
+			<HintPath>$(WrathPath)\Wrath_Data\Managed\UnityEngine.ImageConversionModule.dll</HintPath>
+		</Reference>
+		<Reference Include="UnityEngine.IMGUIModule">
+			<HintPath>$(WrathPath)\Wrath_Data\Managed\UnityEngine.IMGUIModule.dll</HintPath>
+
+			<EmbedInteropTypes>false</EmbedInteropTypes>
+		</Reference>
+		<Reference Include="UnityEngine.UI">
+			<HintPath>$(WrathPath)\Wrath_Data\Managed\UnityEngine.UI.dll</HintPath>
+		</Reference>
+		<Reference Include="UnityEngine.UIModule">
+			<HintPath>$(WrathPath)\Wrath_Data\Managed\UnityEngine.UIModule.dll</HintPath>
+		</Reference>
+		<Reference Include="UnityModManager">
+			<HintPath>$(WrathPath)\Wrath_Data\Managed\UnityModManager\UnityModManager.dll</HintPath>
+
+			<EmbedInteropTypes>false</EmbedInteropTypes>
+		</Reference>
+	</ItemGroup>
+
+	<ItemGroup>
+		<None Update="Assets\Fly.png">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="Info.json">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
+	</ItemGroup>
+
+	<ItemGroup>
+		<Reference Update="System">
+			<Private>false</Private>
+			<EmbedInteropTypes>false</EmbedInteropTypes>
+		</Reference>
+	</ItemGroup>
+
+	<ItemGroup>
+		<Reference Update="System.Core">
+			<Private>false</Private>
+			<EmbedInteropTypes>false</EmbedInteropTypes>
+		</Reference>
+	</ItemGroup>
+
+	<ItemGroup>
+		<Reference Update="System.Data">
+			<Private>false</Private>
+			<EmbedInteropTypes>false</EmbedInteropTypes>
+		</Reference>
+	</ItemGroup>
+
+	<ItemGroup>
+		<Reference Update="System.Drawing">
+			<Private>false</Private>
+			<EmbedInteropTypes>false</EmbedInteropTypes>
+		</Reference>
+	</ItemGroup>
+
+	<ItemGroup>
+		<Reference Update="System.IO.Compression.FileSystem">
+			<Private>false</Private>
+			<EmbedInteropTypes>false</EmbedInteropTypes>
+		</Reference>
+	</ItemGroup>
+
+	<ItemGroup>
+		<Reference Update="System.Numerics">
+			<Private>false</Private>
+			<EmbedInteropTypes>false</EmbedInteropTypes>
+		</Reference>
+	</ItemGroup>
+
+	<ItemGroup>
+		<Reference Update="System.Runtime.Serialization">
+			<Private>false</Private>
+			<EmbedInteropTypes>false</EmbedInteropTypes>
+		</Reference>
+	</ItemGroup>
+
+	<ItemGroup>
+		<Reference Update="System.Xml">
+			<Private>false</Private>
+			<EmbedInteropTypes>false</EmbedInteropTypes>
+		</Reference>
+	</ItemGroup>
+
+	<ItemGroup>
+		<Reference Update="System.Xml.Linq">
+			<Private>false</Private>
+			<EmbedInteropTypes>false</EmbedInteropTypes>
+		</Reference>
+	</ItemGroup>
+
+	<ItemGroup>
+		<Folder Include="Assets\" />
+		<Folder Include="ModifyExistingContent\" />
+		<Folder Include="NewComponents\Controllers\" />
+		<Folder Include="NewComponents\ManeuverProperties\" />
+		<Folder Include="NewComponents\MartialAbilityInformation\" />
+		<Folder Include="NewComponents\UnitParts\ManeuverBookSystem\" />
+	</ItemGroup>
+
+
+	<Target Name="Deploy" AfterTargets="Build">
+		<ItemGroup>
+			<Assembly Include="$(OutputPath)\PathOfWarForWotR.dll" />
+			<ModConfig Include="$(OutputPath)\Info.json" />
+			<Localization Include="$(OutputPath)\Localization\LocalizationPack.json"></Localization>
+			<Localization Include="$(OutputPath)\Localization\SilverCrane.json"></Localization>
+			<Localization Include="$(OutputPath)\Localization\BrokenBlade.json"></Localization>
+			<Localization Include="$(OutputPath)\Localization\MartialTraining.json"></Localization>
+			<Assets Include="$(OutputPath)\Assets\Fly.png" />
+		</ItemGroup>
+
+		<Copy SourceFiles="@(Assembly)" DestinationFolder="$(WrathPath)\Mods\$(MSBuildProjectName)" />
+		<Copy SourceFiles="@(ModConfig)" DestinationFolder="$(WrathPath)\Mods\$(MSBuildProjectName)" />
+		<Copy SourceFiles="@(Assets)" DestinationFolder="$(WrathPath)\Mods\$(MSBuildProjectName)\Assets" />
+		<Copy SourceFiles="@(Localization)" DestinationFolder="$(WrathPath)\Mods\$(MSBuildProjectName)\Localization" />
+	</Target>
 </Project>
